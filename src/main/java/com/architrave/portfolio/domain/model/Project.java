@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +18,7 @@ public class Project extends BaseEntity{
 
     @Id
     @GeneratedValue
+    @Column(name = "project_id")
     private Long id;
 
     @ManyToOne
@@ -28,7 +30,8 @@ public class Project extends BaseEntity{
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-//    private ProjectInfo projectInfo;
+    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+    private List<ProjectInfo> projectInfoList;
 
     private String nation;
     private String city;

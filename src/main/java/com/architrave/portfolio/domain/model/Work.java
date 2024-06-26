@@ -22,7 +22,9 @@ public class Work extends BaseEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-//    private UploadFile uploadFile;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "upload_file_id")
+    private UploadFile uploadFile;
 
     private String title;
     private String description;
