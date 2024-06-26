@@ -29,9 +29,8 @@ public class Work extends BaseEntity{
     private String title;
     private String description;
 
-    private Integer width;
-    private Integer height;
-    private Integer depth;
+    @Embedded
+    private Size size;
 
     private String material;
     private Integer prodYear;

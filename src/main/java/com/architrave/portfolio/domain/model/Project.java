@@ -36,9 +36,8 @@ public class Project extends BaseEntity{
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<Page> pageList;
 
-    private String nation;
-    private String city;
-    private String address;
+    @Embedded
+    private Address address;
 
     private String supportedBy;
 
