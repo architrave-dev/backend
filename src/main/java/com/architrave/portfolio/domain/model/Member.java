@@ -19,6 +19,8 @@ public class Member extends BaseEntity{
     private String email;
     private String password;
     private String aui;
+
+    @Enumerated
     private RoleType role;
     private String description;
 
