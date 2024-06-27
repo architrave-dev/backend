@@ -15,17 +15,7 @@ public class ProjectInfo {
     @Column(name = "project_info_id")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id")
-    @JsonIgnore
-    private Project project;
-
     private String customName;
     private String customValue;
-
-
-
-
-
 
 }

@@ -30,7 +30,8 @@ public class Project extends BaseEntity{
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_info_id")
     private List<ProjectInfo> projectInfoList;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
