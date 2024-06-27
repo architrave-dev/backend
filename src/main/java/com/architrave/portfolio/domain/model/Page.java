@@ -3,7 +3,6 @@ package com.architrave.portfolio.domain.model;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,9 +14,8 @@ public class Page {
     private Long id;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    @JsonIgnore
     private Project project;
 
     @OneToOne
