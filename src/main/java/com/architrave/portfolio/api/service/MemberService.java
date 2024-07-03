@@ -40,4 +40,10 @@ public class MemberService {
         return memberRepository.findById(member.getId())
                 .orElse(null);
     }
+
+    @Transactional(readOnly = true)
+    public Member findMemberByAui(String aui) {
+        return memberRepository.findByAui(aui)
+                .orElse(null);
+    }
 }
