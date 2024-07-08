@@ -4,6 +4,7 @@ import com.architrave.portfolio.api.dto.work.request.UpdateWorkRequestDto;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.repository.WorkRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,11 +35,10 @@ class WorkServiceTest {
 
     @BeforeEach
     void setUp() {
-        authenticatedMember = Member.builder()
-                .id(1L)
+        authenticatedMember = new MemberBuilder()
                 .email("test@example.com")
                 .password("password")
-                .aui("aui")
+                .username("test")
                 .role(RoleType.USER)
                 .description("description")
                 .build();
@@ -97,7 +97,9 @@ class WorkServiceTest {
                 .build();
         when(workRepository.findById(work.getId())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> workService.updateWork(work.getId(), authenticatedMember, updateWorkRequestDto));
+        assertThrows(
+                NoSuchElementException.class,
+                () -> workService.updateWork(work.getId(), authenticatedMember, updateWorkRequestDto));
         verify(workRepository, times(1)).findById(work.getId());
     }
 
@@ -108,11 +110,10 @@ class WorkServiceTest {
         updatedSize.setHeight(200);
         updatedSize.setWidth(200);
 
-        Member otherMember = Member.builder()
-                .id(2L)
+        Member otherMember = new MemberBuilder()
                 .email("other@example.com")
                 .password("other password")
-                .aui("otheraui")
+                .username("other")
                 .role(RoleType.USER)
                 .description("other description")
                 .build();
