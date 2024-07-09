@@ -1,5 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
+import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,10 @@ class WorkTest {
 
     @BeforeEach
     void setUp() {
-        member = Member.builder()
-                .id(1L)
+        member = new MemberBuilder()
                 .email("test@example.com")
                 .password("password")
-                .aui("aui")
+                .username("test")
                 .role(RoleType.USER)
                 .description("description")
                 .build();

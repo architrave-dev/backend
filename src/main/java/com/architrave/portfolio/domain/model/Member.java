@@ -3,16 +3,20 @@ package com.architrave.portfolio.domain.model;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member extends BaseEntity{
+public class Member extends BaseEntity implements UserDetails {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
@@ -31,7 +35,7 @@ public class Member extends BaseEntity{
     @NotNull
     private String aui;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @NotNull
     private RoleType role;
 
@@ -76,5 +80,30 @@ public class Member extends BaseEntity{
         member.description = description;
         member.landingBox = landingBox;
         return member;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
