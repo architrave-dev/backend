@@ -1,6 +1,7 @@
 package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
+import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class ExControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(BadCredentialsException.class)
+    @ExceptionHandler({BadCredentialsException.class, UnauthorizedException.class})
     private ResponseEntity<ErrorDto> BadCredentialsExceptionHandler(BadCredentialsException e){
         log.info("handle in ExControllerAdvice: ", e);
         return ResponseEntity
