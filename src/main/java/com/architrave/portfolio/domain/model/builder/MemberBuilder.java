@@ -54,7 +54,7 @@ public class MemberBuilder {
     }
     private void validateMember(){
         if(email == null || password == null || username == null || role == null){
-            throw new IllegalArgumentException("required value is empty");
+            throw new IllegalArgumentException("required value is empty in MemberBuilder");
         }
     }
 

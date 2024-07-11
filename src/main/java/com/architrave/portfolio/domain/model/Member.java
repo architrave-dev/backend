@@ -62,6 +62,9 @@ public class Member extends BaseEntity implements UserDetails {
     public void setDescription(String description) {
         this.description = description;
     }
+    public void setLandingBox(LandingBox landingBox) {
+        this.landingBox = landingBox;
+    }
 
     public static Member createMember(
             String email,
