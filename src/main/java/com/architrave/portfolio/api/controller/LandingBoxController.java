@@ -31,7 +31,7 @@ public class LandingBoxController {
     ){
         log.info("hello from getLandingBox");
         Member member = memberService.findMemberByAui(aui);
-        LandingBox landingBox = member.getLandingBox();     //Transaction이 끝났는데 landingBox를 가져오려고 하니까 Exception
+        LandingBox landingBox = landingBoxService.findByMember(member);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -40,18 +40,21 @@ public class LandingBoxController {
 
     @PutMapping("/{aui}")
     public ResponseEntity<ResultDto<LandingBoxDto>> updateLandingBox(
-            @RequestParam("aui") String aui,    // 현재 홈페이지 주인
+            @PathVariable("aui") String aui,    // 현재 홈페이지 주인
             @RequestBody UpdateLandingBoxDto updateLandingBoxDto
     ){
         log.info("hello from updateLandingBox");
         Member loginUser = authService.getMemberFromContext();
         //aui와 현재 로그인 한 Member가 같은 사람인지 확인
         //=> Security에서 처리할 수 있나?
-        if(loginUser.getAui().equals(aui)){
+        log.info("loginUser.getAui(): " + loginUser.getAui());
+        log.info("aui: " + aui);
+        if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
         }
-        LandingBox landingBox = landingBoxService.updateLb(
-                loginUser,
+
+        LandingBox updatedLb = landingBoxService.updateLb(
+                updateLandingBoxDto.getId(),
                 updateLandingBoxDto.getOriginUrl(),
                 updateLandingBoxDto.getThumbnailUrl(),
                 updateLandingBoxDto.getTitle(),
@@ -61,6 +64,6 @@ public class LandingBoxController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new LandingBoxDto(landingBox)));
+                .body(new ResultDto<>(new LandingBoxDto(updatedLb)));
     }
 }

@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.builder.LandingBoxBuilder;
 import com.architrave.portfolio.domain.repository.LandingBoxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,29 +13,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class LandingBoxService {
 
     private final LandingBoxRepository landingBoxRepository;
-    private final AuthService authService;
 
     @Transactional
     public LandingBox createLb(LandingBox landingBox) {
-
-        Member member = authService.getMemberFromContext();
-
         LandingBox createdLb = landingBoxRepository.save(landingBox);
-        //Member와 연결
-        member.setLandingBox(createdLb);
         return createdLb;
     }
 
     @Transactional
     public LandingBox updateLb(
-            Member member,
+            Long landingBoxId,
             String originUrl,
             String thumbnailUrl,
             String title,
             String description,
             Boolean isDeleted
     ) {
-        LandingBox landingBox = member.getLandingBox();
+        LandingBox landingBox = findLbById(landingBoxId);
         if(isDeleted){
             landingBox.removeUploadFile();
             return landingBox;
@@ -60,5 +55,28 @@ public class LandingBoxService {
                 .orElse(null);
     }
 
+    /**
+     * @param  member
+     * @return LandingBox
+     */
+    @Transactional
+    public LandingBox findByMember(Member member) {
+        LandingBox landingBox = landingBoxRepository.findByMember(member)
+                .orElse(null);
+        if(landingBox != null){
+            return landingBox;
+        }
+        //default 생성
+        LandingBox defaultLb = new LandingBoxBuilder()
+                .member(member)
+                .originImgUrl("defaultUrl")
+                .thumbnailUrl("defaultThumb")
+                .title("default title")
+                .description("default description")
+                .build();
 
+        landingBoxRepository.save(defaultLb);
+
+        return defaultLb;
+    }
 }

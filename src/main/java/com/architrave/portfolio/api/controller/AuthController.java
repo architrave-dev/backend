@@ -6,9 +6,7 @@ import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.MemberService;
-import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.builder.LandingBoxBuilder;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import lombok.RequiredArgsConstructor;
@@ -32,19 +30,11 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<ResultDto<MemberSimpleDto>> signin(@RequestBody CreateMemberReq createMemberReq){
-        //여기 위치가 맞나...? 가져왔을 때 없으면 생성해도 되지 않을까?
-        LandingBox landingBox = new LandingBoxBuilder()
-                .originImgUrl("defaultUrl")
-                .thumbnailUrl("defaultThumb")
-                .title("default title")
-                .description("default description")
-                .build();
 
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
                 .password(createMemberReq.getPassword())
                 .username(createMemberReq.getUsername())
-                .loadingBox(landingBox)
                 .role(RoleType.USER)
                 .build();
 
@@ -64,9 +54,6 @@ public class AuthController {
         Member member = authService.loadUserByUsername(email);
         String authHeader = authService.login(member, password);
 
-        // authService.login에서 나올 수 있는
-        // UsernameNotFoundException, BadCredentialsException는
-        // @ExceptionHandler에서 한꺼번에 처리할 예정
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
