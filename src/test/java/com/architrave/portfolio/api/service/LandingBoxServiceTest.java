@@ -9,7 +9,6 @@ import jakarta.persistence.EntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,8 +47,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void createLandingBox(){
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
 
         //when
         LandingBox createdLb = landingBoxService.createLb(landingBox);
@@ -70,10 +70,11 @@ public class LandingBoxServiceTest {
     @Transactional
     public void IllegalArgumentExceptionWithEmptyImgWhenCreateLandingBox(){
         //given
-        addContext();
+        Member member = createMemberInTest();
+        addContext(member);
         //when
         assertThrows(IllegalArgumentException.class, () ->
-            createLandingBoxInTest(null, null)
+            createLandingBoxInTest(member, null, null)
         );
     }
 
@@ -81,8 +82,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void updateTitleAndDescriptionLandingBox(){
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
         LandingBox createdLb = landingBoxService.createLb(landingBox);
         em.flush();
         em.clear();
@@ -106,8 +108,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void updateLandingBoxImgToAnother(){
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
         LandingBox createdLb = landingBoxService.createLb(landingBox);
 
         em.flush();
@@ -130,8 +133,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void updateLandingBoxImgToEmpty(){ //이래도 되나??? 고민!!
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
         LandingBox createdLb = landingBoxService.createLb(landingBox);
 
         em.flush();
@@ -162,8 +166,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void EmptyImgWhenUpdateLandingBox(){
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
         LandingBox createdLb = landingBoxService.createLb(landingBox);
         createdLb.removeUploadFile();
 
@@ -193,8 +198,9 @@ public class LandingBoxServiceTest {
     @Transactional
     public void removeLandingBox(){
         //given
-        addContext();
-        LandingBox landingBox = createLandingBoxInTest(TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Member member = createMemberInTest();
+        addContext(member);
+        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
         LandingBox createdLb = landingBoxService.createLb(landingBox);
         em.flush();
         em.clear();
@@ -211,8 +217,7 @@ public class LandingBoxServiceTest {
 
     }
 
-    private void addContext(){
-        Member member = createMemberInTest();
+    private void addContext(Member member){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 member,
                 null,
@@ -230,8 +235,9 @@ public class LandingBoxServiceTest {
         return memberService.createMember(member);
     }
 
-    private LandingBox createLandingBoxInTest(String imgUrl, String thumbnailUrl){
+    private LandingBox createLandingBoxInTest(Member member, String imgUrl, String thumbnailUrl){
         return new LandingBoxBuilder()
+                .member(member)
                 .originImgUrl(imgUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(TEST_LB_TITLE)
