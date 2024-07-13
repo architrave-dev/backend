@@ -12,6 +12,10 @@ public class LandingBox extends BaseEntity {
     @Column(name = "landing_box_id")
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;
@@ -22,11 +26,13 @@ public class LandingBox extends BaseEntity {
 
 
     public static LandingBox createLandingBox(
+            Member member,
             UploadFile uploadFile,
             String title,
             String description
     ) {
         LandingBox landingBox = new LandingBox();
+        landingBox.member = member;
         landingBox.uploadFile = uploadFile;
         landingBox.title = title;
         landingBox.description = description;

@@ -1,13 +1,21 @@
 package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.LandingBox;
+import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.UploadFile;
 
 public class LandingBoxBuilder {
+
+    private Member member;
     private String originImgUrl;
     private String thumbnailUrl;
     private String title;
     private String description;
+
+    public LandingBoxBuilder member(Member member){
+        this.member = member;
+        return this;
+    }
 
     public LandingBoxBuilder title(String title){
         this.title = title;
@@ -40,13 +48,14 @@ public class LandingBoxBuilder {
                 .build();
 
         return LandingBox.createLandingBox(
+                this.member,
                 uploadFile,
                 this.title,
                 this.description
         );
     }
     private void validateLandingBox(){
-        if(originImgUrl == null || thumbnailUrl == null){
+        if(member == null || originImgUrl == null || thumbnailUrl == null){
             throw new IllegalArgumentException("required value is empty in LandingBoxBuilder");
         }
     }
