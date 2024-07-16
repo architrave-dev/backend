@@ -30,6 +30,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<ResultDto<MemberSimpleDto>> signin(@RequestBody CreateMemberReq createMemberReq){
+
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
                 .password(createMemberReq.getPassword())
@@ -53,9 +54,6 @@ public class AuthController {
         Member member = authService.loadUserByUsername(email);
         String authHeader = authService.login(member, password);
 
-        // authService.login에서 나올 수 있는
-        // UsernameNotFoundException, BadCredentialsException는
-        // @ExceptionHandler에서 한꺼번에 처리할 예정
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)

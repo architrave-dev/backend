@@ -1,7 +1,6 @@
 package com.architrave.portfolio.infra.security;
 
 import com.architrave.portfolio.api.service.AuthService;
-import com.architrave.portfolio.domain.model.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,17 +33,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authentication");
         String email;
 
-        if(authHeader == null || authHeader.startsWith("Bearer ")){
-            logger.info("there is no auth token");
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            log.info("there is no auth token");
             filterChain.doFilter(request, response);
             return;
         }
-        logger.info("we should check token in here");
+        log.info("we should check token in here");
         String jwtToken = authHeader.substring(7);
 
         email = jwtService.extractEmailFromToken(jwtToken);
 
-        //email이 비어있지 않고 이미 접속한 유저가 아니라면
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
             //DB에서 email로 찾기
             UserDetails userDetails = authService.loadUserByUsername(email);

@@ -41,10 +41,6 @@ public class Member extends BaseEntity implements UserDetails {
 
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "landing_box_id")
-    private LandingBox landingBox;
-
     private String generateAui(String username){
         String uuid_8 = UUID.randomUUID().toString().substring(0,8);
         return username + "-" + uuid_8;
@@ -68,8 +64,7 @@ public class Member extends BaseEntity implements UserDetails {
             String password,
             String username,
             RoleType role,
-            String description,
-            LandingBox landingBox
+            String description
     ){
         Member member = new Member();
         member.email = email;
@@ -78,7 +73,6 @@ public class Member extends BaseEntity implements UserDetails {
         member.aui = member.generateAui(username);
         member.role = role;
         member.description = description;
-        member.landingBox = landingBox;
         return member;
     }
 
