@@ -1,4 +1,4 @@
-package com.architrave.portfolio;
+package com.architrave.portfolio.api.service;
 
 
 import com.architrave.portfolio.api.service.MemberService;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 
 @SpringBootTest
-public class MemberTest {
+public class MemberServiceTest {
 
     private final MemberService memberService;
     private final EntityManager em;
@@ -29,7 +29,7 @@ public class MemberTest {
     private final RoleType ROLE_CHANGED = RoleType.ADMIN;
 
     @Autowired
-    public MemberTest(MemberService memberService, EntityManager em) {
+    public MemberServiceTest(MemberService memberService, EntityManager em) {
         this.memberService = memberService;
         this.em = em;
     }

@@ -1,4 +1,4 @@
-package com.architrave.portfolio.domain.repository.MemberRepository;
+package com.architrave.portfolio.domain.repository;
 
 import com.architrave.portfolio.domain.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

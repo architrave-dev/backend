@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<ResultDto<MemberSimpleDto>> signin(@RequestBody CreateMemberReq createMemberReq){
+    public ResponseEntity<ResultDto<String>> signin(@RequestBody CreateMemberReq createMemberReq){
 
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
@@ -38,11 +38,11 @@ public class AuthController {
                 .role(RoleType.USER)
                 .build();
 
-        Member createdMember = memberService.createMember(member);
+        memberService.createMember(member);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new MemberSimpleDto(createdMember)));
+                .body(new ResultDto<>("signin success"));
     }
 
     @PostMapping("/login")

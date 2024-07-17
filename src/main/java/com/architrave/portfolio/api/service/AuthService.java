@@ -1,7 +1,7 @@
 package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.repository.MemberRepository.MemberRepository;
+import com.architrave.portfolio.domain.repository.MemberRepository;
 import com.architrave.portfolio.infra.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
