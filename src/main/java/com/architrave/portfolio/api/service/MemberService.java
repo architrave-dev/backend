@@ -1,7 +1,7 @@
 package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.repository.MemberRepository.MemberRepository;
+import com.architrave.portfolio.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
