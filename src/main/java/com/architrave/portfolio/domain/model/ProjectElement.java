@@ -18,8 +18,8 @@ public class ProjectElement {
 
     @Enumerated
     private ProjectElementType projectElementType;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
