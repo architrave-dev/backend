@@ -107,29 +107,4 @@ public class ProjectElementService {
             projectElement.setPeOrder(i+1);
         }
     }
-
-
-//    @Transactional
-//    public ProjectElement updateWithHandler(Long id,
-//                                            Long projectId,
-//                                            Work work,
-//                                            WorkAlignment workAlignment,
-//                                            TextBox textBox,
-//                                            TextBoxAlignment textBoxAlignment,
-//                                            DividerType dividerType,
-//                                            Integer peOrder,
-//                                            Boolean isRepresentative
-//    ){
-//        if(work != null){    //work라면
-//            return updateProjectElementWork(work, id, workAlignment, peOrder,
-//                                            isRepresentative);
-//
-//        }else if(textBox != null) {  //textBox라면
-//            return updateProjectElementTextBox(textBox, id, textBoxAlignment, peOrder);
-//
-//        }else{  //divider 라면
-//            return updateProjectElementDivider(id, dividerType, peOrder);
-//        }
-//    }
-
 }
