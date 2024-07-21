@@ -35,5 +35,12 @@ public class ProjectElementDto {
         this.dividerType = projectElement.getDividerType();
         this.order = projectElement.getPeOrder();
         this.isRepresentative = projectElement.getIsRepresentative();
+        if(this.work != null){
+            this.projectElementType = ProjectElementType.WORK;
+        }else if(this.textBox != null){
+            this.projectElementType = ProjectElementType.TEXTBOX;
+        }else if(this.dividerType != null){
+            this.projectElementType = ProjectElementType.DIVIDER;
+        }
     }
 }
