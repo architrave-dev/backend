@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
+import com.architrave.portfolio.api.dto.textBox.request.CreateTextBoxReq;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
@@ -20,11 +21,11 @@ public class CreateProjectElementReq {
     private Long workId;
     private WorkAlignment workAlignment;
     //textbox 일 경우
-    private Long textBoxId;
+    private CreateTextBoxReq createTextBoxReq;
     private TextBoxAlignment textBoxAlignment;
     //divider일 경우
     private DividerType dividerType;
 
-    private Integer order;
+    private Integer peOrder;
     private Boolean isRepresentative;
 }
