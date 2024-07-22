@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
+import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DividerInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
@@ -66,6 +67,9 @@ public class ProjectElementServiceTest {
     private final TextBoxAlignment TEST_TEXTBOX_ALIGNMENT_CHANGE = TextBoxAlignment.LEFT;
 
     private final DividerType TEST_DIVIDER_TYPE = DividerType.PLAIN;
+
+    private final String TEST_WORK_ORIGINAL_URL = "this is test orinalUrl";
+    private final String TEST_WORK_THUMBNAIL_URL = "this is test thumbnailurl";
 
 
     @Test
@@ -316,8 +320,10 @@ public class ProjectElementServiceTest {
         return projectService.createProject(project);
     }
     private Work createWork(Member member){
-        Work work = Work.builder()
+        Work work = new WorkBuilder()
                 .member(member)
+                .originImgUrl(TEST_WORK_ORIGINAL_URL)
+                .thumbnailUrl(TEST_WORK_THUMBNAIL_URL)
                 .title(TEST_WORK_TITLE)
                 .build();
 
