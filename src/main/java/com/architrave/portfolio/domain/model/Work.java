@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Builder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Work extends BaseEntity {
 
     @Id
@@ -29,11 +25,23 @@ public class Work extends BaseEntity {
     private Integer prodYear;
     private Boolean isDeleted = false;
 
-    public void update(String title, String description, Size size, String material, Integer prodYear) {
-        this.title = title;
-        this.description = description;
-        this.size = size;
-        this.material = material;
-        this.prodYear = prodYear;
+    public static Work createWork(
+            Member member,
+            UploadFile uploadFile,
+            String title,
+            String description,
+            Size size,
+            String material,
+            Integer prodYear
+    ){
+        Work work = new Work();
+        work.member = member;
+        work.title = title;
+        work.description = description;
+        work.size = size;
+        work.material = material;
+        work.prodYear = prodYear;
+        work.isDeleted = false;
+        return work;
     }
 }

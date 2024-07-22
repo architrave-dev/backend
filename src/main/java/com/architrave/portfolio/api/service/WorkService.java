@@ -33,7 +33,7 @@ public class WorkService {
     }
 
     @Transactional
-    public Work updateWork(Work work,
+    public Work updateWork(Long workId,
                            String title,
                            String description,
 //                           Size size,
@@ -41,6 +41,7 @@ public class WorkService {
                            Integer prodYear,
                            Boolean isDeleted
     ) {
+        Work work = findWorkById(workId);
         if(isDeleted != null && isDeleted == true){
             work.setIsDeleted(true);
             return work;
