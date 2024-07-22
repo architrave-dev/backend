@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/project/").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/landing_box/**").permitAll()
                 .requestMatchers("/api/v1/project-element/**").permitAll()
+                .requestMatchers("/api/v1/work/**").permitAll()
                 .requestMatchers("/api/v1/project/**").permitAll()                     //해결 못하겠음... 일단 넘어가자
                 .requestMatchers(HttpMethod.PUT,"/api/v1/landing_box/**").permitAll()  //해결 못하겠음... 일단 넘어가자
 //                .requestMatchers(HttpMethod.PUT, "/api/v1/landing_box/**").hasRole("USER")
