@@ -1,7 +1,6 @@
 package com.architrave.portfolio.api.dto.work.response;
 
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
-import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.Work;
