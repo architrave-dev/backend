@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateWorkReq {
     private Long id;
+    private String originImgUrl;
+    private String thumbnailUrl;
     private String title;
     private String description;
-//    private Size size;
+    private Size size;
     private String material;
     private Integer prodYear;
     private Boolean isDeleted;
