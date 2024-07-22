@@ -31,7 +31,8 @@ public class TextBoxService {
     }
 
     @Transactional
-    public TextBox updateTextBox(TextBox textBox, String content, Boolean isDeleted) {
+    public TextBox updateTextBox(Long textBoxId, String content, Boolean isDeleted) {
+        TextBox textBox = findById(textBoxId);
         if(isDeleted != null && isDeleted == true){
             textBox.setIsDeleted(true);
             return textBox;
