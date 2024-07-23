@@ -1,0 +1,44 @@
+package com.architrave.portfolio.domain.model.builder.projectElementBuilder;
+
+import com.architrave.portfolio.domain.model.Project;
+import com.architrave.portfolio.domain.model.ProjectElement;
+import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.enumType.DividerType;
+import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+public class DividerInProjectBuilder {
+    private Project project;
+    private DividerType dividerType;
+    private Integer peOrder;
+
+    public DividerInProjectBuilder project(Project project){
+        this.project = project;
+        return this;
+    }
+
+    public DividerInProjectBuilder dividerType(DividerType dividerType){
+        this.dividerType = dividerType;
+        return this;
+    }
+
+    public DividerInProjectBuilder peOrder(Integer peOrder){
+        this.peOrder = peOrder;
+        return this;
+    }
+
+    public ProjectElement build(){
+        validateProject();
+        return ProjectElement.createDividerElement(
+                project,
+                dividerType,
+                peOrder
+        );
+    }
+    private void validateProject(){
+        if(project == null || dividerType == null || peOrder == null ){
+            throw new IllegalArgumentException("required value is empty in ProjectBuilder");
+        }
+    }
+}

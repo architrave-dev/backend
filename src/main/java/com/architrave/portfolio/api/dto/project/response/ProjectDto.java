@@ -1,6 +1,8 @@
 package com.architrave.portfolio.api.dto.project.response;
 
+import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.domain.model.Project;
+import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +20,12 @@ public class ProjectDto {
     private LocalDateTime endDate;
     private String supportedBy;
     private List<ProjectInfoDto> projectInfoList;
+    private List<ProjectElementDto> projectElementList;
     private Boolean isDeleted;
 
-    public ProjectDto(Project project, List<ProjectInfoDto> projectInfoList){
+    public ProjectDto(Project project,
+                      List<ProjectInfoDto> projectInfoList,
+                      List<ProjectElementDto>  projectElementList){
         this.id = project.getId();
         this.title = project.getTitle();
         this.description = project.getDescription();
@@ -28,6 +33,7 @@ public class ProjectDto {
         this.endDate = project.getEndDate();
         this.supportedBy = project.getSupportedBy();
         this.projectInfoList = projectInfoList;
+        this.projectElementList = projectElementList;
         this.isDeleted = project.getIsDeleted();
     }
 }

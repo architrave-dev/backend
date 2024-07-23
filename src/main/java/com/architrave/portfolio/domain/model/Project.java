@@ -27,7 +27,7 @@ public class Project extends BaseEntity{
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<Page> pageList = new ArrayList<>();
+    private List<ProjectElement> projectElementList = new ArrayList<>();
 
     @Embedded
     private Address address;

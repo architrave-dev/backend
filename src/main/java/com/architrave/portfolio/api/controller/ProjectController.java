@@ -7,6 +7,7 @@ import com.architrave.portfolio.api.dto.project.request.UpdateProjectReq;
 import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
+import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.api.service.ProjectInfoService;
@@ -60,16 +61,21 @@ public class ProjectController {
     ){
         log.info("hello from getProjectDetail");
         Member member = memberService.findMemberByAui(aui);
-        Project project = projectService.findByMemberAndTitle(member, title);
+        Project project = projectService.findByMemberAndTitleWithElement(member, title);
         List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(project);
 
         List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
                 .map((pi) -> new ProjectInfoDto(pi))
                 .collect(Collectors.toList());
 
+        List<ProjectElementDto> projectElementDtoList = project.getProjectElementList()
+                .stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList)));
+                .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList, projectElementDtoList)));
     }
 
     @PostMapping
@@ -135,9 +141,14 @@ public class ProjectController {
                 updateProjectReq.getIsDeleted()
         );
 
+        List<ProjectElementDto> projectElementDtoList = targetProject.getProjectElementList()
+                .stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(updateProject, projectInfoDtoList)));
+                .body(new ResultDto<>(new ProjectDto(updateProject, projectInfoDtoList, projectElementDtoList)));
     }
 
     private void updateProjectInfo(Project targetProject,
