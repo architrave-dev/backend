@@ -23,9 +23,10 @@ public class SecurityConfig {
         http.csrf((auth) -> auth.disable());
 
         http.authorizeHttpRequests((auth) -> auth
+                .requestMatchers(AUTH_WHITELIST).permitAll()                                //swagger
                 .requestMatchers("/api/v1/auth/**", "/error").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/project/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/landing_box/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/landing-box/**").permitAll()
                 .requestMatchers("/api/v1/project-element/**").permitAll()
                 .requestMatchers("/api/v1/work/**").permitAll()
                 .requestMatchers("/api/v1/project/**").permitAll()                     //해결 못하겠음... 일단 넘어가자
@@ -50,4 +51,10 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }

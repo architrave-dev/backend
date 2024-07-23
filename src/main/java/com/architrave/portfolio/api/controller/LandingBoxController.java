@@ -9,15 +9,18 @@ import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "5. LandingBox")  // => swagger 이름
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/landing_box")
+@RequestMapping("/api/v1/landing-box")
 @RequiredArgsConstructor
 public class LandingBoxController {
 
@@ -25,9 +28,13 @@ public class LandingBoxController {
     private final MemberService memberService;
     private final AuthService authService;
 
-    @GetMapping("/{aui}")
+    @Operation(
+            summary = "작가의 LandingBox 조회하기",
+            description = "LandingBox가 없을 경우 자동생성됩니다."
+    )
+    @GetMapping
     public ResponseEntity<ResultDto<LandingBoxDto>> getLandingBox(
-            @PathVariable("aui") String aui
+            @RequestParam("aui") String aui
     ){
         log.info("hello from getLandingBox");
         Member member = memberService.findMemberByAui(aui);
@@ -38,9 +45,10 @@ public class LandingBoxController {
                 .body(new ResultDto<>(new LandingBoxDto(landingBox)));
     }
 
-    @PutMapping("/{aui}")
+    @Operation(summary = "작가의 LandingBox 수정하기")
+    @PutMapping
     public ResponseEntity<ResultDto<LandingBoxDto>> updateLandingBox(
-            @PathVariable("aui") String aui,    // 현재 홈페이지 주인
+            @RequestParam("aui") String aui,    // 현재 홈페이지 주인
             @RequestBody UpdateLandingBoxDto updateLandingBoxDto
     ){
         log.info("hello from updateLandingBox");

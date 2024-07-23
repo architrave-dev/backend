@@ -10,6 +10,8 @@ import com.architrave.portfolio.api.service.WorkService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "4. Work")  // => swagger 이름
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class WorkController {
     private final WorkService workService;
 
 
+    @Operation(summary = "작가의 Work List 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<List<WorkDto>>> getWorkListByMember(
             @RequestParam("aui") String aui
@@ -49,6 +53,7 @@ public class WorkController {
                 .body(new ResultDto<>(workDtoList));
     }
 
+    @Operation(summary = "Work 생성하기")
     @PostMapping
     public ResponseEntity<ResultDto<WorkDto>> createWork(
             @RequestParam("aui") String aui,
@@ -76,6 +81,7 @@ public class WorkController {
                 .body(new ResultDto<>(new WorkDto(createdWork)));
     }
 
+    @Operation(summary = "Work 수정하기")
     @PutMapping
     public ResponseEntity<ResultDto<WorkDto>> updateWork(
             @RequestParam("aui") String aui,

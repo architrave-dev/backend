@@ -17,6 +17,8 @@ import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "2. Project")  // => swagger 이름
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class ProjectController {
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
 
+    @Operation(summary = "작가의 Project List 조회하기")
     @GetMapping("/list")
     public ResponseEntity<ResultDto<List<ProjectSimpleDto>>> getProjectList(
             @RequestParam("aui") String aui
@@ -54,10 +58,11 @@ public class ProjectController {
                 .body(new ResultDto<>(result));
     }
 
-    @GetMapping("/{title}")
+    @Operation(summary = "작가의 Project 세부내용 조회하기")
+    @GetMapping
     public ResponseEntity<ResultDto<ProjectDto>> getProjectDetail(
-            @PathVariable("title") String title,
-            @RequestParam("aui") String aui
+            @RequestParam("aui") String aui,
+            @RequestParam("title") String title
     ){
         log.info("hello from getProjectDetail");
         Member member = memberService.findMemberByAui(aui);
@@ -78,6 +83,11 @@ public class ProjectController {
                 .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList, projectElementDtoList)));
     }
 
+    @Operation(
+            summary = "Project 생성하기",
+            description = "간단하게 title, description, 대표이미지 만으로 생성합니다. <br />" +
+                    "이후 Project 내의 세부사항은 update 요청으로 진행합니다."
+    )
     @PostMapping
     public ResponseEntity<ResultDto<ProjectSimpleDto>> createProject(
             @RequestParam("aui") String aui,
@@ -107,6 +117,7 @@ public class ProjectController {
      * @param updateProjectReq
      * @return
      */
+    @Operation(summary = "Project 수정하기")
     @PutMapping
     public ResponseEntity<ResultDto<ProjectDto>> updateProject(
             @RequestParam("aui") String aui,
