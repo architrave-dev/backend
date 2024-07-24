@@ -24,6 +24,18 @@ public class ProjectDto {
     private Boolean isDeleted;
 
     public ProjectDto(Project project,
+                      List<ProjectInfoDto> projectInfoList){
+        this.id = project.getId();
+        this.title = project.getTitle();
+        this.description = project.getDescription();
+        this.startDate = project.getStartDate();
+        this.endDate = project.getEndDate();
+        this.supportedBy = project.getSupportedBy();
+        this.projectInfoList = projectInfoList;
+        this.isDeleted = project.getIsDeleted();
+    }
+
+    public ProjectDto(Project project,
                       List<ProjectInfoDto> projectInfoList,
                       List<ProjectElementDto>  projectElementList){
         this.id = project.getId();

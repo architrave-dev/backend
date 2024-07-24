@@ -119,7 +119,8 @@ public class ProjectController {
                     "createdProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "updatedProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "removedProjectInfoList: 삭제된 ProjectInfo <br/><br/>" +
-                    "Project 삭제 시 isDeleted 를 true 로 변경합니다."
+                    "Project 삭제 시 isDeleted 를 true 로 변경합니다. <br/><br/>" +
+                    "projectElement는 전용 API를 사용합니다."
     )
     @PutMapping
     public ResponseEntity<ResultDto<ProjectDto>> updateProject(
@@ -132,20 +133,8 @@ public class ProjectController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        //대상 project 가져오기
-        Project targetProject = projectService.findById(updateProjectReq.getId());
-
-        updateProjectInfo(targetProject,
-                updateProjectReq.getCreatedProjectInfoList(),
-                updateProjectReq.getUpdatedProjectInfoList(),
-                updateProjectReq.getRemovedProjectInfoList());
-
-        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(targetProject);
-        List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
-                .map((p) -> new ProjectInfoDto(p))
-                .collect(Collectors.toList());
-
-        Project updateProject = projectService.updateProject(
+        //project 업데이트
+        Project updatedProject = projectService.updateProject(
                 updateProjectReq.getId(),
                 updateProjectReq.getOriginImgUrl(),
                 updateProjectReq.getThumbnailUrl(),
@@ -157,14 +146,21 @@ public class ProjectController {
                 updateProjectReq.getIsDeleted()
         );
 
-        List<ProjectElementDto> projectElementDtoList = targetProject.getProjectElementList()
-                .stream()
-                .map((pe) -> new ProjectElementDto(pe))
+        //projectInfo 업데이트
+        updateProjectInfo(updatedProject,
+                updateProjectReq.getCreatedProjectInfoList(),
+                updateProjectReq.getUpdatedProjectInfoList(),
+                updateProjectReq.getRemovedProjectInfoList());
+
+        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(updatedProject);
+
+        List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
+                .map((p) -> new ProjectInfoDto(p))
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(updateProject, projectInfoDtoList, projectElementDtoList)));
+                .body(new ResultDto<>(new ProjectDto(updatedProject, projectInfoDtoList)));
     }
 
     private void updateProjectInfo(Project targetProject,
