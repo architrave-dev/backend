@@ -1,24 +1,22 @@
 package com.architrave.portfolio.api.service;
 
 
-import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.NoSuchElementException;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MemberServiceTest {
 
     private final MemberService memberService;
-    private final EntityManager em;
 
     private final String TEST_MEMBER_EMAIL = "lee@gmail.com";
     private final String TEST_MEMBER_EMAIL_2 = "jung@gmail.com";
@@ -29,13 +27,11 @@ public class MemberServiceTest {
     private final RoleType ROLE_CHANGED = RoleType.ADMIN;
 
     @Autowired
-    public MemberServiceTest(MemberService memberService, EntityManager em) {
+    public MemberServiceTest(MemberService memberService) {
         this.memberService = memberService;
-        this.em = em;
     }
 
     @Test
-    @Transactional
     public void createTest(){
         //given
         Member member = new MemberBuilder()
@@ -47,8 +43,6 @@ public class MemberServiceTest {
 
         //when
         Member afterCreateMember = memberService.createMember(member);
-        em.flush();
-        em.clear();
 
         //then
         Assertions.assertNotNull(afterCreateMember.getId());
@@ -56,7 +50,6 @@ public class MemberServiceTest {
         Assertions.assertNotNull(afterCreateMember.getAui());
     }
     @Test
-    @Transactional
     public void IllegalArgumentExceptionWhenCreateDuplicatedEmail(){
         //given
         Member member1 = new MemberBuilder()
@@ -76,13 +69,10 @@ public class MemberServiceTest {
         //when then
         Assertions.assertThrows(IllegalArgumentException.class,()->{
             memberService.createMember(member1);
-            em.flush();
-            em.clear();
             memberService.createMember(member2);
         });
     }
     @Test
-    @Transactional
     public void IllegalArgumentExceptionWhenCreateWithEmptyUsernameAndAUI(){
         //when then
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -95,7 +85,6 @@ public class MemberServiceTest {
         });
     }
     @Test
-    @Transactional
     public void removeTest(){
         //given
         Member member = new MemberBuilder()
@@ -106,19 +95,14 @@ public class MemberServiceTest {
                 .build();
 
         Member afterCreateMember = memberService.createMember(member);
-        em.flush();
-        em.clear();
 
         //when
         memberService.removeMember(afterCreateMember);
-        em.flush();
-        em.clear();
 
         //then
         Assertions.assertNull(memberService.findMemberById(afterCreateMember));
     }
     @Test
-    @Transactional
     public void NoSuchElementExceptionWhenRemoveEmpty(){
         //given
         Member member = new MemberBuilder()
@@ -133,7 +117,6 @@ public class MemberServiceTest {
                 ()-> memberService.removeMember(member));
     }
     @Test
-    @Transactional
     public void findWithIdTest(){
         //given
         Member member = new MemberBuilder()
@@ -144,8 +127,6 @@ public class MemberServiceTest {
                 .build();
 
         Member afterCreateMember = memberService.createMember(member);
-        em.flush();
-        em.clear();
 
         //when
         Member findMember = memberService.findMemberById(afterCreateMember.getId());
@@ -158,7 +139,6 @@ public class MemberServiceTest {
         Assertions.assertEquals(afterCreateMember.getRole(), findMember.getRole());
     }
     @Test
-    @Transactional
     public void findWithAUITest(){
         //given
         Member member = new MemberBuilder()
@@ -170,8 +150,6 @@ public class MemberServiceTest {
 
         Member afterCreateMember = memberService.createMember(member);
 
-        em.flush();
-        em.clear();
         //when
         Member findMember = memberService.findMemberByAui(afterCreateMember.getAui());
 
@@ -188,19 +166,13 @@ public class MemberServiceTest {
         //같은 이메일의 member create가 막혀있기에 성립불가
     }
     @Test
-    @Transactional
     public void findEmptyTest(){
         //given
         //when then
         Assertions.assertNull(memberService.findMemberById(1L));
     }
 
-
-
-
-
     @Test
-    @Transactional
     public void updateRoleTest(){   //일반 update 테스트, 중복가능
         //given
         Member member = new MemberBuilder()
@@ -212,9 +184,7 @@ public class MemberServiceTest {
         Member createdMember = memberService.createMember(member);
 
         //when
-        createdMember.setRole(ROLE_CHANGED);
-        em.flush();
-        em.clear();
+        memberService.updateMemberRole(createdMember.getId(), ROLE_CHANGED);
 
         Member afterUpdateMember = memberService.findMemberById(createdMember.getId());
 
@@ -224,7 +194,6 @@ public class MemberServiceTest {
         Assertions.assertEquals(afterUpdateMember.getRole(), ROLE_CHANGED);
     }
     @Test
-    @Transactional
     public void updateUsernameTest(){   //중복가능, aui는 중복 불가
         //given
         Member member = new MemberBuilder()
@@ -237,8 +206,6 @@ public class MemberServiceTest {
 
         //when
         createdMember.setUsername(TEST_MEMBER_USERNAME_CHANGED);
-        em.flush();
-        em.clear();
 
         //then
         Assertions.assertEquals(createdMember.getId(), createdMember.getId());
@@ -246,7 +213,6 @@ public class MemberServiceTest {
         System.out.println(createdMember.getAui());
     }
     @Test
-    @Transactional
     public void updateDuplicateUsernameTest(){   //중복가능, aui는 중복 불가
         //given
         Member member1 = new MemberBuilder()
@@ -264,21 +230,16 @@ public class MemberServiceTest {
                 .build();
         memberService.createMember(member1);
         Member createdMember2 = memberService.createMember(member2);
-        em.flush();
-        em.clear();
 
         //when
         Member findMember = memberService.findMemberById(createdMember2.getId());
         findMember.setUsername(TEST_MEMBER_USERNAME);
-        em.flush();
-        em.clear();
 
         //then
         Assertions.assertNotEquals(findMember.getUsername(), createdMember2.getUsername());
         Assertions.assertEquals(findMember.getUsername(), TEST_MEMBER_USERNAME);
         Assertions.assertEquals(findMember.getId(), createdMember2.getId());
         Assertions.assertNotNull(findMember.getAui());
-
     }
 
 }
