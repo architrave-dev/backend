@@ -41,8 +41,7 @@ public class ProjectElementService {
     public ProjectElement updateProjectElementWork(Work work,
                                                    Long projectElementId,
                                                    WorkAlignment workAlignment,
-                                                   Integer peOrder,
-                                                   Boolean isRepresentative) {
+                                                   Integer peOrder) {
         ProjectElement projectElement = findById(projectElementId);
         //work 내 변경사항은 이미 완료한 상태
         if(!projectElement.getWork().equals(work)){
@@ -53,9 +52,6 @@ public class ProjectElementService {
         }
         if(peOrder != null){
             projectElement.setPeOrder(peOrder);
-        }
-        if(isRepresentative != null){
-            projectElement.setIsRepresentative(isRepresentative);
         }
         return projectElement;
     }
