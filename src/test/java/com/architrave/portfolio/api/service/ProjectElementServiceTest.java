@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
-import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DividerInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
@@ -13,14 +12,13 @@ import com.architrave.portfolio.domain.model.enumType.DividerType;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -31,21 +29,18 @@ public class ProjectElementServiceTest {
     private final WorkService workService;
     private final TextBoxService textBoxService;
     private final ProjectElementService projectElementService;
-    private final EntityManager em;
 
     @Autowired
     public ProjectElementServiceTest(ProjectService projectService,
                                      MemberService memberService,
                                      WorkService workService,
                                      TextBoxService textBoxService,
-                                     ProjectElementService projectElementService,
-                                     EntityManager em) {
+                                     ProjectElementService projectElementService) {
         this.projectService = projectService;
         this.memberService = memberService;
         this.workService = workService;
         this.textBoxService = textBoxService;
         this.projectElementService = projectElementService;
-        this.em = em;
     }
 
 
@@ -75,7 +70,6 @@ public class ProjectElementServiceTest {
     private final String TEST_PROJECT_THUMBNAIL_URL = "test thumbnail url";
 
     @Test
-    @Transactional
     public void getProjectElementsInProject(){
         //given
         Member member = createMemberInTest();
@@ -90,9 +84,6 @@ public class ProjectElementServiceTest {
         projectElementService.createProjectElement(textBoxPE);
         projectElementService.createProjectElement(dividerPE);
 
-        em.flush();
-        em.clear();
-
         //when
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
         ProjectElement projectElement_0 = projectElementList.get(0);
@@ -101,13 +92,12 @@ public class ProjectElementServiceTest {
 
         //then
         assertEquals(projectElementList.size(), 3);
-        assertNotNull(projectElement_0.getWork());
-        assertNotNull(projectElement_1.getTextBox());
-        assertNotNull(projectElement_2.getDividerType());
+        assertEquals(projectElement_0.getWork().getTitle(), TEST_WORK_TITLE);
+        assertEquals(projectElement_1.getTextBox().getContent(), TEST_TEXTBOX_CONTENT);
+        assertEquals(projectElement_2.getDividerType(), TEST_DIVIDER_TYPE);
     }
 
     @Test
-    @Transactional
     public void addWorkInProject(){
         //given
         Member member = createMemberInTest();
@@ -117,8 +107,6 @@ public class ProjectElementServiceTest {
 
         //when
         projectElementService.createProjectElement(workPE);
-        em.flush();
-        em.clear();
 
         //then
         List<ProjectElement> peList = projectElementService.findProjectElementByProject(project);
@@ -132,7 +120,6 @@ public class ProjectElementServiceTest {
     }
 
     @Test
-    @Transactional
     public void addTextBoxInProject(){
         //given
         Member member = createMemberInTest();
@@ -142,8 +129,6 @@ public class ProjectElementServiceTest {
 
         //when
         projectElementService.createProjectElement(textBoxPE);
-        em.flush();
-        em.clear();
 
         //then
         List<ProjectElement> peList = projectElementService.findProjectElementByProject(project);
@@ -157,7 +142,6 @@ public class ProjectElementServiceTest {
     }
 
     @Test
-    @Transactional
     public void addDividerInProject(){
         //given
         Member member = createMemberInTest();
@@ -166,8 +150,6 @@ public class ProjectElementServiceTest {
 
         //when
         projectElementService.createProjectElement(dividerPE);
-        em.flush();
-        em.clear();
 
         //then
         List<ProjectElement> peList = projectElementService.findProjectElementByProject(project);
@@ -181,7 +163,6 @@ public class ProjectElementServiceTest {
     }
 
     @Test
-    @Transactional
     public void updateWorkInProject(){
         //given
         Member member = createMemberInTest();
@@ -190,12 +171,18 @@ public class ProjectElementServiceTest {
         ProjectElement workPE = createWorkProjectElement(project, work,0);
         projectElementService.createProjectElement(workPE);
 
-        em.flush();
-        em.clear();
-
         //when
-        Work findWork = workService.findWorkById(1L);
-        findWork.setTitle(TEST_WORK_TITLE_CHANGE);
+        workService.updateWork(
+                1L,
+                null,
+                null,
+                TEST_WORK_TITLE_CHANGE,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
 
         projectElementService.updateProjectElementWork(
                 work,
@@ -203,19 +190,17 @@ public class ProjectElementServiceTest {
                 TEST_WORK_ALIGNMENT_CHANGE,
                 null
         );
-        em.flush();
-        em.clear();
 
         //then
+        Work findWork = workService.findWorkById(1L);
+        assertEquals(findWork.getTitle(), TEST_WORK_TITLE_CHANGE);
         ProjectElement findWorkPE2 = projectElementService.findById(1L);
         assertEquals(findWorkPE2.getWork().getTitle(), TEST_WORK_TITLE_CHANGE);
         assertEquals(findWorkPE2.getWorkAlignment(), TEST_WORK_ALIGNMENT_CHANGE);
         assertEquals(findWorkPE2.getPeOrder(), workPE.getPeOrder());
-        assertTrue(findWorkPE2.getProject().getProjectElementList().contains(findWorkPE2));
     }
 
     @Test
-    @Transactional
     public void updateTextBoxInProject(){
         //given
         Member member = createMemberInTest();
@@ -224,34 +209,29 @@ public class ProjectElementServiceTest {
         ProjectElement textBoxPE = createTextboxProjectElement(project, textBox,1);
 
         projectElementService.createProjectElement(textBoxPE);
-        em.flush();
-        em.clear();
 
         //when
-        TextBox findTextBox = textBoxService.findById(1L);
-        findTextBox.setContent(TEST_TEXTBOX_CONTENT_CHANGED);
+        TextBox updateTextBox = textBoxService.updateTextBox(1L, TEST_TEXTBOX_CONTENT_CHANGED, false);
 
         projectElementService.updateProjectElementTextBox(
-                findTextBox,
+                updateTextBox,
                 1L,
                 TEST_TEXTBOX_ALIGNMENT_CHANGE,
                 null
         );
-        em.flush();
-        em.clear();
 
         //then
+        TextBox findTextBox = textBoxService.findById(1l);
+        assertEquals(findTextBox.getContent(), TEST_TEXTBOX_CONTENT_CHANGED);
+
         ProjectElement findTextBoxPE = projectElementService.findById(1L);
         assertNull(findTextBoxPE.getWork());
         assertEquals(findTextBoxPE.getTextBox().getContent(), TEST_TEXTBOX_CONTENT_CHANGED);
         assertEquals(findTextBoxPE.getTextBoxAlignment(), TEST_TEXTBOX_ALIGNMENT_CHANGE);
         assertEquals(findTextBoxPE.getPeOrder(), 1);
-        assertTrue(findTextBoxPE.getProject().getProjectElementList().contains(findTextBoxPE));
     }
 
     @Test
-    @Transactional
-//    @Commit
     public void updateDividerInProject(){
         //given
         Member member = createMemberInTest();
@@ -260,37 +240,68 @@ public class ProjectElementServiceTest {
 
         projectElementService.createProjectElement(dividerPE);
 
-        em.flush();
-        em.clear();
-
         //when
         projectElementService.updateProjectElementDivider(
                 1L,
                 null,
                 1
         );
-        em.flush();
-        em.clear();
 
         //then
         ProjectElement findDividerPE = projectElementService.findById(1L);
         assertNull(findDividerPE.getWork());
         assertNull(findDividerPE.getTextBox());
         assertEquals(findDividerPE.getPeOrder(), 1);
-        assertTrue(findDividerPE.getProject().getProjectElementList().contains(findDividerPE));
     }
 
     @Test
-    @Transactional
-    public void removeProjectElement(){
+    public void removeWorkProjectElement(){
+        //given
+        Member member = createMemberInTest();
+        Project project = createProjectInTest(member);
+        Work work = createWork(member);
+        ProjectElement workPE = createWorkProjectElement(project, work, 0);
+
+        ProjectElement projectElement = projectElementService.createProjectElement(workPE);
+
+        //when
+        projectElementService.removeById(projectElement.getId());
+
+        //then
+        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
+        assertEquals(projectElementList.size(), 0);
+        Work findWork = workService.findWorkById(work.getId());
+        assertNotNull(findWork);
+        assertEquals(findWork.getTitle(), TEST_WORK_TITLE);
+    }
+    @Test
+    public void removeTextBoxProjectElement(){
+        //given
+        Member member = createMemberInTest();
+        Project project = createProjectInTest(member);
+        TextBox textBox = createTextBox(member);
+        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox, 0);
+
+        ProjectElement projectElement = projectElementService.createProjectElement(textBoxPE);
+
+        //when
+        projectElementService.removeById(projectElement.getId());
+
+        //then
+        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
+        assertEquals(projectElementList.size(), 0);
+        assertThrows(NoSuchElementException.class, () -> {
+            textBoxService.findById(textBox.getId());
+        });
+    }
+    @Test
+    public void removeDividerProjectElement(){
         //given
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         ProjectElement dividerPE = createDividerProjectElement(project, 0);
 
         ProjectElement projectElement = projectElementService.createProjectElement(dividerPE);
-        em.flush();
-        em.clear();
 
         //when
         projectElementService.removeById(projectElement.getId());
@@ -307,9 +318,7 @@ public class ProjectElementServiceTest {
                 .username(TEST_MEMBER_USERNAME)
                 .role(ROLE_USER)
                 .build();
-        Member member1 = memberService.createMember(member);
-        System.out.println("hello from createMemberInTest: "  + member1.getId());
-        return member1;
+        return memberService.createMember(member);
     }
 
     private Project createProjectInTest(Member member){
