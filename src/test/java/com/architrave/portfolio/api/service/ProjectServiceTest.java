@@ -48,6 +48,10 @@ public class ProjectServiceTest {
     private final String TEST_PROJECTINFO_NAME_2 = "test2";
     private final String TEST_PROJECTINFO_VALUE_2 = "test2 value";
 
+    private final String TEST_PROJECT_ORIGIN_URL = "test origin url";
+    private final String TEST_PROJECT_THUMBNAIL_URL = "test thumbnail url";
+
+
     @Test
     @Transactional
     public void getProjectListByMember(){
@@ -246,12 +250,14 @@ public class ProjectServiceTest {
     }
 
     private Project createProjectInTest(Member member){
-        Project project = new ProjectBuilder()
-                .member(member)
-                .title(TEST_PROJECT_TITLE)
-                .build();
         //when
-        return projectService.createProject(project);
+        return projectService.createProject(
+                member,
+                TEST_PROJECT_ORIGIN_URL,
+                TEST_PROJECT_THUMBNAIL_URL,
+                TEST_PROJECT_TITLE,
+                null
+        );
     }
 
 }

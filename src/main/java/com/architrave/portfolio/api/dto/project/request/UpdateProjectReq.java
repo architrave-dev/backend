@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateProjectReq {
     private Long id;
+    private String originImgUrl;
+    private String thumbnailUrl;
     private String title;
     private String description;
     private LocalDateTime startDate;

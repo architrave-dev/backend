@@ -1,9 +1,7 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
-import com.architrave.portfolio.api.dto.project.request.CreateProjectReq;
-import com.architrave.portfolio.api.dto.project.request.ProjectInfoReq;
-import com.architrave.portfolio.api.dto.project.request.UpdateProjectReq;
+import com.architrave.portfolio.api.dto.project.request.*;
 import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
@@ -15,7 +13,6 @@ import com.architrave.portfolio.api.service.ProjectService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
-import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -99,12 +96,13 @@ public class ProjectController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        Project project = new ProjectBuilder()
-                .member(loginUser)
-                .title(createProjectReq.getTitle())
-                .description(createProjectReq.getDescription())
-                .build();
-        Project createdProject = projectService.createProject(project);
+        Project createdProject = projectService.createProject(
+                loginUser,
+                createProjectReq.getOriginUrl(),
+                createProjectReq.getThumbnailUrl(),
+                createProjectReq.getTitle(),
+                createProjectReq.getDescription()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -143,7 +141,9 @@ public class ProjectController {
                 .collect(Collectors.toList());
 
         Project updateProject = projectService.updateProject(
-                targetProject,
+                updateProjectReq.getId(),
+                updateProjectReq.getOriginImgUrl(),
+                updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription(),
                 updateProjectReq.getStartDate(),

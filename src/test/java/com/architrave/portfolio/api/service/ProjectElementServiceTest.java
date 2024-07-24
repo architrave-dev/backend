@@ -71,6 +71,8 @@ public class ProjectElementServiceTest {
     private final String TEST_WORK_ORIGINAL_URL = "this is test orinalUrl";
     private final String TEST_WORK_THUMBNAIL_URL = "this is test thumbnailurl";
 
+    private final String TEST_PROJECT_ORIGIN_URL = "test origin url";
+    private final String TEST_PROJECT_THUMBNAIL_URL = "test thumbnail url";
 
     @Test
     @Transactional
@@ -199,7 +201,6 @@ public class ProjectElementServiceTest {
                 work,
                 1L,
                 TEST_WORK_ALIGNMENT_CHANGE,
-                null,
                 null
         );
         em.flush();
@@ -312,12 +313,13 @@ public class ProjectElementServiceTest {
     }
 
     private Project createProjectInTest(Member member){
-        Project project = new ProjectBuilder()
-                .member(member)
-                .title(TEST_PROJECT_TITLE)
-                .build();
-        //when
-        return projectService.createProject(project);
+        return projectService.createProject(
+                member,
+                TEST_PROJECT_ORIGIN_URL,
+                TEST_PROJECT_THUMBNAIL_URL,
+                TEST_PROJECT_TITLE,
+                null
+        );
     }
     private Work createWork(Member member){
         Work work = new WorkBuilder()
@@ -341,7 +343,6 @@ public class ProjectElementServiceTest {
                 .work(work)
                 .workAlignment(TEST_WORK_ALIGNMENT)
                 .peOrder(peOrder)
-                .isRepresentative(false)
                 .build();
     }
 
