@@ -50,6 +50,7 @@ public class ProjectElement {
             Integer peOrder
     ){
         ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.WORK;
         projectElement.project = project;
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
@@ -63,6 +64,7 @@ public class ProjectElement {
             Integer peOrder
     ){
         ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.TEXTBOX;
         projectElement.project = project;
         projectElement.textBox = textBox;
         projectElement.textBoxAlignment = textBoxAlignment;
@@ -75,6 +77,7 @@ public class ProjectElement {
             Integer peOrder
     ){
         ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.DIVIDER;
         projectElement.project = project;
         projectElement.dividerType = dividerType;
         projectElement.peOrder = peOrder;

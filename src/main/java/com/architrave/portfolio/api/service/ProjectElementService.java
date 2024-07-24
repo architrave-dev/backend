@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.TextBox;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
+import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
 import com.architrave.portfolio.domain.repository.ProjectElementRepository;
@@ -21,6 +22,7 @@ public class ProjectElementService {
 
     private final ProjectElementRepository projectElementRepository;
 
+    private final TextBoxService textBoxService;
 
     @Transactional
     public ProjectElement createProjectElement(ProjectElement projectElement) {
@@ -92,6 +94,9 @@ public class ProjectElementService {
     @Transactional
     public void removeById(Long id) {
         ProjectElement projectElement = findById(id);
+        if(projectElement.getProjectElementType() == ProjectElementType.TEXTBOX){
+            textBoxService.removeTextBox(projectElement.getTextBox().getId());
+        }
         projectElementRepository.delete(projectElement);
     }
 
