@@ -20,8 +20,8 @@ public class UpdateProjectReq {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String supportedBy;
-    private List<ProjectInfoReq> createdProjectInfoList = new ArrayList<>();
-    private List<ProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
-    private List<Long> removedProjectInfoList = new ArrayList<>();
+    private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
+    private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
+    private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();
     private Boolean isDeleted;
 }

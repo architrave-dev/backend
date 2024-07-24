@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectInfoReq {
-    private Long id;
-    private String customName;
-    private String customValue;
+public class RemoveProjectInfoReq {
+    private Long projectInfoId;
 }

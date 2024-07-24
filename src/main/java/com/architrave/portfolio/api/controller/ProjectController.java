@@ -163,9 +163,9 @@ public class ProjectController {
     }
 
     private void updateProjectInfo(Project targetProject,
-                       List<ProjectInfoReq> createdList,
-                       List<ProjectInfoReq> updatedList,
-                       List<Long> removedList
+                       List<CreateProjectInfoReq> createdList,
+                       List<UpdateProjectInfoReq> updatedList,
+                       List<RemoveProjectInfoReq> removedList
                        ){
         createdList.stream()
                 .forEach((p) -> projectInfoService.createProjectInfo(
@@ -175,11 +175,11 @@ public class ProjectController {
 
         updatedList.stream()
                 .forEach((p) -> projectInfoService.updateProjectInfo(
-                        p.getId(),
+                        p.getProjectInfoId(),
                         p.getCustomName(),
                         p.getCustomValue()));
 
         removedList.stream()
-                .forEach((id) -> projectInfoService.removeProjectInfo(id));
+                .forEach((p) -> projectInfoService.removeProjectInfo(p.getProjectInfoId()));
     }
 }
