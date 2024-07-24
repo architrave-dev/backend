@@ -34,7 +34,8 @@ public class AuthController {
 
     @Operation(
             summary = "회원가입",
-            description = "회원가입을 위한 API 입니다."
+            description = "회원가입을 위한 API 입니다. <br />" +
+                    "중복 가능한 username으로 unique한 aui를 생성합니다."
     )
     @PostMapping("/signin")
     public ResponseEntity<ResultDto<String>> signin(@RequestBody CreateMemberReq createMemberReq){
@@ -55,7 +56,8 @@ public class AuthController {
 
     @Operation(
             summary = "로그인",
-            description = "로그인을 위한 API 입니다."
+            description = "로그인을 위한 API 입니다. <br />" +
+                    "Authorization 헤더에 jwt 토큰을 반환합니다."
     )
     @PostMapping("/login")
     public ResponseEntity<ResultDto<MemberSimpleDto>> login(@RequestBody LoginReq loginReq){
