@@ -119,8 +119,7 @@ public class ProjectElementController {
                 updatedWork,
                 updateWorkProjectElementReq.getId(),
                 updateWorkProjectElementReq.getWorkAlignment(),
-                updateWorkProjectElementReq.getPeOrder(),
-                updateWorkProjectElementReq.getIsRepresentative()
+                updateWorkProjectElementReq.getPeOrder()
         );
 
         return ResponseEntity
@@ -239,7 +238,6 @@ public class ProjectElementController {
                     .work(work)
                     .workAlignment(createProjectElementReq.getWorkAlignment())
                     .peOrder(createProjectElementReq.getPeOrder())
-                    .isRepresentative(createProjectElementReq.getIsRepresentative())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(

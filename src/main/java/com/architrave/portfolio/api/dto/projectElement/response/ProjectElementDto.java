@@ -21,7 +21,6 @@ public class ProjectElementDto {
     private TextBoxAlignment textBoxAlignment;
     private DividerType dividerType;
     private Integer order;
-    private Boolean isRepresentative;
 
     public ProjectElementDto(ProjectElement projectElement){
         this.id = projectElement.getId();
@@ -35,7 +34,6 @@ public class ProjectElementDto {
         //divider
         this.dividerType = projectElement.getDividerType();
         this.order = projectElement.getPeOrder();
-        this.isRepresentative = projectElement.getIsRepresentative();
         if(this.work != null){
             this.projectElementType = ProjectElementType.WORK;
         }else if(this.textBox != null){

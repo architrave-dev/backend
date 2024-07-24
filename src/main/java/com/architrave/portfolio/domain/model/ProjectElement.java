@@ -42,21 +42,18 @@ public class ProjectElement {
 
     @Column
     private Integer peOrder;
-    private Boolean isRepresentative = false;
 
     public static ProjectElement createWorkElement(
             Project project,
             Work work,
             WorkAlignment workAlignment,
-            Integer peOrder,
-            Boolean isRepresentative
+            Integer peOrder
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.project = project;
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
         projectElement.peOrder = peOrder;
-        projectElement.isRepresentative = isRepresentative;
         return projectElement;
     }
     public static ProjectElement createTextboxElement(
