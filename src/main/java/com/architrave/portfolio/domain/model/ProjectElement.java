@@ -56,7 +56,7 @@ public class ProjectElement {
         projectElement.peOrder = peOrder;
         return projectElement;
     }
-    public static ProjectElement createTextboxElement(
+    public static ProjectElement createTextBoxElement(
             Project project,
             TextBox textBox,
             TextBoxAlignment textBoxAlignment,
