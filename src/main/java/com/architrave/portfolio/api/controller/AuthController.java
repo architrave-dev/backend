@@ -78,6 +78,7 @@ public class AuthController {
             summary = "[미지원] 로그아웃",
             description = "로그아웃은 jwt token을 지우는 것으로 대체합니다."
     )
+    @Deprecated
     @GetMapping("/logout")
     public void login(){}
 }
