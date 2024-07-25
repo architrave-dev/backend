@@ -34,18 +34,18 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("there is no Member that id: " + memberId));
     }
     @Transactional(readOnly = true)
     public Member findMemberById(Member member) {
         return memberRepository.findById(member.getId())
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("there is no Member like that"));
     }
 
     @Transactional(readOnly = true)
     public Member findMemberByAui(String aui) {
         return memberRepository.findByAui(aui)
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("there is no Member that aui: " + aui));
     }
 
     /**
