@@ -33,7 +33,7 @@ public class TextBoxInProjectBuilder {
 
     public ProjectElement build(){
         validateProject();
-        return ProjectElement.createTextboxElement(
+        return ProjectElement.createTextBoxElement(
                 project,
                 textBox,
                 textBoxAlignment,

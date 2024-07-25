@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.auth.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginReq {
+    @Schema(example = "example@gmail.com")
     private String email;
+    @Schema(example = "string(아직 요구되는 길이,특수문자 없음)")
     private String password;
 }

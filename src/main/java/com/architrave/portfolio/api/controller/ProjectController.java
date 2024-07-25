@@ -1,22 +1,18 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
-import com.architrave.portfolio.api.dto.project.request.CreateProjectReq;
-import com.architrave.portfolio.api.dto.project.request.ProjectInfoReq;
-import com.architrave.portfolio.api.dto.project.request.UpdateProjectReq;
+import com.architrave.portfolio.api.dto.project.request.*;
 import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
-import com.architrave.portfolio.api.service.AuthService;
-import com.architrave.portfolio.api.service.MemberService;
-import com.architrave.portfolio.api.service.ProjectInfoService;
-import com.architrave.portfolio.api.service.ProjectService;
+import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
-import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "2. Project")  // => swagger 이름
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +34,7 @@ public class ProjectController {
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
 
+    @Operation(summary = "작가의 Project List 조회하기")
     @GetMapping("/list")
     public ResponseEntity<ResultDto<List<ProjectSimpleDto>>> getProjectList(
             @RequestParam("aui") String aui
@@ -54,10 +52,11 @@ public class ProjectController {
                 .body(new ResultDto<>(result));
     }
 
-    @GetMapping("/{title}")
+    @Operation(summary = "작가의 Project 세부내용 조회하기")
+    @GetMapping
     public ResponseEntity<ResultDto<ProjectDto>> getProjectDetail(
-            @PathVariable("title") String title,
-            @RequestParam("aui") String aui
+            @RequestParam("aui") String aui,
+            @RequestParam("title") String title
     ){
         log.info("hello from getProjectDetail");
         Member member = memberService.findMemberByAui(aui);
@@ -78,6 +77,11 @@ public class ProjectController {
                 .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList, projectElementDtoList)));
     }
 
+    @Operation(
+            summary = "Project 생성하기",
+            description = "간단하게 title, description, UploadFile 만으로 생성합니다. <br />" +
+                    "이후 Project 내의 세부사항은 update 요청으로 진행합니다."
+    )
     @PostMapping
     public ResponseEntity<ResultDto<ProjectSimpleDto>> createProject(
             @RequestParam("aui") String aui,
@@ -89,12 +93,13 @@ public class ProjectController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        Project project = new ProjectBuilder()
-                .member(loginUser)
-                .title(createProjectReq.getTitle())
-                .description(createProjectReq.getDescription())
-                .build();
-        Project createdProject = projectService.createProject(project);
+        Project createdProject = projectService.createProject(
+                loginUser,
+                createProjectReq.getOriginUrl(),
+                createProjectReq.getThumbnailUrl(),
+                createProjectReq.getTitle(),
+                createProjectReq.getDescription()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -107,6 +112,16 @@ public class ProjectController {
      * @param updateProjectReq
      * @return
      */
+    @Operation(
+            summary = "Project 수정하기",
+            description = "projectInfo 관련 설명 <br/><br/>" +
+                    "Project 내에 ProjectInfo 생성, 수정, 삭제를 위해 3가지로 나뉩니다. <br />" +
+                    "createdProjectInfoList: 생성된 ProjectInfo <br/>" +
+                    "updatedProjectInfoList: 생성된 ProjectInfo <br/>" +
+                    "removedProjectInfoList: 삭제된 ProjectInfo <br/><br/>" +
+                    "Project 삭제 시 isDeleted 를 true 로 변경합니다. <br/><br/>" +
+                    "projectElement는 전용 API를 사용합니다."
+    )
     @PutMapping
     public ResponseEntity<ResultDto<ProjectDto>> updateProject(
             @RequestParam("aui") String aui,
@@ -118,21 +133,11 @@ public class ProjectController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        //대상 project 가져오기
-        Project targetProject = projectService.findById(updateProjectReq.getId());
-
-        updateProjectInfo(targetProject,
-                updateProjectReq.getCreatedProjectInfoList(),
-                updateProjectReq.getUpdatedProjectInfoList(),
-                updateProjectReq.getRemovedProjectInfoList());
-
-        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(targetProject);
-        List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
-                .map((p) -> new ProjectInfoDto(p))
-                .collect(Collectors.toList());
-
-        Project updateProject = projectService.updateProject(
-                targetProject,
+        //project 업데이트
+        Project updatedProject = projectService.updateProject(
+                updateProjectReq.getId(),
+                updateProjectReq.getOriginImgUrl(),
+                updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription(),
                 updateProjectReq.getStartDate(),
@@ -141,20 +146,27 @@ public class ProjectController {
                 updateProjectReq.getIsDeleted()
         );
 
-        List<ProjectElementDto> projectElementDtoList = targetProject.getProjectElementList()
-                .stream()
-                .map((pe) -> new ProjectElementDto(pe))
+        //projectInfo 업데이트
+        updateProjectInfo(updatedProject,
+                updateProjectReq.getCreatedProjectInfoList(),
+                updateProjectReq.getUpdatedProjectInfoList(),
+                updateProjectReq.getRemovedProjectInfoList());
+
+        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(updatedProject);
+
+        List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
+                .map((p) -> new ProjectInfoDto(p))
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(updateProject, projectInfoDtoList, projectElementDtoList)));
+                .body(new ResultDto<>(new ProjectDto(updatedProject, projectInfoDtoList)));
     }
 
     private void updateProjectInfo(Project targetProject,
-                       List<ProjectInfoReq> createdList,
-                       List<ProjectInfoReq> updatedList,
-                       List<Long> removedList
+                       List<CreateProjectInfoReq> createdList,
+                       List<UpdateProjectInfoReq> updatedList,
+                       List<RemoveProjectInfoReq> removedList
                        ){
         createdList.stream()
                 .forEach((p) -> projectInfoService.createProjectInfo(
@@ -164,11 +176,11 @@ public class ProjectController {
 
         updatedList.stream()
                 .forEach((p) -> projectInfoService.updateProjectInfo(
-                        p.getId(),
+                        p.getProjectInfoId(),
                         p.getCustomName(),
                         p.getCustomValue()));
 
         removedList.stream()
-                .forEach((id) -> projectInfoService.removeProjectInfo(id));
+                .forEach((p) -> projectInfoService.removeProjectInfo(p.getProjectInfoId()));
     }
 }

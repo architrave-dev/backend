@@ -15,5 +15,4 @@ public class UpdateWorkProjectElementReq {
     private UpdateWorkReq updateWorkReq;
     private WorkAlignment workAlignment;
     private Integer peOrder;
-    private Boolean isRepresentative;
 }

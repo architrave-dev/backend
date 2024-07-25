@@ -1,6 +1,6 @@
 //package com.architrave.portfolio.api.service;
 //
-//import com.architrave.portfolio.api.dto.work.request.UpdateWorkRequestDto;
+//import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 //import com.architrave.portfolio.domain.model.Member;
 //import com.architrave.portfolio.domain.model.Size;
 //import com.architrave.portfolio.domain.model.Work;

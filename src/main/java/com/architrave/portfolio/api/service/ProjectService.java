@@ -2,6 +2,9 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
+import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
+import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,21 @@ public class ProjectService {
 
 
     @Transactional
-    public Project createProject(Project project) {
+    public Project createProject(
+            Member loginUser,
+            String originImgUrl,
+            String thumbnailUrl,
+            String title,
+            String description
+    ) {
+        Project project = new ProjectBuilder()
+                .member(loginUser)
+                .originImgUrl(originImgUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .title(title)
+                .description(description)
+                .build();
+
         return projectRepository.save(project);
     }
 
@@ -48,7 +65,9 @@ public class ProjectService {
 
     @Transactional
     public Project updateProject(
-            Project project,
+            Long projectId,
+            String originUrl,
+            String thumbnailUrl,
             String title,
             String description,
             LocalDateTime startDate,
@@ -56,9 +75,13 @@ public class ProjectService {
             String supportedBy,
             Boolean isDeleted
     ) {
+        Project project = findById(projectId);
         if(isDeleted != null && isDeleted == true){
             project.setIsDeleted(true);
             return project;
+        }
+        if(originUrl != null || thumbnailUrl != null){
+            project.setUploadFileUrl(originUrl, thumbnailUrl);
         }
         if(startDate != null || endDate != null){
             project.setDate(startDate, endDate);

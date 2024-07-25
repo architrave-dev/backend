@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProjectReq {
-    private String title;
-    private String description;
-    private String originUrl;
-    private String thumbnailUrl;
+public class CreateProjectInfoReq {
+    private String customName;
+    private String customValue;
 }

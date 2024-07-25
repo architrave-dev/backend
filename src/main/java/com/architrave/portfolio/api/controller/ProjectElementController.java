@@ -12,6 +12,8 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextB
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "3. ProjectElement")  // => swagger 이름
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class ProjectElementController {
     private final MemberService memberService;
     private final AuthService authService;
 
+    @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<List<ProjectElementDto>>> getProjectElementList(
             @RequestParam("aui") String aui,
@@ -59,6 +63,7 @@ public class ProjectElementController {
      * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
      * projectElment를 하나씩 보내기 때문에 단건 create
      */
+    @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
     @PostMapping
     public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
             @RequestParam("aui") String aui,
@@ -79,6 +84,11 @@ public class ProjectElementController {
                 .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
     }
 
+    @Operation(summary = "특정 Project 내의 ProjectElement (Work) 수정하기",
+            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+    )
     @PutMapping("/work")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
             @RequestParam("aui") String aui,
@@ -109,8 +119,7 @@ public class ProjectElementController {
                 updatedWork,
                 updateWorkProjectElementReq.getId(),
                 updateWorkProjectElementReq.getWorkAlignment(),
-                updateWorkProjectElementReq.getPeOrder(),
-                updateWorkProjectElementReq.getIsRepresentative()
+                updateWorkProjectElementReq.getPeOrder()
         );
 
         return ResponseEntity
@@ -118,6 +127,12 @@ public class ProjectElementController {
                 .body(new ResultDto<>(new ProjectElementDto(projectElement)));
     }
 
+    @Operation(
+            summary = "특정 Project 내의 ProjectElement (TextBox) 수정하기",
+            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+    )
     @PutMapping("/textBox")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
             @RequestParam("aui") String aui,
@@ -149,6 +164,11 @@ public class ProjectElementController {
                 .body(new ResultDto<>(new ProjectElementDto(projectElement)));
     }
 
+    @Operation(summary = "특정 Project 내의 ProjectElement (Divider) 수정하기" ,
+            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+    )
     @PutMapping("/divider")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
             @RequestParam("aui") String aui,
@@ -176,6 +196,7 @@ public class ProjectElementController {
      * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
      * projectElment를 하나씩 보내기 때문에 단건 delete
      */
+    @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> deleteProjectElement(
             @RequestParam("aui") String aui,
@@ -197,6 +218,11 @@ public class ProjectElementController {
      * 전체 순서변경을 지금 만들어야하나...?
      * 프론트에게 미안하더라도 일단 하나씩 하자.
      */
+    @Operation(
+            summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
+            description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
+    )
+    @GetMapping("/order")
     private void changeOrderAtOnce(){}
 
 
@@ -212,7 +238,6 @@ public class ProjectElementController {
                     .work(work)
                     .workAlignment(createProjectElementReq.getWorkAlignment())
                     .peOrder(createProjectElementReq.getPeOrder())
-                    .isRepresentative(createProjectElementReq.getIsRepresentative())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(

@@ -9,6 +9,9 @@ import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 
+@Tag(name = "1. Auth")  // => swagger 이름
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -28,6 +32,11 @@ public class AuthController {
     private final AuthService authService;
 
 
+    @Operation(
+            summary = "회원가입",
+            description = "회원가입을 위한 API 입니다. <br />" +
+                    "중복 가능한 username으로 unique한 aui를 생성합니다."
+    )
     @PostMapping("/signin")
     public ResponseEntity<ResultDto<String>> signin(@RequestBody CreateMemberReq createMemberReq){
 
@@ -45,6 +54,11 @@ public class AuthController {
                 .body(new ResultDto<>("signin success"));
     }
 
+    @Operation(
+            summary = "로그인",
+            description = "로그인을 위한 API 입니다. <br />" +
+                    "Authorization 헤더에 jwt 토큰을 반환합니다."
+    )
     @PostMapping("/login")
     public ResponseEntity<ResultDto<MemberSimpleDto>> login(@RequestBody LoginReq loginReq){
 
@@ -60,5 +74,11 @@ public class AuthController {
                 .body(new ResultDto<>(new MemberSimpleDto(member)));
     }
 
-    //logout은 front에서 authToken 지우기
+    @Operation(
+            summary = "[미지원] 로그아웃",
+            description = "로그아웃은 jwt token을 지우는 것으로 대체합니다."
+    )
+    @Deprecated
+    @GetMapping("/logout")
+    public void login(){}
 }

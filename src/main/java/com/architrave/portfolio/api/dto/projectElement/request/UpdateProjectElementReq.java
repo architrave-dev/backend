@@ -19,5 +19,4 @@ public class UpdateProjectElementReq {
     private TextBoxAlignment textBoxAlignment;
     private DividerType dividerType;
     private Integer peOrder;
-    private Boolean isRepresentative;
 }

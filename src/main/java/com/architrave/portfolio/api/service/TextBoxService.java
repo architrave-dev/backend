@@ -41,4 +41,9 @@ public class TextBoxService {
 
         return textBox;
     }
+
+    public void removeTextBox(Long textBoxId) {
+        TextBox textBox = findById(textBoxId);
+        textBoxRepository.delete(textBox);
+    }
 }

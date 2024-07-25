@@ -21,6 +21,9 @@ public class Project extends BaseEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "upload_file_id")
+    private UploadFile uploadFile;
     private String title;
     private String description;
     private LocalDateTime startDate;
@@ -39,11 +42,13 @@ public class Project extends BaseEntity{
 
     public static Project createProject(
             Member member,
+            UploadFile uploadFile,
             String title,
             String description
     ){
         Project project = new Project();
         project.member = member;
+        project.uploadFile = uploadFile;
         project.title = title;
         project.description = description;
         project.isDeleted = false;
@@ -63,5 +68,12 @@ public class Project extends BaseEntity{
         }
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+    /**
+     * Project의 대표이미지 url을 설정한다.
+     */
+    public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
+        this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
+        if(this.isDeleted) this.isDeleted = false;
     }
 }

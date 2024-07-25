@@ -27,5 +27,4 @@ public class CreateProjectElementReq {
     private DividerType dividerType;
 
     private Integer peOrder;
-    private Boolean isRepresentative;
 }

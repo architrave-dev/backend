@@ -6,34 +6,30 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
-import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ProjectServiceTest {
 
     private final ProjectService projectService;
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
-    private final EntityManager em;
 
     @Autowired
     public ProjectServiceTest(ProjectService projectService,
                               MemberService memberService,
-                              ProjectInfoService projectInfoService,
-                              EntityManager em) {
+                              ProjectInfoService projectInfoService) {
         this.projectService = projectService;
         this.memberService = memberService;
         this.projectInfoService = projectInfoService;
-        this.em = em;
     }
 
     private final String TEST_MEMBER_EMAIL = "lee@gmail.com";
@@ -48,15 +44,16 @@ public class ProjectServiceTest {
     private final String TEST_PROJECTINFO_NAME_2 = "test2";
     private final String TEST_PROJECTINFO_VALUE_2 = "test2 value";
 
+    private final String TEST_PROJECT_ORIGIN_URL = "test origin url";
+    private final String TEST_PROJECT_THUMBNAIL_URL = "test thumbnail url";
+
+
     @Test
-    @Transactional
     public void getProjectListByMember(){
         //given
         Member member = createMemberInTest();
         createProjectInTest(member);
         createProjectInTest(member);
-        em.flush();
-        em.clear();
 
         //when
         List<Project> projectList = projectService.findByMember(member);
@@ -71,12 +68,9 @@ public class ProjectServiceTest {
     }
 
     @Test
-    @Transactional
     public void getProjectListEmpty(){
         //given
         Member member = createMemberInTest();
-        em.flush();
-        em.clear();
 
         //when
         List<Project> projectList = projectService.findByMember(member);
@@ -86,13 +80,10 @@ public class ProjectServiceTest {
     }
 
     @Test
-    @Transactional
     public void getProjectDetail(){
         //given
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
-        em.flush();
-        em.clear();
 
         //when
         Project findProject = projectService.findById(project.getId());
@@ -102,7 +93,6 @@ public class ProjectServiceTest {
         assertEquals(findProject.getMember().getAui(), member.getAui());
     }
     @Test
-    @Transactional(readOnly = true)
     public void getProjectDetailEmpty(){
         //given
         //when then
@@ -112,15 +102,12 @@ public class ProjectServiceTest {
     }
 
     @Test
-    @Transactional
     public void createProject(){
         //given
         Member member = createMemberInTest();
 
         //when
         Project createdProject = createProjectInTest(member);
-        em.flush();
-        em.clear();
 
         //then
         Project findProject = projectService.findById(createdProject.getId());
@@ -130,34 +117,36 @@ public class ProjectServiceTest {
 
 
     @Test
-    @Transactional
     public void updateProject(){
         //given
         Member member = createMemberInTest();
         Project createdProject = createProjectInTest(member);
-        em.flush();
-        em.clear();
 
         //when
-        Project findProject = projectService.findById(createdProject.getId());
-        findProject.setIsDeleted(true);
-        em.flush();
-        em.clear();
+        Project updatedProject = projectService.updateProject(
+                createdProject.getId(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                true
+        );
 
         //then
-        Project findProject2 = projectService.findById(createdProject.getId());
-        assertTrue(findProject2.getIsDeleted());
-        assertEquals(findProject2.getTitle(), findProject.getTitle());
+        Project findProject = projectService.findById(createdProject.getId());
+        assertEquals(findProject.getTitle(), createdProject.getTitle());
+        assertTrue(findProject.getIsDeleted());
+
     }
 
     @Test
-    @Transactional
     public void addProjectInfoInProject(){
         //given
         Member member = createMemberInTest();
         Project createdProject = createProjectInTest(member);
-        em.flush();
-        em.clear();
 
         //when
         Project findProject = projectService.findById(createdProject.getId());
@@ -165,8 +154,6 @@ public class ProjectServiceTest {
         assertEquals(projectInfoByProject.size(), 0);
         projectInfoService.createProjectInfo(findProject, TEST_PROJECTINFO_NAME, TEST_PROJECTINFO_VALUE);
 
-        em.flush();
-        em.clear();
 
         //then
         Project findProject2 = projectService.findById(createdProject.getId());
@@ -175,15 +162,12 @@ public class ProjectServiceTest {
     }
 
     @Test
-    @Transactional
     public void updateProjectInfoInProject(){
         //given
         Member member = createMemberInTest();
         Project createdProject = createProjectInTest(member);
         projectInfoService.createProjectInfo(createdProject, TEST_PROJECTINFO_NAME, TEST_PROJECTINFO_VALUE);
         projectInfoService.createProjectInfo(createdProject, TEST_PROJECTINFO_NAME_2, TEST_PROJECTINFO_VALUE_2);
-        em.flush();
-        em.clear();
 
         //when
         List<ProjectInfo> projectInfoByProject = projectInfoService.findProjectInfoByProject(createdProject);
@@ -194,8 +178,6 @@ public class ProjectServiceTest {
                 projectInfo.getId(),
                 projectInfo.getCustomName(),
                 TEST_PROJECTINFO_VALUE_2);
-        em.flush();
-        em.clear();
 
         //then
         List<ProjectInfo> projectInfoByProject2 = projectInfoService.findProjectInfoByProject(createdProject);
@@ -206,23 +188,18 @@ public class ProjectServiceTest {
     }
 
     @Test
-    @Transactional
     public void deleteProjectInfoInProject(){
         //given
         Member member = createMemberInTest();
         Project createdProject = createProjectInTest(member);
         projectInfoService.createProjectInfo(createdProject, TEST_PROJECTINFO_NAME, TEST_PROJECTINFO_VALUE);
         projectInfoService.createProjectInfo(createdProject, TEST_PROJECTINFO_NAME_2, TEST_PROJECTINFO_VALUE_2);
-        em.flush();
-        em.clear();
 
         //when
         List<ProjectInfo> projectInfoByProject = projectInfoService.findProjectInfoByProject(createdProject);
         assertEquals(projectInfoByProject.size(), 2);
         ProjectInfo projectInfo = projectInfoByProject.get(0);
         projectInfoService.removeProjectInfo(projectInfo.getId());
-        em.flush();
-        em.clear();
 
         //then
         List<ProjectInfo> projectInfoByProject2 = projectInfoService.findProjectInfoByProject(createdProject);
@@ -246,12 +223,14 @@ public class ProjectServiceTest {
     }
 
     private Project createProjectInTest(Member member){
-        Project project = new ProjectBuilder()
-                .member(member)
-                .title(TEST_PROJECT_TITLE)
-                .build();
         //when
-        return projectService.createProject(project);
+        return projectService.createProject(
+                member,
+                TEST_PROJECT_ORIGIN_URL,
+                TEST_PROJECT_THUMBNAIL_URL,
+                TEST_PROJECT_TITLE,
+                null
+        );
     }
 
 }

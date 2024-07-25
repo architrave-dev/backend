@@ -12,7 +12,6 @@ public class WorkInProjectBuilder {
     private Work work;
     private WorkAlignment workAlignment;
     private Integer peOrder;
-    private Boolean isRepresentative;
 
     public WorkInProjectBuilder project(Project project){
         this.project = project;
@@ -33,22 +32,17 @@ public class WorkInProjectBuilder {
         return this;
     }
 
-    public WorkInProjectBuilder isRepresentative(Boolean isRepresentative){
-        this.isRepresentative = isRepresentative;
-        return this;
-    }
     public ProjectElement build(){
         validateProject();
         return ProjectElement.createWorkElement(
                 project,
                 work,
                 workAlignment,
-                peOrder,
-                isRepresentative
+                peOrder
         );
     }
     private void validateProject(){
-        if(project == null || work == null || workAlignment == null || peOrder == null || isRepresentative == null){
+        if(project == null || work == null || workAlignment == null || peOrder == null){
             throw new IllegalArgumentException("required value is empty in ProjectBuilder");
         }
     }
