@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 public class LandingBoxService {
@@ -30,7 +32,7 @@ public class LandingBoxService {
             Boolean isDeleted
     ) {
         LandingBox landingBox = findLbById(landingBoxId);
-        if(isDeleted){
+        if(isDeleted != null && isDeleted == true){
             landingBox.removeUploadFile();
             return landingBox;
         }
@@ -40,7 +42,7 @@ public class LandingBoxService {
         if(title != null)           landingBox.setTitle(title);
         if(description != null)     landingBox.setDescription(description);
         if(landingBox.getIsDeleted()) landingBox.setIsDeleted(false);
-
+        landingBox.setIsDeleted(false);
         return landingBox;
     }
 
@@ -52,7 +54,7 @@ public class LandingBoxService {
     @Transactional(readOnly = true)
     public LandingBox findLbById(Long landingBoxId) {
         return landingBoxRepository.findById(landingBoxId)
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("there is no landingBox that id: " + landingBoxId));
     }
 
     /**
