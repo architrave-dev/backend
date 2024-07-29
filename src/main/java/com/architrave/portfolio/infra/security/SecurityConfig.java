@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -16,11 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf((auth) -> auth.disable());
+
+        http.cors((auth) -> auth.configurationSource(corsConfigurationSource));
 
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers(AUTH_WHITELIST).permitAll()                                //swagger

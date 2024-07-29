@@ -6,17 +6,23 @@ import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MemberServiceTest {
 
-    private final MemberService memberService;
+    @Autowired
+    private MemberService memberService;
 
     private final String TEST_MEMBER_EMAIL = "lee@gmail.com";
     private final String TEST_MEMBER_EMAIL_2 = "jung@gmail.com";
@@ -25,11 +31,6 @@ public class MemberServiceTest {
     private final String TEST_MEMBER_USERNAME_CHANGED = "중섭이";
     private final RoleType ROLE_USER = RoleType.USER;
     private final RoleType ROLE_CHANGED = RoleType.ADMIN;
-
-    @Autowired
-    public MemberServiceTest(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @Test
     public void createTest(){
@@ -100,7 +101,10 @@ public class MemberServiceTest {
         memberService.removeMember(afterCreateMember);
 
         //then
-        Assertions.assertNull(memberService.findMemberById(afterCreateMember));
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            //given
+            memberService.findMemberById(afterCreateMember);
+        });
     }
     @Test
     public void NoSuchElementExceptionWhenRemoveEmpty(){
@@ -169,7 +173,9 @@ public class MemberServiceTest {
     public void findEmptyTest(){
         //given
         //when then
-        Assertions.assertNull(memberService.findMemberById(1L));
+        assertThrows(NoSuchElementException.class, () ->
+                memberService.findMemberById(1L)
+        );
     }
 
     @Test

@@ -8,29 +8,26 @@ import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ProjectServiceTest {
 
-    private final ProjectService projectService;
-    private final MemberService memberService;
-    private final ProjectInfoService projectInfoService;
-
     @Autowired
-    public ProjectServiceTest(ProjectService projectService,
-                              MemberService memberService,
-                              ProjectInfoService projectInfoService) {
-        this.projectService = projectService;
-        this.memberService = memberService;
-        this.projectInfoService = projectInfoService;
-    }
+    private ProjectService projectService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private ProjectInfoService projectInfoService;
 
     private final String TEST_MEMBER_EMAIL = "lee@gmail.com";
     private final String TEST_MEMBER_PASSWORD = "12345";

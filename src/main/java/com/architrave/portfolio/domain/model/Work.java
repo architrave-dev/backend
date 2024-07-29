@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Work extends BaseEntity {
 
     @Id

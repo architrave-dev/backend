@@ -2,6 +2,7 @@ package com.architrave.portfolio.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class Project extends BaseEntity{
 
     @Id

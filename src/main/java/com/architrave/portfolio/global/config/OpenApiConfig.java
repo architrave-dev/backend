@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
                 ),
                 @Server(
                         description = "product server",
-                        url = "http://localhost:8080"
+                        url = "http://43.202.45.205:8080"
                 )
         }
 )
