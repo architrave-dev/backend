@@ -13,36 +13,30 @@ import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ProjectElementServiceTest {
 
-    private final ProjectService projectService;
-    private final MemberService memberService;
-    private final WorkService workService;
-    private final TextBoxService textBoxService;
-    private final ProjectElementService projectElementService;
-
     @Autowired
-    public ProjectElementServiceTest(ProjectService projectService,
-                                     MemberService memberService,
-                                     WorkService workService,
-                                     TextBoxService textBoxService,
-                                     ProjectElementService projectElementService) {
-        this.projectService = projectService;
-        this.memberService = memberService;
-        this.workService = workService;
-        this.textBoxService = textBoxService;
-        this.projectElementService = projectElementService;
-    }
-
+    private ProjectService projectService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private WorkService workService;
+    @Autowired
+    private TextBoxService textBoxService;
+    @Autowired
+    private ProjectElementService projectElementService;
 
     private final String TEST_MEMBER_EMAIL = "lee@gmail.com";
     private final String TEST_MEMBER_PASSWORD = "12345";
