@@ -14,6 +14,7 @@ import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class ProjectElementController {
     @PostMapping
     public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
             @RequestParam("aui") String aui,
-            @RequestBody CreateProjectElementReq createProjectElementReq
+            @Valid @RequestBody CreateProjectElementReq createProjectElementReq
     ){
         log.info("hello from createProjectElement");
         Member loginUser = authService.getMemberFromContext();
@@ -92,7 +93,7 @@ public class ProjectElementController {
     @PutMapping("/work")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
             @RequestParam("aui") String aui,
-            @RequestBody UpdateWorkProjectElementReq updateWorkProjectElementReq
+            @Valid @RequestBody UpdateWorkProjectElementReq updateWorkProjectElementReq
     ) {
         log.info("hello from updateWorkProjectElement");
         Member loginUser = authService.getMemberFromContext();
@@ -136,7 +137,7 @@ public class ProjectElementController {
     @PutMapping("/textBox")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
             @RequestParam("aui") String aui,
-            @RequestBody UpdateTextBoxProjectElementReq updateTextBoxProjectElementReq
+            @Valid @RequestBody UpdateTextBoxProjectElementReq updateTextBoxProjectElementReq
     ) {
         log.info("hello from updateTextBoxProjectElement");
         Member loginUser = authService.getMemberFromContext();
@@ -172,7 +173,7 @@ public class ProjectElementController {
     @PutMapping("/divider")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
             @RequestParam("aui") String aui,
-            @RequestBody UpdateDividerProjectElementReq updateDividerProjectElementReq
+            @Valid @RequestBody UpdateDividerProjectElementReq updateDividerProjectElementReq
     ) {
         log.info("hello from updateDividerProjectElement");
         Member loginUser = authService.getMemberFromContext();
@@ -200,7 +201,7 @@ public class ProjectElementController {
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> deleteProjectElement(
             @RequestParam("aui") String aui,
-            @RequestBody RemoveProjectElementReq removeProjectElementReq
+            @Valid @RequestBody RemoveProjectElementReq removeProjectElementReq
     ){
         log.info("hello from deleteProjectElement");
         Member loginUser = authService.getMemberFromContext();

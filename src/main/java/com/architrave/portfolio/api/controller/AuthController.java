@@ -10,8 +10,8 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -44,7 +44,7 @@ public class AuthController {
                     "중복 가능한 username으로 unique한 aui를 생성합니다."
     )
     @PostMapping("/signin")
-    public ResponseEntity<ResultDto<String>> signin(@RequestBody CreateMemberReq createMemberReq){
+    public ResponseEntity<ResultDto<String>> signin(@Valid @RequestBody CreateMemberReq createMemberReq){
 
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
@@ -66,7 +66,7 @@ public class AuthController {
                     "Authorization 헤더에 jwt 토큰을 반환합니다."
     )
     @PostMapping("/login")
-    public ResponseEntity<ResultDto<MemberSimpleDto>> login(@RequestBody LoginReq loginReq){
+    public ResponseEntity<ResultDto<MemberSimpleDto>> login(@Valid @RequestBody LoginReq loginReq){
 
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();

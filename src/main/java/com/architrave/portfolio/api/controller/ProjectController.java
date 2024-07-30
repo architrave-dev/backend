@@ -13,6 +13,7 @@ import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -85,7 +86,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<ResultDto<ProjectSimpleDto>> createProject(
             @RequestParam("aui") String aui,
-            @RequestBody CreateProjectReq createProjectReq
+            @Valid @RequestBody CreateProjectReq createProjectReq
     ){
         log.info("hello from createProject");
         Member loginUser = authService.getMemberFromContext();
@@ -125,7 +126,7 @@ public class ProjectController {
     @PutMapping
     public ResponseEntity<ResultDto<ProjectDto>> updateProject(
             @RequestParam("aui") String aui,
-            @RequestBody UpdateProjectReq updateProjectReq
+            @Valid @RequestBody UpdateProjectReq updateProjectReq
     ){
         log.info("hello from updateProject");
         Member loginUser = authService.getMemberFromContext();
