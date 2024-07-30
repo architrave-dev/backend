@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.project.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProjectReq {
+    @NotNull
     private Long id;
     private String originImgUrl;
     private String thumbnailUrl;

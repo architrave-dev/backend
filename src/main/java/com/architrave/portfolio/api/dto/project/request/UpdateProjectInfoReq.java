@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.project.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProjectInfoReq {
+    @NotNull
     private Long projectInfoId;
     private String customName;
     private String customValue;

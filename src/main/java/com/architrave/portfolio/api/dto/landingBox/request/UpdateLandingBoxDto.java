@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.landingBox.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateLandingBoxDto {
+    @NotNull
     private Long id;
     private String originUrl;
     private String thumbnailUrl;
