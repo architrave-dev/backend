@@ -4,8 +4,6 @@ import com.architrave.portfolio.domain.model.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -22,11 +20,9 @@ public class JwtService {
     private SecretKey SECRET_KEY;
 
     public JwtService(@Value("${spring.jwt.secret}") String secret){
-        System.out.println("secret in yml: " + secret);
         this.SECRET_KEY = new SecretKeySpec(
                 secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
-        System.out.println("secretKey: " + SECRET_KEY);
     }
 
     public String extractEmailFromToken(String token) {
