@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,6 +33,9 @@ public class AuthController {
 
     private final MemberService memberService;
     private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
+
+    private final PasswordEncoder passwordEncoder;
 
 
     @Operation(
@@ -42,7 +48,7 @@ public class AuthController {
 
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
-                .password(createMemberReq.getPassword())
+                .password(passwordEncoder.encode(createMemberReq.getPassword()))
                 .username(createMemberReq.getUsername())
                 .role(RoleType.USER)
                 .build();
@@ -66,7 +72,14 @@ public class AuthController {
         String password = loginReq.getPassword();
 
         Member member = authService.loadUserByUsername(email);
-        String authHeader = authService.login(member, password);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        password
+                )
+        );
+
+        String authHeader = authService.login(email);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
