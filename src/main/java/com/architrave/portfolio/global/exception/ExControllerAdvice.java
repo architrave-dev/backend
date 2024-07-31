@@ -45,7 +45,7 @@ public class ExControllerAdvice {
             UsernameNotFoundException.class,
             NoSuchElementException.class
     })
-    private ResponseEntity<ErrorDto> illgalArgumentExceptionHandler(RuntimeException e){
+    private ResponseEntity<ErrorDto> illegalArgumentExceptionHandler(RuntimeException e){
         log.info("handle in ExControllerAdvice: ", e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
