@@ -4,6 +4,7 @@ import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.TextBox;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -42,7 +43,7 @@ public class TextBoxInProjectBuilder {
     }
     private void validateProject(){
         if(project == null || textBox == null || textBoxAlignment == null || peOrder == null ){
-            throw new IllegalArgumentException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }
 }

@@ -64,6 +64,7 @@ public class SecurityConfig {
     };
 
     private static final String[] CLIENT_WHITELIST = {
+            "/api/v1/member",
             "/api/v1/landing-box/**",
             "/api/v1/project",
             "/api/v1/project/**",

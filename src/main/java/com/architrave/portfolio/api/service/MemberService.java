@@ -36,11 +36,6 @@ public class MemberService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("there is no Member that id: " + memberId));
     }
-    @Transactional(readOnly = true)
-    public Member findMemberById(Member member) {
-        return memberRepository.findById(member.getId())
-                .orElseThrow(() -> new NoSuchElementException("there is no Member like that"));
-    }
 
     @Transactional(readOnly = true)
     public Member findMemberByAui(String aui) {

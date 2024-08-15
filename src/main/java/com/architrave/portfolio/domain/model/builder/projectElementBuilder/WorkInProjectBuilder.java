@@ -4,6 +4,7 @@ import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -43,7 +44,7 @@ public class WorkInProjectBuilder {
     }
     private void validateProject(){
         if(project == null || work == null || workAlignment == null || peOrder == null){
-            throw new IllegalArgumentException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }
 }

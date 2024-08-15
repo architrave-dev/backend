@@ -2,8 +2,7 @@ package com.architrave.portfolio.api.dto.project.response;
 
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
-import com.architrave.portfolio.domain.model.ProjectInfo;
+import com.architrave.portfolio.domain.model.UploadFile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +15,8 @@ public class ProjectDto {
     private Long id;
     private String title;
     private String description;
+    private String originUrl;
+    private String thumbnailUrl;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String supportedBy;
@@ -28,6 +29,9 @@ public class ProjectDto {
         this.id = project.getId();
         this.title = project.getTitle();
         this.description = project.getDescription();
+        UploadFile uploadFile = project.getUploadFile();
+        this.originUrl = uploadFile.getOriginUrl();
+        this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
         this.supportedBy = project.getSupportedBy();
@@ -41,6 +45,9 @@ public class ProjectDto {
         this.id = project.getId();
         this.title = project.getTitle();
         this.description = project.getDescription();
+        UploadFile uploadFile = project.getUploadFile();
+        this.originUrl = uploadFile.getOriginUrl();
+        this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
         this.supportedBy = project.getSupportedBy();

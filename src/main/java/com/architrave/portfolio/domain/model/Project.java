@@ -1,5 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,7 +67,7 @@ public class Project extends BaseEntity{
 
     public void setDate(LocalDateTime startDate, LocalDateTime endDate){
         if( startDate == null && endDate != null){
-            throw new IllegalArgumentException("if endDate is not null, startDate required");
+            throw new RequiredValueEmptyException("if endDate is not null, startDate required");
         }
         this.startDate = startDate;
         this.endDate = endDate;

@@ -103,7 +103,7 @@ public class MemberServiceTest {
         //then
         Assertions.assertThrows(NoSuchElementException.class, () -> {
             //given
-            memberService.findMemberById(afterCreateMember);
+            memberService.findMemberById(afterCreateMember.getId());
         });
     }
     @Test

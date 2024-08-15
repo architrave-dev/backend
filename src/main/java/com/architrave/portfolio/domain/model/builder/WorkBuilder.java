@@ -1,6 +1,7 @@
 package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.*;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -73,7 +74,7 @@ public class WorkBuilder {
     }
     private void validateWork(){
         if(member == null || originImgUrl == null || thumbnailUrl == null){
-            throw new IllegalArgumentException("required value is empty in WorkBuilder");
+            throw new RequiredValueEmptyException("required value is empty in WorkBuilder");
         }
     }
 

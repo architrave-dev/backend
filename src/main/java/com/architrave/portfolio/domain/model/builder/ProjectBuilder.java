@@ -3,6 +3,7 @@ package com.architrave.portfolio.domain.model.builder;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.UploadFile;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -56,7 +57,7 @@ public class ProjectBuilder {
     }
     private void validateProject(){
         if(member == null || title == null || originImgUrl == null || thumbnailUrl == null){
-            throw new IllegalArgumentException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }
 }
