@@ -1,6 +1,8 @@
 package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
+import com.architrave.portfolio.domain.model.enumType.ErrorCode;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -36,20 +37,40 @@ public class ExControllerAdvice {
         });
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorDto("Please check this fieldName: " + message.toString(), LocalDateTime.now()));
+                .body(new ErrorDto(ErrorCode.IDF, "Please check this fieldName: " + message.toString()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
-            IllegalArgumentException.class,
             UsernameNotFoundException.class,
             NoSuchElementException.class
     })
-    private ResponseEntity<ErrorDto> illegalArgumentExceptionHandler(RuntimeException e){
+    private ResponseEntity<ErrorDto> NotFoundResultExceptionHandler(RuntimeException e){
         log.info("handle in ExControllerAdvice: ", e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorDto(e.getMessage(), LocalDateTime.now()));
+                .body(new ErrorDto( ErrorCode.NFR, e.getMessage()));
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            IllegalArgumentException.class,
+    })
+    private ResponseEntity<ErrorDto> illegalArgumentExceptionHandler(IllegalArgumentException e){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto( ErrorCode.AEV, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            RequiredValueEmptyException.class,
+    })
+    private ResponseEntity<ErrorDto> requiredValueEmptyExceptionHandler(RequiredValueEmptyException e){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto( ErrorCode.RVN, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -60,6 +81,6 @@ public class ExControllerAdvice {
         log.info("handle in ExControllerAdvice: ", e);
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorDto(e.getMessage(), LocalDateTime.now()));
+                .body(new ErrorDto(ErrorCode.NAU, e.getMessage()));
     }
 }
