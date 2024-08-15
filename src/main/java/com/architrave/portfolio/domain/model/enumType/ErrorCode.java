@@ -1,7 +1,6 @@
 package com.architrave.portfolio.domain.model.enumType;
 
 public enum ErrorCode {
-    IVA("InValid Aui"),
     IDF("Invalid Dto Field"),
     RVN("Required Value Null"),
     NFR("Not Found Result"),
