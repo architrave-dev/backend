@@ -3,6 +3,7 @@ package com.architrave.portfolio.domain.model.builder;
 import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.UploadFile;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 
 public class LandingBoxBuilder {
 
@@ -56,7 +57,7 @@ public class LandingBoxBuilder {
     }
     private void validateLandingBox(){
         if(member == null || originImgUrl == null || thumbnailUrl == null){
-            throw new IllegalArgumentException("required value is empty in LandingBoxBuilder");
+            throw new RequiredValueEmptyException("required value is empty in LandingBoxBuilder");
         }
     }
 }

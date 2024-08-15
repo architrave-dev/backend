@@ -2,6 +2,7 @@ package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -47,7 +48,7 @@ public class MemberBuilder {
     }
     private void validateMember(){
         if(email == null || password == null || username == null || role == null){
-            throw new IllegalArgumentException("required value is empty in MemberBuilder");
+            throw new RequiredValueEmptyException("required value is empty in MemberBuilder");
         }
     }
 }

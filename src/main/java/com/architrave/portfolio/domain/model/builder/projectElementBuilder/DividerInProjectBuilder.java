@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
 import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -38,7 +39,7 @@ public class DividerInProjectBuilder {
     }
     private void validateProject(){
         if(project == null || dividerType == null || peOrder == null ){
-            throw new IllegalArgumentException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }
 }
