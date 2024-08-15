@@ -24,7 +24,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @Operation(summary = "AUI로 작가 조회하기")
+    @Operation(summary = "작가 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<String>> getMember(
             @RequestParam("aui") String aui
