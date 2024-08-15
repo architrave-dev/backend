@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.textBox.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTextBoxReq {
+    @NotNull
     private Long id;
     private String content;
     private Boolean isDeleted;

@@ -11,6 +11,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class LandingBoxController {
     @PutMapping
     public ResponseEntity<ResultDto<LandingBoxDto>> updateLandingBox(
             @RequestParam("aui") String aui,    // 현재 홈페이지 주인
-            @RequestBody UpdateLandingBoxDto updateLandingBoxDto
+            @Valid @RequestBody UpdateLandingBoxDto updateLandingBoxDto
     ){
         log.info("hello from updateLandingBox");
         Member loginUser = authService.getMemberFromContext();

@@ -12,6 +12,7 @@ import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,7 @@ public class WorkController {
     @PostMapping
     public ResponseEntity<ResultDto<WorkDto>> createWork(
             @RequestParam("aui") String aui,
-            @RequestBody CreateWorkReq createWorkReq
+            @Valid @RequestBody CreateWorkReq createWorkReq
     ){
         log.info("hello from createWork");
         Member loginUser = authService.getMemberFromContext();
@@ -85,7 +86,7 @@ public class WorkController {
     @PutMapping
     public ResponseEntity<ResultDto<WorkDto>> updateWork(
             @RequestParam("aui") String aui,
-            @RequestBody UpdateWorkReq updateWorkReq
+            @Valid @RequestBody UpdateWorkReq updateWorkReq
     ) {
         log.info("hello from updateWork");
         Member loginUser = authService.getMemberFromContext();

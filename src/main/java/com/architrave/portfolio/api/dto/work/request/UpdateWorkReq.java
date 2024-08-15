@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.dto.work.request;
 
 import com.architrave.portfolio.domain.model.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateWorkReq {
+    @NotNull
     private Long id;
     private String originImgUrl;
     private String thumbnailUrl;
