@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "3. ProjectElement")  // => swagger 이름
+@Tag(name = "4. ProjectElement")  // => swagger 이름
 @Slf4j
 @RestController
 @RequiredArgsConstructor

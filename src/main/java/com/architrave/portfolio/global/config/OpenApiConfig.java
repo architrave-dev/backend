@@ -54,10 +54,11 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .addTagsItem(new Tag().name("1. Auth"))
-                .addTagsItem(new Tag().name("2. Project"))
-                .addTagsItem(new Tag().name("3. ProjectElement"))
-                .addTagsItem(new Tag().name("4. Work"))
-                .addTagsItem(new Tag().name("5. LandingBox"));
+                .addTagsItem(new Tag().name("2. Member"))
+                .addTagsItem(new Tag().name("3. Project"))
+                .addTagsItem(new Tag().name("4. ProjectElement"))
+                .addTagsItem(new Tag().name("5. Work"))
+                .addTagsItem(new Tag().name("6. LandingBox"));
     }
 
     @Bean
