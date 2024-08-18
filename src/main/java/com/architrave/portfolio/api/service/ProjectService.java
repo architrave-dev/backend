@@ -2,15 +2,13 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -70,8 +68,8 @@ public class ProjectService {
             String thumbnailUrl,
             String title,
             String description,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
+            LocalDate startDate,
+            LocalDate endDate,
             String supportedBy,
             Boolean isDeleted
     ) {
