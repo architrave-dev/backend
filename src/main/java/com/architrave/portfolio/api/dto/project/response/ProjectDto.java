@@ -6,7 +6,7 @@ import com.architrave.portfolio.domain.model.UploadFile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -17,8 +17,8 @@ public class ProjectDto {
     private String description;
     private String originUrl;
     private String thumbnailUrl;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String supportedBy;
     private List<ProjectInfoDto> projectInfoList;
     private List<ProjectElementDto> projectElementList;
