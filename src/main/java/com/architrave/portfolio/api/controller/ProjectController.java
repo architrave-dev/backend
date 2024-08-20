@@ -177,11 +177,11 @@ public class ProjectController {
 
         updatedList.stream()
                 .forEach((p) -> projectInfoService.updateProjectInfo(
-                        p.getProjectInfoId(),
+                        p.getId(),
                         p.getCustomName(),
                         p.getCustomValue()));
 
         removedList.stream()
-                .forEach((p) -> projectInfoService.removeProjectInfo(p.getProjectInfoId()));
+                .forEach((p) -> projectInfoService.removeProjectInfo(p.getId()));
     }
 }

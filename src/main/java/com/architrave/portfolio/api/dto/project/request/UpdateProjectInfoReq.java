@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateProjectInfoReq {
     @NotNull
-    private Long projectInfoId;
+    private Long id;
     private String customName;
     private String customValue;
 }
