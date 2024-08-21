@@ -66,6 +66,7 @@ public class ProjectElementController {
      * projectElment를 하나씩 보내기 때문에 단건 create
      */
     @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
+    @Deprecated
     @PostMapping
     public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
             @RequestParam("aui") String aui,
@@ -91,6 +92,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/work")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
             @RequestParam("aui") String aui,
@@ -135,6 +137,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/textBox")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
             @RequestParam("aui") String aui,
@@ -171,6 +174,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/divider")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
             @RequestParam("aui") String aui,
@@ -199,6 +203,7 @@ public class ProjectElementController {
      * projectElment를 하나씩 보내기 때문에 단건 delete
      */
     @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
+    @Deprecated
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> deleteProjectElement(
             @RequestParam("aui") String aui,
@@ -224,6 +229,7 @@ public class ProjectElementController {
             summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
             description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
     )
+    @Deprecated
     @GetMapping("/order")
     private void changeOrderAtOnce(){}
 
