@@ -4,6 +4,7 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
+import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.*;
@@ -76,7 +77,7 @@ public class ProjectElementController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        ProjectElement projectElement = handleProjectElement(createProjectElementReq);
+        ProjectElement projectElement = handleProjectElement(loginUser, createProjectElementReq);
         ProjectElement createdProjectElement = projectElementService.createProjectElement(
                 projectElement);
 
@@ -227,13 +228,22 @@ public class ProjectElementController {
     private void changeOrderAtOnce(){}
 
 
-    private ProjectElement handleProjectElement(CreateProjectElementReq createProjectElementReq) {
+    private ProjectElement handleProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());
         ProjectElementType elementType = createProjectElementReq.getProjectElementType();
         ProjectElement projectElement = null;
 
         if(elementType.equals(ProjectElementType.WORK)){
-            Work work = workService.findWorkById(createProjectElementReq.getWorkId());
+            CreateWorkReq createWorkReq = createProjectElementReq.getCreateWorkReq();
+            Work work = workService.createWork(
+                    loginUser,
+                    createWorkReq.getOriginImgUrl(),
+                    createWorkReq.getThumbnailUrl(),
+                    createWorkReq.getTitle(),
+                    createWorkReq.getDescription(),
+                    createWorkReq.getSize(),
+                    createWorkReq.getMaterial(),
+                    createWorkReq.getProdYear());
             projectElement = new WorkInProjectBuilder()
                     .project(project)
                     .work(work)
