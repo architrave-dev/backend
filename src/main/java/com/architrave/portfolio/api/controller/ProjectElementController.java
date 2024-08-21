@@ -60,6 +60,56 @@ public class ProjectElementController {
                 .body(new ResultDto<>(projectElementDtoList));
     }
 
+    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
+            description = "한번의 요청으로 다음의 것들을 처리합니다." +
+                    "1. 새롭게 추가되는 ProjectElement 리스트" +
+                    "2. 기존 ProjectElement 변경 리스트" +
+                    "3. 삭제되는 ProjectElement 리스트를 받습니다."
+    )
+    @PutMapping
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> updateProjectElementList(
+            @RequestParam("aui") String aui,
+            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
+    ) {
+        log.info("hello from updateProjectElementList");
+        Member loginUser = authService.getMemberFromContext();
+        if (!loginUser.getAui().equals(aui)) {
+            throw new UnauthorizedException("loginUser is not page owner");
+        }
+
+        Project targetProject = projectService.findById(updateProjectElementListReq.getProjectId());
+
+        //projectElementList 업데이트
+        updateProjectElementList(loginUser,
+                updateProjectElementListReq.getCreateProjectElements(),
+                updateProjectElementListReq.getUpdatedProjectElements(),
+                updateProjectElementListReq.getRemovedProjectElements()
+        );
+
+        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
+
+        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(projectElementDtoList));
+    }
+    private void updateProjectElementList(Member loginUser,
+                                   List<CreateProjectElementReq> createdList,
+                                   List<UpdateProjectElementReq> updatedList,
+                                   List<RemoveProjectElementReq> removedList
+    ){
+        createdList.stream()
+                .forEach((pe) -> projectElementService.createProjectElement(
+                        handleProjectElement(loginUser, pe)));
+        updatedList.stream()
+                .forEach((pe) -> handleUpdateProjectElement(pe));
+        removedList.stream()
+                .forEach((p) -> projectElementService.removeById(p.getId()));
+    }
+
     /**
      * 향후에 변경되더라도
      * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
@@ -276,5 +326,56 @@ public class ProjectElementController {
                     .build();
         }
         return projectElement;
+    }
+
+    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){
+        //work일 경우
+        if(updateProjectElementReq.getWorkAlignment() != null)
+        {
+            UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
+            Work updatedWork = workService.updateWork(
+                    updateWorkReq.getId(),
+                    updateWorkReq.getOriginImgUrl(),
+                    updateWorkReq.getThumbnailUrl(),
+                    updateWorkReq.getTitle(),
+                    updateWorkReq.getDescription(),
+                    updateWorkReq.getSize(),
+                    updateWorkReq.getMaterial(),
+                    updateWorkReq.getProdYear(),
+                    updateWorkReq.getIsDeleted()
+            );
+            // updated 된 work를 전달
+            projectElementService.updateProjectElementWork(
+                    updatedWork,
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getWorkAlignment(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
+        //textBox일 경우
+        else if(updateProjectElementReq.getTextBoxAlignment() != null)
+        {
+            UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
+            TextBox updatedTextBox = textBoxService.updateTextBox(
+                    updateTextBoxReq.getId(),
+                    updateTextBoxReq.getContent(),
+                    updateTextBoxReq.getIsDeleted()
+            );
+            // updated 된 textBox 를 전달
+            projectElementService.updateProjectElementTextBox(
+                    updatedTextBox,
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getTextBoxAlignment(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
+        //divider 일 경우
+        else{
+            projectElementService.updateProjectElementDivider(
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getDividerType(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
     }
 }
