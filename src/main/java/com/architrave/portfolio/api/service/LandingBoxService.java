@@ -71,7 +71,7 @@ public class LandingBoxService {
         //default 생성
         LandingBox defaultLb = new LandingBoxBuilder()
                 .member(member)
-                .originImgUrl("defaultUrl")
+                .originUrl("defaultUrl")
                 .thumbnailUrl("defaultThumb")
                 .title("default title")
                 .description("default description")

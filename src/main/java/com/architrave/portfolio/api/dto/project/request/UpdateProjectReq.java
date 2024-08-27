@@ -15,7 +15,7 @@ import java.util.List;
 public class UpdateProjectReq {
     @NotNull
     private Long id;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;

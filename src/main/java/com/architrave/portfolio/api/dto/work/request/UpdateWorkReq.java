@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UpdateWorkReq {
     @NotNull
     private Long id;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;

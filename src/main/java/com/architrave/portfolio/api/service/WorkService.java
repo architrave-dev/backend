@@ -40,7 +40,7 @@ public class WorkService {
      */
     @Transactional
     public Work createWork(Member loginUser,
-                           String originImgUrl,
+                           String originUrl,
                            String thumbnailUrl,
                            String title,
                            String description,
@@ -50,7 +50,7 @@ public class WorkService {
     ) {
         Work work = new WorkBuilder()
                 .member(loginUser)
-                .originImgUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(title)
                 .description(description)

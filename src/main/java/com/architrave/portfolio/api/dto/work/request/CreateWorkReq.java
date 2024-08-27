@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.URL;
 public class CreateWorkReq {
 
     @NotEmpty @URL
-    private String originImgUrl;
+    private String originUrl;
     @NotEmpty @URL
     private String thumbnailUrl;
     @NotEmpty

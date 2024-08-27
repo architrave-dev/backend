@@ -22,14 +22,14 @@ public class ProjectService {
     @Transactional
     public Project createProject(
             Member loginUser,
-            String originImgUrl,
+            String originUrl,
             String thumbnailUrl,
             String title,
             String description
     ) {
         Project project = new ProjectBuilder()
                 .member(loginUser)
-                .originImgUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(title)
                 .description(description)
