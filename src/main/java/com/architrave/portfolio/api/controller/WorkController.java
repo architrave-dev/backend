@@ -68,7 +68,7 @@ public class WorkController {
 
         Work createdWork = workService.createWork(
                 loginUser,
-                createWorkReq.getOriginImgUrl(),
+                createWorkReq.getOriginUrl(),
                 createWorkReq.getThumbnailUrl(),
                 createWorkReq.getTitle(),
                 createWorkReq.getDescription(),
@@ -96,7 +96,7 @@ public class WorkController {
 
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
-                updateWorkReq.getOriginImgUrl(),
+                updateWorkReq.getOriginUrl(),
                 updateWorkReq.getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),

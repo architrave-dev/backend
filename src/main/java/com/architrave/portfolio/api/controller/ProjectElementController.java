@@ -158,7 +158,7 @@ public class ProjectElementController {
         //work update 먼저 하고
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
-                updateWorkReq.getOriginImgUrl(),
+                updateWorkReq.getOriginUrl(),
                 updateWorkReq.getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),
@@ -293,7 +293,7 @@ public class ProjectElementController {
             CreateWorkReq createWorkReq = createProjectElementReq.getCreateWorkReq();
             Work work = workService.createWork(
                     loginUser,
-                    createWorkReq.getOriginImgUrl(),
+                    createWorkReq.getOriginUrl(),
                     createWorkReq.getThumbnailUrl(),
                     createWorkReq.getTitle(),
                     createWorkReq.getDescription(),
@@ -335,7 +335,7 @@ public class ProjectElementController {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
                     updateWorkReq.getId(),
-                    updateWorkReq.getOriginImgUrl(),
+                    updateWorkReq.getOriginUrl(),
                     updateWorkReq.getThumbnailUrl(),
                     updateWorkReq.getTitle(),
                     updateWorkReq.getDescription(),
