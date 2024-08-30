@@ -19,9 +19,6 @@ public class UpdateProjectReq {
     private String thumbnailUrl;
     private String title;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String supportedBy;
     private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
     private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
     private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();

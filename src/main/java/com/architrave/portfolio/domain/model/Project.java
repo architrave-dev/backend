@@ -29,16 +29,8 @@ public class Project extends BaseEntity{
     private UploadFile uploadFile;
     private String title;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
-
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectElement> projectElementList = new ArrayList<>();
-
-    @Embedded
-    private Address address;
-
-    private String supportedBy;
 
     private Integer projectOrder;
     private Boolean isDeleted;
@@ -62,16 +54,7 @@ public class Project extends BaseEntity{
     private void setId(Long id){};
     // 이게 가능한지 확인해봐야해
     private void setMember(Member member){}
-    private void setStartDate(LocalDate startDate){}
-    private void setEndDate(LocalDate endDate){}
 
-    public void setDate(LocalDate startDate, LocalDate endDate){
-        if( startDate == null && endDate != null){
-            throw new RequiredValueEmptyException("if endDate is not null, startDate required");
-        }
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
     /**
      * Project의 대표이미지 url을 설정한다.
      */

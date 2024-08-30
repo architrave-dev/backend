@@ -17,9 +17,6 @@ public class ProjectDto {
     private String description;
     private String originUrl;
     private String thumbnailUrl;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String supportedBy;
     private List<ProjectInfoDto> projectInfoList;
     private List<ProjectElementDto> projectElementList;
     private Boolean isDeleted;
@@ -32,9 +29,6 @@ public class ProjectDto {
         UploadFile uploadFile = project.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
-        this.startDate = project.getStartDate();
-        this.endDate = project.getEndDate();
-        this.supportedBy = project.getSupportedBy();
         this.projectInfoList = projectInfoList;
         this.isDeleted = project.getIsDeleted();
     }
@@ -48,9 +42,6 @@ public class ProjectDto {
         UploadFile uploadFile = project.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
-        this.startDate = project.getStartDate();
-        this.endDate = project.getEndDate();
-        this.supportedBy = project.getSupportedBy();
         this.projectInfoList = projectInfoList;
         this.projectElementList = projectElementList;
         this.isDeleted = project.getIsDeleted();

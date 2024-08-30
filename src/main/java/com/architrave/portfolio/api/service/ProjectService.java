@@ -68,9 +68,6 @@ public class ProjectService {
             String thumbnailUrl,
             String title,
             String description,
-            LocalDate startDate,
-            LocalDate endDate,
-            String supportedBy,
             Boolean isDeleted
     ) {
         Project project = findById(projectId);
@@ -81,12 +78,8 @@ public class ProjectService {
         if(originUrl != null || thumbnailUrl != null){
             project.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(startDate != null || endDate != null){
-            project.setDate(startDate, endDate);
-        }
         if(title != null)           project.setTitle(title);
         if(description != null)     project.setDescription(description);
-        if(supportedBy != null)     project.setSupportedBy(supportedBy);
 
         return project;
     }

@@ -141,9 +141,6 @@ public class ProjectController {
                 updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription(),
-                updateProjectReq.getStartDate(),
-                updateProjectReq.getEndDate(),
-                updateProjectReq.getSupportedBy(),
                 updateProjectReq.getIsDeleted()
         );
 
