@@ -71,10 +71,10 @@ public class LandingBoxService {
         //default 생성
         LandingBox defaultLb = new LandingBoxBuilder()
                 .member(member)
-                .originUrl("defaultUrl")
-                .thumbnailUrl("defaultThumb")
-                .title("default title")
-                .description("default description")
+                .originUrl("")
+                .thumbnailUrl("")
+                .title("Billboard")
+                .description("Brief description of your content")
                 .build();
 
         landingBoxRepository.save(defaultLb);
