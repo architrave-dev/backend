@@ -60,7 +60,7 @@ public class JwtService {
                 .claims(extraClaims)
                 .subject(member.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 5)) //1초 * 60 * 5 = 5분
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 15)) //1초 * 60 * 5 = 15분
                 .signWith(SECRET_KEY)
                 .compact();
     }
