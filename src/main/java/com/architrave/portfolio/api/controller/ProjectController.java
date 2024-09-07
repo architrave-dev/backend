@@ -137,13 +137,10 @@ public class ProjectController {
         //project 업데이트
         Project updatedProject = projectService.updateProject(
                 updateProjectReq.getId(),
-                updateProjectReq.getOriginImgUrl(),
+                updateProjectReq.getOriginUrl(),
                 updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription(),
-                updateProjectReq.getStartDate(),
-                updateProjectReq.getEndDate(),
-                updateProjectReq.getSupportedBy(),
                 updateProjectReq.getIsDeleted()
         );
 
@@ -177,11 +174,11 @@ public class ProjectController {
 
         updatedList.stream()
                 .forEach((p) -> projectInfoService.updateProjectInfo(
-                        p.getProjectInfoId(),
+                        p.getId(),
                         p.getCustomName(),
                         p.getCustomValue()));
 
         removedList.stream()
-                .forEach((p) -> projectInfoService.removeProjectInfo(p.getProjectInfoId()));
+                .forEach((p) -> projectInfoService.removeProjectInfo(p.getId()));
     }
 }

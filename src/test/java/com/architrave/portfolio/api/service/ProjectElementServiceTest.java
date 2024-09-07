@@ -327,7 +327,7 @@ public class ProjectElementServiceTest {
     private Work createWork(Member member){
         Work work = new WorkBuilder()
                 .member(member)
-                .originImgUrl(TEST_WORK_ORIGINAL_URL)
+                .originUrl(TEST_WORK_ORIGINAL_URL)
                 .thumbnailUrl(TEST_WORK_THUMBNAIL_URL)
                 .title(TEST_WORK_TITLE)
                 .build();

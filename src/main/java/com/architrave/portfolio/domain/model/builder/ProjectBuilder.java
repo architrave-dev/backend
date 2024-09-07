@@ -12,7 +12,7 @@ public class ProjectBuilder {
     private Member member;
     private String title;
     private String description;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
 
     public ProjectBuilder member(Member member) {
@@ -27,8 +27,8 @@ public class ProjectBuilder {
         this.description = description;
         return this;
     }
-    public ProjectBuilder originImgUrl(String originImgUrl){
-        this.originImgUrl = originImgUrl;
+    public ProjectBuilder originUrl(String originUrl){
+        this.originUrl = originUrl;
         return this;
     }
     public ProjectBuilder thumbnailUrl(String thumbnailUrl){
@@ -36,15 +36,15 @@ public class ProjectBuilder {
         return this;
     }
     /**
-     * originImgUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originImgUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
+     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
      * @return Project
      */
     public Project build(){
         validateProject();
 
         UploadFile uploadFile = UploadFile.builder()
-                .originUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .build();
 
@@ -56,7 +56,7 @@ public class ProjectBuilder {
         );
     }
     private void validateProject(){
-        if(member == null || title == null || originImgUrl == null || thumbnailUrl == null){
+        if(member == null || title == null || originUrl == null || thumbnailUrl == null){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

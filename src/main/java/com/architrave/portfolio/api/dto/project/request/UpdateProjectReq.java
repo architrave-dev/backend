@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +15,10 @@ import java.util.List;
 public class UpdateProjectReq {
     @NotNull
     private Long id;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private String supportedBy;
     private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
     private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
     private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();

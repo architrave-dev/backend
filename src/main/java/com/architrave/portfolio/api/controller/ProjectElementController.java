@@ -4,6 +4,7 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
+import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.*;
@@ -59,12 +60,63 @@ public class ProjectElementController {
                 .body(new ResultDto<>(projectElementDtoList));
     }
 
+    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
+            description = "한번의 요청으로 다음의 것들을 처리합니다." +
+                    "1. 새롭게 추가되는 ProjectElement 리스트" +
+                    "2. 기존 ProjectElement 변경 리스트" +
+                    "3. 삭제되는 ProjectElement 리스트를 받습니다."
+    )
+    @PutMapping
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> updateProjectElementList(
+            @RequestParam("aui") String aui,
+            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
+    ) {
+        log.info("hello from updateProjectElementList");
+        Member loginUser = authService.getMemberFromContext();
+        if (!loginUser.getAui().equals(aui)) {
+            throw new UnauthorizedException("loginUser is not page owner");
+        }
+
+        Project targetProject = projectService.findById(updateProjectElementListReq.getProjectId());
+
+        //projectElementList 업데이트
+        updateProjectElementList(loginUser,
+                updateProjectElementListReq.getCreateProjectElements(),
+                updateProjectElementListReq.getUpdatedProjectElements(),
+                updateProjectElementListReq.getRemovedProjectElements()
+        );
+
+        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
+
+        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(projectElementDtoList));
+    }
+    private void updateProjectElementList(Member loginUser,
+                                   List<CreateProjectElementReq> createdList,
+                                   List<UpdateProjectElementReq> updatedList,
+                                   List<RemoveProjectElementReq> removedList
+    ){
+        createdList.stream()
+                .forEach((pe) -> projectElementService.createProjectElement(
+                        handleProjectElement(loginUser, pe)));
+        updatedList.stream()
+                .forEach((pe) -> handleUpdateProjectElement(pe));
+        removedList.stream()
+                .forEach((p) -> projectElementService.removeById(p.getId()));
+    }
+
     /**
      * 향후에 변경되더라도
      * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
      * projectElment를 하나씩 보내기 때문에 단건 create
      */
     @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
+    @Deprecated
     @PostMapping
     public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
             @RequestParam("aui") String aui,
@@ -76,7 +128,7 @@ public class ProjectElementController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        ProjectElement projectElement = handleProjectElement(createProjectElementReq);
+        ProjectElement projectElement = handleProjectElement(loginUser, createProjectElementReq);
         ProjectElement createdProjectElement = projectElementService.createProjectElement(
                 projectElement);
 
@@ -90,6 +142,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/work")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
             @RequestParam("aui") String aui,
@@ -105,7 +158,7 @@ public class ProjectElementController {
         //work update 먼저 하고
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
-                updateWorkReq.getOriginImgUrl(),
+                updateWorkReq.getOriginUrl(),
                 updateWorkReq.getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),
@@ -134,6 +187,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/textBox")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
             @RequestParam("aui") String aui,
@@ -170,6 +224,7 @@ public class ProjectElementController {
                     "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
                     "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
     )
+    @Deprecated
     @PutMapping("/divider")
     public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
             @RequestParam("aui") String aui,
@@ -198,6 +253,7 @@ public class ProjectElementController {
      * projectElment를 하나씩 보내기 때문에 단건 delete
      */
     @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
+    @Deprecated
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> deleteProjectElement(
             @RequestParam("aui") String aui,
@@ -223,17 +279,27 @@ public class ProjectElementController {
             summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
             description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
     )
+    @Deprecated
     @GetMapping("/order")
     private void changeOrderAtOnce(){}
 
 
-    private ProjectElement handleProjectElement(CreateProjectElementReq createProjectElementReq) {
+    private ProjectElement handleProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());
         ProjectElementType elementType = createProjectElementReq.getProjectElementType();
         ProjectElement projectElement = null;
 
         if(elementType.equals(ProjectElementType.WORK)){
-            Work work = workService.findWorkById(createProjectElementReq.getWorkId());
+            CreateWorkReq createWorkReq = createProjectElementReq.getCreateWorkReq();
+            Work work = workService.createWork(
+                    loginUser,
+                    createWorkReq.getOriginUrl(),
+                    createWorkReq.getThumbnailUrl(),
+                    createWorkReq.getTitle(),
+                    createWorkReq.getDescription(),
+                    createWorkReq.getSize(),
+                    createWorkReq.getMaterial(),
+                    createWorkReq.getProdYear());
             projectElement = new WorkInProjectBuilder()
                     .project(project)
                     .work(work)
@@ -260,5 +326,56 @@ public class ProjectElementController {
                     .build();
         }
         return projectElement;
+    }
+
+    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){
+        //work일 경우
+        if(updateProjectElementReq.getWorkAlignment() != null)
+        {
+            UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
+            Work updatedWork = workService.updateWork(
+                    updateWorkReq.getId(),
+                    updateWorkReq.getOriginUrl(),
+                    updateWorkReq.getThumbnailUrl(),
+                    updateWorkReq.getTitle(),
+                    updateWorkReq.getDescription(),
+                    updateWorkReq.getSize(),
+                    updateWorkReq.getMaterial(),
+                    updateWorkReq.getProdYear(),
+                    updateWorkReq.getIsDeleted()
+            );
+            // updated 된 work를 전달
+            projectElementService.updateProjectElementWork(
+                    updatedWork,
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getWorkAlignment(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
+        //textBox일 경우
+        else if(updateProjectElementReq.getTextBoxAlignment() != null)
+        {
+            UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
+            TextBox updatedTextBox = textBoxService.updateTextBox(
+                    updateTextBoxReq.getId(),
+                    updateTextBoxReq.getContent(),
+                    updateTextBoxReq.getIsDeleted()
+            );
+            // updated 된 textBox 를 전달
+            projectElementService.updateProjectElementTextBox(
+                    updatedTextBox,
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getTextBoxAlignment(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
+        //divider 일 경우
+        else{
+            projectElementService.updateProjectElementDivider(
+                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getDividerType(),
+                    updateProjectElementReq.getPeOrder()
+            );
+        }
     }
 }

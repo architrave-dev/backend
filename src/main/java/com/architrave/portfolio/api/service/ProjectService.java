@@ -2,15 +2,13 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -24,14 +22,14 @@ public class ProjectService {
     @Transactional
     public Project createProject(
             Member loginUser,
-            String originImgUrl,
+            String originUrl,
             String thumbnailUrl,
             String title,
             String description
     ) {
         Project project = new ProjectBuilder()
                 .member(loginUser)
-                .originImgUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(title)
                 .description(description)
@@ -70,9 +68,6 @@ public class ProjectService {
             String thumbnailUrl,
             String title,
             String description,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            String supportedBy,
             Boolean isDeleted
     ) {
         Project project = findById(projectId);
@@ -83,12 +78,8 @@ public class ProjectService {
         if(originUrl != null || thumbnailUrl != null){
             project.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(startDate != null || endDate != null){
-            project.setDate(startDate, endDate);
-        }
         if(title != null)           project.setTitle(title);
         if(description != null)     project.setDescription(description);
-        if(supportedBy != null)     project.setSupportedBy(supportedBy);
 
         return project;
     }

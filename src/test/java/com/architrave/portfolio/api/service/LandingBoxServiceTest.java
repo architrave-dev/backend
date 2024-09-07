@@ -203,7 +203,7 @@ public class LandingBoxServiceTest {
     private LandingBox createLandingBoxInTest(Member member, String imgUrl, String thumbnailUrl){
         return new LandingBoxBuilder()
                 .member(member)
-                .originImgUrl(imgUrl)
+                .originUrl(imgUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(TEST_LB_TITLE)
                 .description(TEST_LB_DISCRIPTION)

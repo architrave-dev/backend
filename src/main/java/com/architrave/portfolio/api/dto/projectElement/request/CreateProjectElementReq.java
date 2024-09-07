@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
 import com.architrave.portfolio.api.dto.textBox.request.CreateTextBoxReq;
+import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
@@ -21,7 +22,7 @@ public class CreateProjectElementReq {
     private ProjectElementType projectElementType;
 
     //work 일 경우
-    private Long workId;
+    private CreateWorkReq createWorkReq;
     private WorkAlignment workAlignment;
     //textbox 일 경우
     private CreateTextBoxReq createTextBoxReq;

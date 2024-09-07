@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class WorkBuilder {
 
     private Member member;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;
@@ -28,8 +28,8 @@ public class WorkBuilder {
         this.description = description;
         return this;
     }
-    public WorkBuilder originImgUrl(String originImgUrl){
-        this.originImgUrl = originImgUrl;
+    public WorkBuilder originUrl(String originUrl){
+        this.originUrl = originUrl;
         return this;
     }
     public WorkBuilder thumbnailUrl(String thumbnailUrl){
@@ -50,15 +50,15 @@ public class WorkBuilder {
     }
 
     /**
-     * originImgUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originImgUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
+     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
      * @return LandingBox
      */
     public Work build(){
         validateWork();
         //일단 무지성 UploadFile 생성
         UploadFile uploadFile = UploadFile.builder()
-                .originUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .build();
 
@@ -73,7 +73,7 @@ public class WorkBuilder {
         );
     }
     private void validateWork(){
-        if(member == null || originImgUrl == null || thumbnailUrl == null){
+        if(member == null || originUrl == null || thumbnailUrl == null){
             throw new RequiredValueEmptyException("required value is empty in WorkBuilder");
         }
     }

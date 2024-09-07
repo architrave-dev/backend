@@ -12,7 +12,7 @@ public class ProjectSimpleDto {
     private String title;
     private String description;
 
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
 
     public ProjectSimpleDto(Project project){
@@ -20,7 +20,7 @@ public class ProjectSimpleDto {
         this.title = project.getTitle();
         this.description = project.getDescription();
         UploadFile uploadFile = project.getUploadFile();
-        this.originImgUrl = uploadFile.getOriginUrl();
+        this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
     }
 }

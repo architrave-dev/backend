@@ -10,7 +10,7 @@ import lombok.Data;
 public class WorkDto {
     private Long id;
     private MemberSimpleDto member;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;
@@ -23,7 +23,7 @@ public class WorkDto {
         this.id = work.getId();
         this.member = new MemberSimpleDto(work.getMember());
         UploadFile uploadFile = work.getUploadFile();
-        this.originImgUrl = uploadFile.getOriginUrl();
+        this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.title = work.getTitle();
         this.description = work.getDescription();

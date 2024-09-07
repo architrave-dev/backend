@@ -8,7 +8,7 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 public class LandingBoxBuilder {
 
     private Member member;
-    private String originImgUrl;
+    private String originUrl;
     private String thumbnailUrl;
     private String title;
     private String description;
@@ -26,8 +26,8 @@ public class LandingBoxBuilder {
         this.description = description;
         return this;
     }
-    public LandingBoxBuilder originImgUrl(String originImgUrl){
-        this.originImgUrl = originImgUrl;
+    public LandingBoxBuilder originUrl(String originUrl){
+        this.originUrl = originUrl;
         return this;
     }
     public LandingBoxBuilder thumbnailUrl(String thumbnailUrl){
@@ -36,15 +36,15 @@ public class LandingBoxBuilder {
     }
 
     /**
-     * originImgUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originImgUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
+     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
      * @return LandingBox
      */
     public LandingBox build(){
         validateLandingBox();
         //일단 무지성 UploadFile 생성
         UploadFile uploadFile = UploadFile.builder()
-                .originUrl(originImgUrl)
+                .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .build();
 
@@ -56,7 +56,7 @@ public class LandingBoxBuilder {
         );
     }
     private void validateLandingBox(){
-        if(member == null || originImgUrl == null || thumbnailUrl == null){
+        if(member == null || originUrl == null || thumbnailUrl == null){
             throw new RequiredValueEmptyException("required value is empty in LandingBoxBuilder");
         }
     }
