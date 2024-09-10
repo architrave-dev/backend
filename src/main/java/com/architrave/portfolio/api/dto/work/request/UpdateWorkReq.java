@@ -19,5 +19,4 @@ public class UpdateWorkReq {
     private Size size;
     private String material;
     private Integer prodYear;
-    private Boolean isDeleted;
 }

@@ -102,8 +102,7 @@ public class WorkController {
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),
                 updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear(),
-                updateWorkReq.getIsDeleted()
+                updateWorkReq.getProdYear()
         );
 
         return ResponseEntity

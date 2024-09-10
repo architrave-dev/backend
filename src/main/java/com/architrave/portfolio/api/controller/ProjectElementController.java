@@ -164,8 +164,7 @@ public class ProjectElementController {
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),
                 updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear(),
-                updateWorkReq.getIsDeleted()
+                updateWorkReq.getProdYear()
         );
 
         // updated 된 work를 전달
@@ -202,8 +201,7 @@ public class ProjectElementController {
 
         TextBox updatedTextBox = textBoxService.updateTextBox(
                 updateTextBoxReq.getId(),
-                updateTextBoxReq.getContent(),
-                updateTextBoxReq.getIsDeleted()
+                updateTextBoxReq.getContent()
         );
 
         // updated 된 textBox 를 전달
@@ -341,8 +339,7 @@ public class ProjectElementController {
                     updateWorkReq.getDescription(),
                     updateWorkReq.getSize(),
                     updateWorkReq.getMaterial(),
-                    updateWorkReq.getProdYear(),
-                    updateWorkReq.getIsDeleted()
+                    updateWorkReq.getProdYear()
             );
             // updated 된 work를 전달
             projectElementService.updateProjectElementWork(
@@ -358,8 +355,7 @@ public class ProjectElementController {
             UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
             TextBox updatedTextBox = textBoxService.updateTextBox(
                     updateTextBoxReq.getId(),
-                    updateTextBoxReq.getContent(),
-                    updateTextBoxReq.getIsDeleted()
+                    updateTextBoxReq.getContent()
             );
             // updated 된 textBox 를 전달
             projectElementService.updateProjectElementTextBox(

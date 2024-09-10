@@ -12,5 +12,4 @@ public class UpdateTextBoxReq {
     @NotNull
     private Long id;
     private String content;
-    private Boolean isDeleted;
 }

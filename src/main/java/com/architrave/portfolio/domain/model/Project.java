@@ -33,7 +33,6 @@ public class Project extends BaseEntity{
     private List<ProjectElement> projectElementList = new ArrayList<>();
 
     private Integer projectOrder;
-    private Boolean isDeleted;
 
     public static Project createProject(
             Member member,
@@ -46,7 +45,6 @@ public class Project extends BaseEntity{
         project.uploadFile = uploadFile;
         project.title = title;
         project.description = description;
-        project.isDeleted = false;
         return project;
     }
 
@@ -60,6 +58,5 @@ public class Project extends BaseEntity{
      */
     public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
         this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
-        if(this.isDeleted) this.isDeleted = false;
     }
 }

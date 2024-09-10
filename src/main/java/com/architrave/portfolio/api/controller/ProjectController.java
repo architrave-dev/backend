@@ -120,7 +120,6 @@ public class ProjectController {
                     "createdProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "updatedProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "removedProjectInfoList: 삭제된 ProjectInfo <br/><br/>" +
-                    "Project 삭제 시 isDeleted 를 true 로 변경합니다. <br/><br/>" +
                     "projectElement는 전용 API를 사용합니다."
     )
     @PutMapping
@@ -140,8 +139,7 @@ public class ProjectController {
                 updateProjectReq.getOriginUrl(),
                 updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
-                updateProjectReq.getDescription(),
-                updateProjectReq.getIsDeleted()
+                updateProjectReq.getDescription()
         );
 
         //projectInfo 업데이트

@@ -19,7 +19,6 @@ public class ProjectDto {
     private String thumbnailUrl;
     private List<ProjectInfoDto> projectInfoList;
     private List<ProjectElementDto> projectElementList;
-    private Boolean isDeleted;
 
     public ProjectDto(Project project,
                       List<ProjectInfoDto> projectInfoList){
@@ -30,7 +29,6 @@ public class ProjectDto {
         this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.projectInfoList = projectInfoList;
-        this.isDeleted = project.getIsDeleted();
     }
 
     public ProjectDto(Project project,
@@ -44,6 +42,5 @@ public class ProjectDto {
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.projectInfoList = projectInfoList;
         this.projectElementList = projectElementList;
-        this.isDeleted = project.getIsDeleted();
     }
 }

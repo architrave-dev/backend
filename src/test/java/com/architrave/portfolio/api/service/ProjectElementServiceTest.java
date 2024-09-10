@@ -174,7 +174,6 @@ public class ProjectElementServiceTest {
                 null,
                 null,
                 null,
-                null,
                 null
         );
 
@@ -205,7 +204,7 @@ public class ProjectElementServiceTest {
         projectElementService.createProjectElement(textBoxPE);
 
         //when
-        TextBox updateTextBox = textBoxService.updateTextBox(1L, TEST_TEXTBOX_CONTENT_CHANGED, false);
+        TextBox updateTextBox = textBoxService.updateTextBox(1L, TEST_TEXTBOX_CONTENT_CHANGED);
 
         projectElementService.updateProjectElementTextBox(
                 updateTextBox,

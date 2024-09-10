@@ -16,12 +16,10 @@ public class TextBox extends BaseEntity {
     private Long id;
     private String content;
 //    private Member member;
-    private Boolean isDeleted;
 
     public static TextBox createTextBox(String content){
         TextBox textBox  = new TextBox();
         textBox.setContent(content);
-        textBox.isDeleted = false;
         return textBox;
     }
 }

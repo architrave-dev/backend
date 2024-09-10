@@ -67,14 +67,9 @@ public class ProjectService {
             String originUrl,
             String thumbnailUrl,
             String title,
-            String description,
-            Boolean isDeleted
+            String description
     ) {
         Project project = findById(projectId);
-        if(isDeleted != null && isDeleted == true){
-            project.setIsDeleted(true);
-            return project;
-        }
         if(originUrl != null || thumbnailUrl != null){
             project.setUploadFileUrl(originUrl, thumbnailUrl);
         }

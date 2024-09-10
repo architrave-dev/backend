@@ -22,5 +22,4 @@ public class UpdateProjectReq {
     private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
     private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
     private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();
-    private Boolean isDeleted;
 }
