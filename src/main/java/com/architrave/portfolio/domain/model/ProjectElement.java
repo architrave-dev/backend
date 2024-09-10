@@ -16,7 +16,7 @@ public class ProjectElement {
     @Column(name = "project_element_id")
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ProjectElementType projectElementType;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,14 +27,14 @@ public class ProjectElement {
     @JoinColumn(name = "work_id")
     private Work work;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private WorkAlignment workAlignment;
 
     @OneToOne
     @JoinColumn(name = "text_box_id")
     private TextBox textBox;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TextBoxAlignment textBoxAlignment;
 
     @Enumerated
