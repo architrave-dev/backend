@@ -13,18 +13,15 @@ public class LandingBoxDto {
     private String thumbnailUrl;
     private String title;
     private String description;
-    private Boolean isDeleted;
+    private Boolean isVisible;
 
     public LandingBoxDto(LandingBox landingBox) {
-        if(landingBox.getIsDeleted() == null){
-            return;
-        }
         this.id = landingBox.getId();
         UploadFile uploadFile = landingBox.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.title = landingBox.getTitle();
         this.description = landingBox.getDescription();
-        this.isDeleted = landingBox.getIsDeleted();
+        this.isVisible = landingBox.getIsVisible();
     }
 }

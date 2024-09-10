@@ -29,20 +29,15 @@ public class LandingBoxService {
             String thumbnailUrl,
             String title,
             String description,
-            Boolean isDeleted
+            Boolean isVisible
     ) {
         LandingBox landingBox = findLbById(landingBoxId);
-        if(isDeleted != null && isDeleted == true){
-            landingBox.removeUploadFile();
-            return landingBox;
-        }
+        if(isVisible != null) landingBox.setIsVisible(isVisible);
         if(originUrl != null || thumbnailUrl != null){
             landingBox.setUploadFileUrl(originUrl, thumbnailUrl);
         }
         if(title != null)           landingBox.setTitle(title);
         if(description != null)     landingBox.setDescription(description);
-        if(landingBox.getIsDeleted()) landingBox.setIsDeleted(false);
-        landingBox.setIsDeleted(false);
         return landingBox;
     }
 
