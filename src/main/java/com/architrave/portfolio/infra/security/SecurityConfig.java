@@ -69,7 +69,8 @@ public class SecurityConfig {
             "/api/v1/project",
             "/api/v1/project/**",
             "/api/v1/project-element/**",
-            "/api/v1/work"
+            "/api/v1/work",
+            "/api/v1/career"
     };
 
     private static final String[] USER_WHITELIST = {
@@ -77,6 +78,7 @@ public class SecurityConfig {
             "/api/v1/project",
             "/api/v1/project/**",
             "/api/v1/project-element/**",
-            "/api/v1/work"
+            "/api/v1/work",
+            "/api/v1/career"
     };
 }
