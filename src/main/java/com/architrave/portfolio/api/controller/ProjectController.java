@@ -179,4 +179,32 @@ public class ProjectController {
         removedList.stream()
                 .forEach((p) -> projectInfoService.removeProjectInfo(p.getId()));
     }
+
+    @Operation(
+            summary = "Project 삭제하기",
+            description = "Project가 삭제되면 " +
+                    "관련된 ProjectInfo와 " +
+                    "ProjectElement가 모두 삭제됩니다."
+    )
+    @DeleteMapping
+    public ResponseEntity<ResultDto<String>> removeProject(
+            @RequestParam("aui") String aui,
+            @Valid @RequestBody RemoveProjectReq removeProjectReq
+    ){
+        log.info("hello from removeProject");
+        Member loginUser = authService.getMemberFromContext();
+        if(!loginUser.getAui().equals(aui)){
+            throw new UnauthorizedException("loginUser is not page owner");
+        }
+
+        Project project = projectService.findById(removeProjectReq.getProjectId());
+        //projectInfo 삭제
+        projectInfoService.removeProjectInfoByProject(project);
+        //project 삭제
+        projectService.removeProject(project);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("delete project success"));
+    }
 }

@@ -29,7 +29,11 @@ public class Project extends BaseEntity{
     private UploadFile uploadFile;
     private String title;
     private String description;
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<ProjectElement> projectElementList = new ArrayList<>();
 
     private Integer projectOrder;

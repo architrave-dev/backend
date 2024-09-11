@@ -78,4 +78,13 @@ public class ProjectService {
 
         return project;
     }
+    @Transactional
+    public void removeProject(Project project){
+        projectRepository.delete(project);
+    }
+    @Transactional
+    public void removeProject(Long projectId){
+        Project projectById = findById(projectId);
+        projectRepository.delete(projectById);
+    }
 }
