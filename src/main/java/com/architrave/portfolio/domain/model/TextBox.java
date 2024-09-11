@@ -14,6 +14,8 @@ public class TextBox extends BaseEntity {
     @GeneratedValue
     @Column(name = "text_box_id")
     private Long id;
+
+    @Lob
     private String content;
 //    private Member member;
 
