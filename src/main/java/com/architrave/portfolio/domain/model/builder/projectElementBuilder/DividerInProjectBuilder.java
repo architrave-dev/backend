@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class DividerInProjectBuilder {
     private Project project;
     private DividerType dividerType;
-    private Integer peOrder;
 
     public DividerInProjectBuilder project(Project project){
         this.project = project;
@@ -24,21 +23,15 @@ public class DividerInProjectBuilder {
         return this;
     }
 
-    public DividerInProjectBuilder peOrder(Integer peOrder){
-        this.peOrder = peOrder;
-        return this;
-    }
-
     public ProjectElement build(){
         validateProject();
         return ProjectElement.createDividerElement(
                 project,
-                dividerType,
-                peOrder
+                dividerType
         );
     }
     private void validateProject(){
-        if(project == null || dividerType == null || peOrder == null ){
+        if(project == null || dividerType == null ){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

@@ -12,7 +12,6 @@ public class WorkInProjectBuilder {
     private Project project;
     private Work work;
     private WorkAlignment workAlignment;
-    private Integer peOrder;
 
     public WorkInProjectBuilder project(Project project){
         this.project = project;
@@ -28,22 +27,17 @@ public class WorkInProjectBuilder {
         return this;
     }
 
-    public WorkInProjectBuilder peOrder(Integer peOrder){
-        this.peOrder = peOrder;
-        return this;
-    }
 
     public ProjectElement build(){
         validateProject();
         return ProjectElement.createWorkElement(
                 project,
                 work,
-                workAlignment,
-                peOrder
+                workAlignment
         );
     }
     private void validateProject(){
-        if(project == null || work == null || workAlignment == null || peOrder == null){
+        if(project == null || work == null || workAlignment == null){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

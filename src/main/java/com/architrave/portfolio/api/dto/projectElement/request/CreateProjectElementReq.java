@@ -29,7 +29,4 @@ public class CreateProjectElementReq {
     private TextBoxAlignment textBoxAlignment;
     //divider일 경우
     private DividerType dividerType;
-
-    @NotNull
-    private Integer peOrder;
 }

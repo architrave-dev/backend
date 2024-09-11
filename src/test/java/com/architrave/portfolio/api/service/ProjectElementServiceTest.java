@@ -69,10 +69,10 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         Work work = createWork(member);
-        ProjectElement workPE = createWorkProjectElement(project, work,0);
+        ProjectElement workPE = createWorkProjectElement(project, work);
         TextBox textBox = createTextBox(member);
-        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox,1);
-        ProjectElement dividerPE = createDividerProjectElement(project, 2);
+        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox);
+        ProjectElement dividerPE = createDividerProjectElement(project);
 
         projectElementService.createProjectElement(workPE);
         projectElementService.createProjectElement(textBoxPE);
@@ -97,7 +97,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Work work = createWork(member);
         Project project = createProjectInTest(member);
-        ProjectElement workPE = createWorkProjectElement(project, work,0);
+        ProjectElement workPE = createWorkProjectElement(project, work);
 
         //when
         projectElementService.createProjectElement(workPE);
@@ -119,7 +119,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         TextBox textBox = createTextBox(member);
         Project project = createProjectInTest(member);
-        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox,0);
+        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox);
 
         //when
         projectElementService.createProjectElement(textBoxPE);
@@ -140,7 +140,7 @@ public class ProjectElementServiceTest {
         //given
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
-        ProjectElement dividerPE = createDividerProjectElement(project, 0);
+        ProjectElement dividerPE = createDividerProjectElement(project);
 
         //when
         projectElementService.createProjectElement(dividerPE);
@@ -162,7 +162,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         Work work = createWork(member);
-        ProjectElement workPE = createWorkProjectElement(project, work,0);
+        ProjectElement workPE = createWorkProjectElement(project, work);
         projectElementService.createProjectElement(workPE);
 
         //when
@@ -180,8 +180,7 @@ public class ProjectElementServiceTest {
         projectElementService.updateProjectElementWork(
                 work,
                 1L,
-                TEST_WORK_ALIGNMENT_CHANGE,
-                null
+                TEST_WORK_ALIGNMENT_CHANGE
         );
 
         //then
@@ -190,7 +189,6 @@ public class ProjectElementServiceTest {
         ProjectElement findWorkPE2 = projectElementService.findById(1L);
         assertEquals(findWorkPE2.getWork().getTitle(), TEST_WORK_TITLE_CHANGE);
         assertEquals(findWorkPE2.getWorkAlignment(), TEST_WORK_ALIGNMENT_CHANGE);
-        assertEquals(findWorkPE2.getPeOrder(), workPE.getPeOrder());
     }
 
     @Test
@@ -199,7 +197,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         TextBox textBox = createTextBox(member);
-        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox,1);
+        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox);
 
         projectElementService.createProjectElement(textBoxPE);
 
@@ -209,8 +207,7 @@ public class ProjectElementServiceTest {
         projectElementService.updateProjectElementTextBox(
                 updateTextBox,
                 1L,
-                TEST_TEXTBOX_ALIGNMENT_CHANGE,
-                null
+                TEST_TEXTBOX_ALIGNMENT_CHANGE
         );
 
         //then
@@ -221,7 +218,6 @@ public class ProjectElementServiceTest {
         assertNull(findTextBoxPE.getWork());
         assertEquals(findTextBoxPE.getTextBox().getContent(), TEST_TEXTBOX_CONTENT_CHANGED);
         assertEquals(findTextBoxPE.getTextBoxAlignment(), TEST_TEXTBOX_ALIGNMENT_CHANGE);
-        assertEquals(findTextBoxPE.getPeOrder(), 1);
     }
 
     @Test
@@ -229,22 +225,20 @@ public class ProjectElementServiceTest {
         //given
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
-        ProjectElement dividerPE = createDividerProjectElement(project, 0);
+        ProjectElement dividerPE = createDividerProjectElement(project);
 
         projectElementService.createProjectElement(dividerPE);
 
         //when
         projectElementService.updateProjectElementDivider(
                 1L,
-                null,
-                1
+                null
         );
 
         //then
         ProjectElement findDividerPE = projectElementService.findById(1L);
         assertNull(findDividerPE.getWork());
         assertNull(findDividerPE.getTextBox());
-        assertEquals(findDividerPE.getPeOrder(), 1);
     }
 
     @Test
@@ -253,7 +247,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         Work work = createWork(member);
-        ProjectElement workPE = createWorkProjectElement(project, work, 0);
+        ProjectElement workPE = createWorkProjectElement(project, work);
 
         ProjectElement projectElement = projectElementService.createProjectElement(workPE);
 
@@ -273,7 +267,7 @@ public class ProjectElementServiceTest {
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
         TextBox textBox = createTextBox(member);
-        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox, 0);
+        ProjectElement textBoxPE = createTextboxProjectElement(project, textBox);
 
         ProjectElement projectElement = projectElementService.createProjectElement(textBoxPE);
 
@@ -292,7 +286,7 @@ public class ProjectElementServiceTest {
         //given
         Member member = createMemberInTest();
         Project project = createProjectInTest(member);
-        ProjectElement dividerPE = createDividerProjectElement(project, 0);
+        ProjectElement dividerPE = createDividerProjectElement(project);
 
         ProjectElement projectElement = projectElementService.createProjectElement(dividerPE);
 
@@ -339,29 +333,26 @@ public class ProjectElementServiceTest {
         return textBoxService.createTextBox(textBox);
     }
 
-    private ProjectElement createWorkProjectElement(Project project, Work work, Integer peOrder){
+    private ProjectElement createWorkProjectElement(Project project, Work work){
         return new WorkInProjectBuilder()
                 .project(project)
                 .work(work)
                 .workAlignment(TEST_WORK_ALIGNMENT)
-                .peOrder(peOrder)
                 .build();
     }
 
-    private ProjectElement createTextboxProjectElement(Project project, TextBox textBox, Integer peOrder){
+    private ProjectElement createTextboxProjectElement(Project project, TextBox textBox){
         return new TextBoxInProjectBuilder()
                 .project(project)
                 .textBox(textBox)
                 .textBoxAlignment(TEST_TEXTBOX_ALIGNMENT)
-                .peOrder(peOrder)
                 .build();
     }
 
-    private ProjectElement createDividerProjectElement(Project project, Integer peOrder){
+    private ProjectElement createDividerProjectElement(Project project){
         return new DividerInProjectBuilder()
                 .project(project)
                 .dividerType(TEST_DIVIDER_TYPE)
-                .peOrder(peOrder)
                 .build();
     }
 }

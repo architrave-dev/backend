@@ -17,6 +17,4 @@ public class UpdateTextBoxProjectElementReq {
     private Long projectId;
     private UpdateTextBoxReq updateTextBoxReq;
     private TextBoxAlignment textBoxAlignment;
-    @NotNull
-    private Integer peOrder;
 }

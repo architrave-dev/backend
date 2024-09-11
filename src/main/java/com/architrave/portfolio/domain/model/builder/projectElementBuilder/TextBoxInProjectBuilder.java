@@ -12,7 +12,6 @@ public class TextBoxInProjectBuilder {
     private Project project;
     private TextBox textBox;
     private TextBoxAlignment textBoxAlignment;
-    private Integer peOrder;
 
     public TextBoxInProjectBuilder project(Project project){
         this.project = project;
@@ -27,22 +26,17 @@ public class TextBoxInProjectBuilder {
         this.textBoxAlignment = textBoxAlignment;
         return this;
     }
-    public TextBoxInProjectBuilder peOrder(Integer peOrder){
-        this.peOrder = peOrder;
-        return this;
-    }
 
     public ProjectElement build(){
         validateProject();
         return ProjectElement.createTextBoxElement(
                 project,
                 textBox,
-                textBoxAlignment,
-                peOrder
+                textBoxAlignment
         );
     }
     private void validateProject(){
-        if(project == null || textBox == null || textBoxAlignment == null || peOrder == null ){
+        if(project == null || textBox == null || textBoxAlignment == null ){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

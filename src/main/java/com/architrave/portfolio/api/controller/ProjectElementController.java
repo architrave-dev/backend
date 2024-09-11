@@ -171,8 +171,7 @@ public class ProjectElementController {
         ProjectElement projectElement = projectElementService.updateProjectElementWork(
                 updatedWork,
                 updateWorkProjectElementReq.getId(),
-                updateWorkProjectElementReq.getWorkAlignment(),
-                updateWorkProjectElementReq.getPeOrder()
+                updateWorkProjectElementReq.getWorkAlignment()
         );
 
         return ResponseEntity
@@ -208,8 +207,7 @@ public class ProjectElementController {
         ProjectElement projectElement = projectElementService.updateProjectElementTextBox(
                 updatedTextBox,
                 updateTextBoxProjectElementReq.getId(),
-                updateTextBoxProjectElementReq.getTextBoxAlignment(),
-                updateTextBoxProjectElementReq.getPeOrder()
+                updateTextBoxProjectElementReq.getTextBoxAlignment()
         );
 
         return ResponseEntity
@@ -236,8 +234,7 @@ public class ProjectElementController {
 
         ProjectElement projectElement = projectElementService.updateProjectElementDivider(
                 updateDividerProjectElementReq.getId(),
-                updateDividerProjectElementReq.getDividerType(),
-                updateDividerProjectElementReq.getPeOrder()
+                updateDividerProjectElementReq.getDividerType()
         );
 
         return ResponseEntity
@@ -302,7 +299,6 @@ public class ProjectElementController {
                     .project(project)
                     .work(work)
                     .workAlignment(createProjectElementReq.getWorkAlignment())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -314,13 +310,11 @@ public class ProjectElementController {
                     .project(project)
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextBoxAlignment())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
             projectElement = new DividerInProjectBuilder()
                     .project(project)
                     .dividerType(createProjectElementReq.getDividerType())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }
         return projectElement;
@@ -345,8 +339,7 @@ public class ProjectElementController {
             projectElementService.updateProjectElementWork(
                     updatedWork,
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getWorkAlignment(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getWorkAlignment()
             );
         }
         //textBox일 경우
@@ -361,16 +354,14 @@ public class ProjectElementController {
             projectElementService.updateProjectElementTextBox(
                     updatedTextBox,
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getTextBoxAlignment(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getTextBoxAlignment()
             );
         }
         //divider 일 경우
         else{
             projectElementService.updateProjectElementDivider(
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getDividerType(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getDividerType()
             );
         }
     }
