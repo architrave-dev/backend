@@ -89,6 +89,12 @@ public class ProjectService {
     }
 
     @Transactional
+    public Project updatePiIndex(Long projectId, String piIndex) {
+        Project project = findById(projectId);
+        project.setPiIndex(piIndex);
+        return project;
+    }
+    @Transactional
     public Project updatePeIndex(Long projectId, String peIndex) {
         Project project = findById(projectId);
         project.setPeIndex(peIndex);

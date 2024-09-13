@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndexDto {
-    private Long peId; //기존 ProjectElement의 id
-    private Long tempPeId; //새로 생긴 ProjectElement의 tempId
+    private Long id; //기존 객체의 id
+    private Long tempId; //새로 생긴 객체의 tempId
 }

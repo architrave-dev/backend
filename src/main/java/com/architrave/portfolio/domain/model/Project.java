@@ -36,6 +36,8 @@ public class Project extends BaseEntity{
     //ProjectElement의 순서를 _ 구분자로 관리
     private String peIndex;
 
+    //ProjectInfo의 순서를 _ 구분자로 관리
+    private String piIndex;
 
     public static Project createProject(
             Member member,

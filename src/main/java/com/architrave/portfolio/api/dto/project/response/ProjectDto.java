@@ -17,8 +17,8 @@ public class ProjectDto {
     private String description;
     private String originUrl;
     private String thumbnailUrl;
+    private String piIndex;
     private List<ProjectInfoDto> projectInfoList;
-    private List<ProjectElementDto> projectElementList;
 
     public ProjectDto(Project project,
                       List<ProjectInfoDto> projectInfoList){
@@ -28,19 +28,7 @@ public class ProjectDto {
         UploadFile uploadFile = project.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
+        this.piIndex = project.getPiIndex();
         this.projectInfoList = projectInfoList;
-    }
-
-    public ProjectDto(Project project,
-                      List<ProjectInfoDto> projectInfoList,
-                      List<ProjectElementDto>  projectElementList){
-        this.id = project.getId();
-        this.title = project.getTitle();
-        this.description = project.getDescription();
-        UploadFile uploadFile = project.getUploadFile();
-        this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
-        this.projectInfoList = projectInfoList;
-        this.projectElementList = projectElementList;
     }
 }
