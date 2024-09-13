@@ -18,7 +18,7 @@ public class CreateProjectElementReq {
 
     @NotNull
     private Long projectId;
-
+    @NotNull
     private Long tempId;
     @NotNull
     private ProjectElementType projectElementType;

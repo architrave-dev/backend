@@ -191,7 +191,7 @@ public class ProjectServiceTest {
         List<ProjectInfo> projectInfoByProject = projectInfoService.findProjectInfoByProject(createdProject);
         assertEquals(projectInfoByProject.size(), 2);
         ProjectInfo projectInfo = projectInfoByProject.get(0);
-        projectInfoService.removeProjectInfo(projectInfo.getId());
+        projectInfoService.removeProjectInfoById(projectInfo.getId());
 
         //then
         List<ProjectInfo> projectInfoByProject2 = projectInfoService.findProjectInfoByProject(createdProject);

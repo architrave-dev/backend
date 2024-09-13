@@ -107,7 +107,7 @@ public class ProjectElementController {
 
     private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
         return indexDtoList.stream()
-                .map(dto -> Optional.ofNullable(dto.getPeId())
+                .map(dto -> Optional.ofNullable(dto.getId())
                         .orElseThrow(() -> new IllegalStateException("ProjectId is null for IndexDto")))
                 .map(Object::toString)
                 .collect(Collectors.joining("_"));
@@ -126,10 +126,10 @@ public class ProjectElementController {
             Long peId = projectElement.getId();
             indexDtoList.stream()
                     .filter(idxDto -> {
-                        Long tempPeId = idxDto.getTempPeId();
+                        Long tempPeId = idxDto.getTempId();
                         return tempPeId != null && tempPeId.equals(tempId);
                     })
-                    .forEach(idxDto -> idxDto.setPeId(peId));
+                    .forEach(idxDto -> idxDto.setId(peId));
         });
         updatedList.forEach(this::handleUpdateProjectElement);
         removedList.forEach(p -> projectElementService.removeById(p.getId()));
