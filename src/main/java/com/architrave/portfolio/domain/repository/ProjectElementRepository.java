@@ -12,8 +12,7 @@ import java.util.List;
 @Repository
 public interface ProjectElementRepository extends JpaRepository<ProjectElement, Long> {
     @Query("select pe from ProjectElement pe" +
-            " where pe.project = :project" +
-            " order by pe.peOrder")
+            " where pe.project = :project")
     List<ProjectElement> findByProject(
             @Param("project") Project project);
 }

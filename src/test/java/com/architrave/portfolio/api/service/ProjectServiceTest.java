@@ -125,14 +125,12 @@ public class ProjectServiceTest {
                 null,
                 null,
                 null,
-                null,
-                true
+                null
         );
 
         //then
         Project findProject = projectService.findById(createdProject.getId());
         assertEquals(findProject.getTitle(), createdProject.getTitle());
-        assertTrue(findProject.getIsDeleted());
 
     }
 
@@ -193,7 +191,7 @@ public class ProjectServiceTest {
         List<ProjectInfo> projectInfoByProject = projectInfoService.findProjectInfoByProject(createdProject);
         assertEquals(projectInfoByProject.size(), 2);
         ProjectInfo projectInfo = projectInfoByProject.get(0);
-        projectInfoService.removeProjectInfo(projectInfo.getId());
+        projectInfoService.removeProjectInfoById(projectInfo.getId());
 
         //then
         List<ProjectInfo> projectInfoByProject2 = projectInfoService.findProjectInfoByProject(createdProject);
@@ -203,7 +201,6 @@ public class ProjectServiceTest {
     @Test
     public void deleteProject(){
         //Project를 테이블에서 제거하는 로직은 존재하지 않는다.
-        //isDeleted를 true로 update하는 로직으로 대체한다.
     }
 
     private Member createMemberInTest(){

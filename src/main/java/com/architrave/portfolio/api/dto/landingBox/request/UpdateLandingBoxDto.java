@@ -15,5 +15,5 @@ public class UpdateLandingBoxDto {
     private String thumbnailUrl;
     private String title;
     private String description;
-    private Boolean isDeleted;
+    private Boolean isVisible;
 }

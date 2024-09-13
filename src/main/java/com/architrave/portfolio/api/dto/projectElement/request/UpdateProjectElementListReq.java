@@ -14,6 +14,7 @@ public class UpdateProjectElementListReq {
 
     @NotNull
     private Long projectId;
+    private List<IndexDto> peIndexList;
     private List<CreateProjectElementReq> createProjectElements;
     private List<UpdateProjectElementReq> updatedProjectElements;
     private List<RemoveProjectElementReq> removedProjectElements;

@@ -42,8 +42,7 @@ public class ProjectElementService {
     @Transactional
     public ProjectElement updateProjectElementWork(Work work,
                                                    Long projectElementId,
-                                                   WorkAlignment workAlignment,
-                                                   Integer peOrder) {
+                                                   WorkAlignment workAlignment) {
         ProjectElement projectElement = findById(projectElementId);
         //work 내 변경사항은 이미 완료한 상태
         if(!projectElement.getWork().equals(work)){
@@ -52,17 +51,13 @@ public class ProjectElementService {
         if(workAlignment != null){
             projectElement.setWorkAlignment(workAlignment);
         }
-        if(peOrder != null){
-            projectElement.setPeOrder(peOrder);
-        }
         return projectElement;
     }
 
     @Transactional
     public ProjectElement updateProjectElementTextBox(TextBox textBox,
                                                       Long projectElementId,
-                                                      TextBoxAlignment textBoxAlignment,
-                                                      Integer peOrder) {
+                                                      TextBoxAlignment textBoxAlignment) {
         ProjectElement projectElement = findById(projectElementId);
         //textBox 내 변경사항은 이미 완료한 상태
         if(!projectElement.getTextBox().equals(textBox)){
@@ -71,22 +66,15 @@ public class ProjectElementService {
         if(textBoxAlignment != null){
             projectElement.setTextBoxAlignment(textBoxAlignment);
         }
-        if(peOrder != null){
-            projectElement.setPeOrder(peOrder);
-        }
         return projectElement;
     }
 
     @Transactional
     public ProjectElement updateProjectElementDivider(Long projectElementId,
-                                                      DividerType dividerType,
-                                                      Integer peOrder) {
+                                                      DividerType dividerType) {
         ProjectElement projectElement = findById(projectElementId);
         if(dividerType != null){
             projectElement.setDividerType(dividerType);
-        }
-        if(peOrder != null){
-            projectElement.setPeOrder(peOrder);
         }
         return projectElement;
     }
@@ -105,7 +93,6 @@ public class ProjectElementService {
         List<ProjectElement> projectElementList = findProjectElementByProject(project);
         for(int i=0; i<projectElementList.size(); i++){
             ProjectElement projectElement = projectElementList.get(i);
-            projectElement.setPeOrder(i+1);
         }
     }
 }

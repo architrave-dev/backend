@@ -19,6 +19,8 @@ public class CreateProjectElementReq {
     @NotNull
     private Long projectId;
     @NotNull
+    private Long tempId;
+    @NotNull
     private ProjectElementType projectElementType;
 
     //work 일 경우
@@ -29,7 +31,4 @@ public class CreateProjectElementReq {
     private TextBoxAlignment textBoxAlignment;
     //divider일 경우
     private DividerType dividerType;
-
-    @NotNull
-    private Integer peOrder;
 }

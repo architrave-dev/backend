@@ -1,4 +1,4 @@
-package com.architrave.portfolio.api.dto.textBox.request;
+package com.architrave.portfolio.api.dto.project.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateTextBoxReq {
+public class RemoveProjectReq {
     @NotNull
-    private Long id;
-    private String content;
+    private Long projectId;
 }

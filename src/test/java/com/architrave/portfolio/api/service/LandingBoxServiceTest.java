@@ -55,7 +55,7 @@ public class LandingBoxServiceTest {
         assertNotNull(findLb.getUploadFile().getThumbnailUrl());
         assertEquals(findLb.getTitle(), TEST_LB_TITLE);
         assertEquals(findLb.getDescription(), TEST_LB_DISCRIPTION);
-        assertFalse(findLb.getIsDeleted());
+        assertTrue(findLb.getIsVisible());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class LandingBoxServiceTest {
         assertEquals(findLb2.getUploadFile().getThumbnailUrl(), TEST_LB_IMG_URL);
         assertEquals(findLb2.getTitle(), TEST_LB_DISCRIPTION);
         assertEquals(findLb2.getDescription(), TEST_LB_TITLE);
-        assertFalse(findLb2.getIsDeleted());
+        assertTrue(findLb2.getIsVisible());
     }
     @Test
     public void updateLandingBoxImgToEmpty(){ //이래도 되나??? 고민!!
@@ -107,21 +107,21 @@ public class LandingBoxServiceTest {
                 null, null,
                 null,
                 null,
-                true
+                false
         );
 
         //then
         LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
         assertEquals(findLb2.getTitle(), TEST_LB_TITLE);
-        assertEquals(findLb2.getUploadFile().getOriginUrl(), null);
-        assertEquals(findLb2.getUploadFile().getThumbnailUrl(), null);
-        assertTrue(findLb2.getIsDeleted());
+        assertEquals(findLb2.getUploadFile().getOriginUrl(), TEST_LB_IMG_URL);
+        assertEquals(findLb2.getUploadFile().getThumbnailUrl(), TEST_LB_THUMBNAIL_URL);
+        assertFalse(findLb2.getIsVisible());
     }
     @Test
     public void deleteLandingBox(){
         //LandingBox를 테이블에서 제거하는 로직은 존재하지 않는다.
         //UploadFile의 이미지 url을 null처리 하는 로직으로 대체한다.
-        //UploadFile이 null 처리 후 isDeleted를 true로 변경한다.
+        //UploadFile이 null 처리 후 isVisible를 false로 변경한다.
     }
 
     @Test
@@ -149,7 +149,7 @@ public class LandingBoxServiceTest {
         LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
         assertNotNull(findLb2.getUploadFile().getOriginUrl());
         assertNotNull(findLb2.getUploadFile().getThumbnailUrl());
-        assertFalse(findLb2.getIsDeleted());
+        assertFalse(findLb2.getIsVisible());
     }
 
     @Test
@@ -168,17 +168,17 @@ public class LandingBoxServiceTest {
 
         //when
         LandingBox findLb = landingBoxService.findLbById(createdLb.getId());
-        findLb.setIsDeleted(true);
+        findLb.setIsVisible(true);
         landingBoxService.updateLb(createdLb.getId(),
                 null, null,
                 null,
                 null,
-                true
+                false
         );
 
         //then
         LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
-        assertTrue(findLb2.getIsDeleted());
+        assertFalse(findLb2.getIsVisible());
 
     }
 

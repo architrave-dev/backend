@@ -1,11 +1,11 @@
 package com.architrave.portfolio.api.dto.project.request;
 
+import com.architrave.portfolio.api.dto.projectElement.request.IndexDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +19,8 @@ public class UpdateProjectReq {
     private String thumbnailUrl;
     private String title;
     private String description;
+    private List<IndexDto> piIndexList;
     private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
     private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
     private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();
-    private Boolean isDeleted;
 }

@@ -24,7 +24,6 @@ public class Work extends BaseEntity {
     private Size size;
     private String material;
     private Integer prodYear;
-    private Boolean isDeleted = false;
 
     public static Work createWork(
             Member member,
@@ -43,26 +42,21 @@ public class Work extends BaseEntity {
         work.size = size;
         work.material = material;
         work.prodYear = prodYear;
-        work.isDeleted = false;
         return work;
     }
 
     // ----- 연관관계 메소드 -----
     /**
-     * Work의 이미지 url을 설정한다. <br/>
-     * Work의 isDeleted를 false로 설정한다.
+     * Work의 이미지 url을 설정한다.
      */
     public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
         this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
-        if(this.isDeleted) this.isDeleted = false;
     }
     /**
      * Work의 이미지 url을 null 처리한다. <br/>
-     * 연결된 Work과의 관계를 끊지 않는다. <br/>
-     * Work의 이미지 url이 null 처리되면 Work의 isDeleted는 true로 변한다.
+     * 연결된 Work과의 관계를 끊지 않는다.
      */
     public void removeUploadFile(){
         this.uploadFile.removeImg();
-        this.isDeleted = true;
     }
 }

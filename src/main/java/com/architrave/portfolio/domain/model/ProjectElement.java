@@ -40,47 +40,39 @@ public class ProjectElement {
     @Enumerated
     private DividerType dividerType;
 
-    @Column
-    private Integer peOrder;
 
     public static ProjectElement createWorkElement(
             Project project,
             Work work,
-            WorkAlignment workAlignment,
-            Integer peOrder
+            WorkAlignment workAlignment
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.WORK;
         projectElement.project = project;
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
-        projectElement.peOrder = peOrder;
         return projectElement;
     }
     public static ProjectElement createTextBoxElement(
             Project project,
             TextBox textBox,
-            TextBoxAlignment textBoxAlignment,
-            Integer peOrder
+            TextBoxAlignment textBoxAlignment
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.TEXTBOX;
         projectElement.project = project;
         projectElement.textBox = textBox;
         projectElement.textBoxAlignment = textBoxAlignment;
-        projectElement.peOrder = peOrder;
         return projectElement;
     }
     public static ProjectElement createDividerElement(
             Project project,
-            DividerType dividerType,
-            Integer peOrder
+            DividerType dividerType
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.DIVIDER;
         projectElement.project = project;
         projectElement.dividerType = dividerType;
-        projectElement.peOrder = peOrder;
         return projectElement;
     }
 }

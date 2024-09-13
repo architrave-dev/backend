@@ -3,6 +3,7 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
+import com.architrave.portfolio.api.dto.projectElement.response.UpdateProjectElementListDto;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "4. ProjectElement")  // => swagger 이름
@@ -67,7 +69,7 @@ public class ProjectElementController {
                     "3. 삭제되는 ProjectElement 리스트를 받습니다."
     )
     @PutMapping
-    public ResponseEntity<ResultDto<List<ProjectElementDto>>> updateProjectElementList(
+    public ResponseEntity<ResultDto<UpdateProjectElementListDto>> updateProjectElementList(
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
     ) {
@@ -77,14 +79,16 @@ public class ProjectElementController {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        Project targetProject = projectService.findById(updateProjectElementListReq.getProjectId());
-
         //projectElementList 업데이트
-        updateProjectElementList(loginUser,
+        List<IndexDto> indexDtoList = updateProjectElementList(loginUser,
                 updateProjectElementListReq.getCreateProjectElements(),
                 updateProjectElementListReq.getUpdatedProjectElements(),
-                updateProjectElementListReq.getRemovedProjectElements()
+                updateProjectElementListReq.getRemovedProjectElements(),
+                updateProjectElementListReq.getPeIndexList()
         );
+
+        String peIndex = convertToStringUsingMap(indexDtoList);
+        Project targetProject = projectService.updatePeIndex(updateProjectElementListReq.getProjectId(), peIndex);
 
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
 
@@ -94,20 +98,43 @@ public class ProjectElementController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(projectElementDtoList));
+                .body(new ResultDto<>(
+                        new UpdateProjectElementListDto(
+                                peIndex,
+                                projectElementDtoList
+                )));
     }
-    private void updateProjectElementList(Member loginUser,
+
+    private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
+        return indexDtoList.stream()
+                .map(dto -> Optional.ofNullable(dto.getId())
+                        .orElseThrow(() -> new IllegalStateException("ProjectId is null for IndexDto")))
+                .map(Object::toString)
+                .collect(Collectors.joining("_"));
+    }
+
+    private List<IndexDto> updateProjectElementList(Member loginUser,
                                    List<CreateProjectElementReq> createdList,
                                    List<UpdateProjectElementReq> updatedList,
-                                   List<RemoveProjectElementReq> removedList
+                                   List<RemoveProjectElementReq> removedList,
+                                          List<IndexDto> indexDtoList
     ){
-        createdList.stream()
-                .forEach((pe) -> projectElementService.createProjectElement(
-                        handleProjectElement(loginUser, pe)));
-        updatedList.stream()
-                .forEach((pe) -> handleUpdateProjectElement(pe));
-        removedList.stream()
-                .forEach((p) -> projectElementService.removeById(p.getId()));
+        createdList.forEach(pe -> {
+            ProjectElement projectElement = projectElementService.createProjectElement(
+                    handleProjectElement(loginUser, pe));
+            Long tempId = pe.getTempId();
+            Long peId = projectElement.getId();
+            indexDtoList.stream()
+                    .filter(idxDto -> {
+                        Long tempPeId = idxDto.getTempId();
+                        return tempPeId != null && tempPeId.equals(tempId);
+                    })
+                    .forEach(idxDto -> idxDto.setId(peId));
+        });
+        updatedList.forEach(this::handleUpdateProjectElement);
+        removedList.forEach(p -> projectElementService.removeById(p.getId()));
+
+        return indexDtoList;
     }
 
     /**
@@ -164,16 +191,14 @@ public class ProjectElementController {
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),
                 updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear(),
-                updateWorkReq.getIsDeleted()
+                updateWorkReq.getProdYear()
         );
 
         // updated 된 work를 전달
         ProjectElement projectElement = projectElementService.updateProjectElementWork(
                 updatedWork,
                 updateWorkProjectElementReq.getId(),
-                updateWorkProjectElementReq.getWorkAlignment(),
-                updateWorkProjectElementReq.getPeOrder()
+                updateWorkProjectElementReq.getWorkAlignment()
         );
 
         return ResponseEntity
@@ -202,16 +227,14 @@ public class ProjectElementController {
 
         TextBox updatedTextBox = textBoxService.updateTextBox(
                 updateTextBoxReq.getId(),
-                updateTextBoxReq.getContent(),
-                updateTextBoxReq.getIsDeleted()
+                updateTextBoxReq.getContent()
         );
 
         // updated 된 textBox 를 전달
         ProjectElement projectElement = projectElementService.updateProjectElementTextBox(
                 updatedTextBox,
                 updateTextBoxProjectElementReq.getId(),
-                updateTextBoxProjectElementReq.getTextBoxAlignment(),
-                updateTextBoxProjectElementReq.getPeOrder()
+                updateTextBoxProjectElementReq.getTextBoxAlignment()
         );
 
         return ResponseEntity
@@ -238,8 +261,7 @@ public class ProjectElementController {
 
         ProjectElement projectElement = projectElementService.updateProjectElementDivider(
                 updateDividerProjectElementReq.getId(),
-                updateDividerProjectElementReq.getDividerType(),
-                updateDividerProjectElementReq.getPeOrder()
+                updateDividerProjectElementReq.getDividerType()
         );
 
         return ResponseEntity
@@ -304,7 +326,6 @@ public class ProjectElementController {
                     .project(project)
                     .work(work)
                     .workAlignment(createProjectElementReq.getWorkAlignment())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -316,13 +337,11 @@ public class ProjectElementController {
                     .project(project)
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextBoxAlignment())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
             projectElement = new DividerInProjectBuilder()
                     .project(project)
                     .dividerType(createProjectElementReq.getDividerType())
-                    .peOrder(createProjectElementReq.getPeOrder())
                     .build();
         }
         return projectElement;
@@ -341,15 +360,13 @@ public class ProjectElementController {
                     updateWorkReq.getDescription(),
                     updateWorkReq.getSize(),
                     updateWorkReq.getMaterial(),
-                    updateWorkReq.getProdYear(),
-                    updateWorkReq.getIsDeleted()
+                    updateWorkReq.getProdYear()
             );
             // updated 된 work를 전달
             projectElementService.updateProjectElementWork(
                     updatedWork,
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getWorkAlignment(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getWorkAlignment()
             );
         }
         //textBox일 경우
@@ -358,23 +375,20 @@ public class ProjectElementController {
             UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
             TextBox updatedTextBox = textBoxService.updateTextBox(
                     updateTextBoxReq.getId(),
-                    updateTextBoxReq.getContent(),
-                    updateTextBoxReq.getIsDeleted()
+                    updateTextBoxReq.getContent()
             );
             // updated 된 textBox 를 전달
             projectElementService.updateProjectElementTextBox(
                     updatedTextBox,
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getTextBoxAlignment(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getTextBoxAlignment()
             );
         }
         //divider 일 경우
         else{
             projectElementService.updateProjectElementDivider(
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getDividerType(),
-                    updateProjectElementReq.getPeOrder()
+                    updateProjectElementReq.getDividerType()
             );
         }
     }

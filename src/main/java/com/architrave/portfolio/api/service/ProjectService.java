@@ -67,20 +67,37 @@ public class ProjectService {
             String originUrl,
             String thumbnailUrl,
             String title,
-            String description,
-            Boolean isDeleted
+            String description
     ) {
         Project project = findById(projectId);
-        if(isDeleted != null && isDeleted == true){
-            project.setIsDeleted(true);
-            return project;
-        }
         if(originUrl != null || thumbnailUrl != null){
             project.setUploadFileUrl(originUrl, thumbnailUrl);
         }
         if(title != null)           project.setTitle(title);
         if(description != null)     project.setDescription(description);
 
+        return project;
+    }
+    @Transactional
+    public void removeProject(Project project){
+        projectRepository.delete(project);
+    }
+    @Transactional
+    public void removeProject(Long projectId){
+        Project projectById = findById(projectId);
+        projectRepository.delete(projectById);
+    }
+
+    @Transactional
+    public Project updatePiIndex(Long projectId, String piIndex) {
+        Project project = findById(projectId);
+        project.setPiIndex(piIndex);
+        return project;
+    }
+    @Transactional
+    public Project updatePeIndex(Long projectId, String peIndex) {
+        Project project = findById(projectId);
+        project.setPeIndex(peIndex);
         return project;
     }
 }

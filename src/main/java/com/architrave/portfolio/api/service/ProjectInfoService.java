@@ -46,8 +46,13 @@ public class ProjectInfoService {
     }
 
     @Transactional
-    public void removeProjectInfo(Long projectInfoId){
+    public void removeProjectInfoById(Long projectInfoId){
         ProjectInfo projectInfo = findProjectInfoById(projectInfoId);
         projectInfoRepository.delete(projectInfo);
+    }
+
+    @Transactional
+    public void removeProjectInfoByProject(Project project){
+        projectInfoRepository.deleteByProject(project);
     }
 }

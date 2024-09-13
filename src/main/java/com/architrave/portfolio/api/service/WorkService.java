@@ -69,14 +69,9 @@ public class WorkService {
                            String description,
                            Size size,
                            String material,
-                           Integer prodYear,
-                           Boolean isDeleted
+                           Integer prodYear
     ) {
         Work work = findWorkById(workId);
-        if(isDeleted != null && isDeleted == true){
-            work.setIsDeleted(true);
-            return work;
-        }
         if(originUrl != null || thumbnailUrl != null){
             work.setUploadFileUrl(originUrl, thumbnailUrl);
         }

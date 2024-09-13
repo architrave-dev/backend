@@ -17,6 +17,4 @@ public class UpdateWorkProjectElementReq {
     private Long projectId;
     private UpdateWorkReq updateWorkReq;
     private WorkAlignment workAlignment;
-    @NotNull
-    private Integer peOrder;
 }

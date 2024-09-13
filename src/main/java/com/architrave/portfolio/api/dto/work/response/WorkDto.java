@@ -17,7 +17,6 @@ public class WorkDto {
     private Size size;
     private String material;
     private Integer prodYear;
-    private Boolean isDeleted;
 
     public WorkDto(Work work) {
         this.id = work.getId();
@@ -30,6 +29,5 @@ public class WorkDto {
         this.size = work.getSize();
         this.material = work.getMaterial();
         this.prodYear = work.getProdYear();
-        this.isDeleted = work.getIsDeleted();
     }
 }

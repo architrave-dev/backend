@@ -16,6 +16,4 @@ public class UpdateDividerProjectElementReq {
     @NotNull
     private Long projectId;
     private DividerType dividerType;
-    @NotNull
-    private Integer peOrder;
 }

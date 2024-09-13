@@ -68,7 +68,7 @@ public class LandingBoxController {
                 updateLandingBoxDto.getThumbnailUrl(),
                 updateLandingBoxDto.getTitle(),
                 updateLandingBoxDto.getDescription(),
-                updateLandingBoxDto.getIsDeleted()
+                updateLandingBoxDto.getIsVisible()
                 );
 
         return ResponseEntity

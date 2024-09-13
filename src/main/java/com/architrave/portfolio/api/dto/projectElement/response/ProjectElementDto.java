@@ -20,7 +20,6 @@ public class ProjectElementDto {
     private TextBox textBox;
     private TextBoxAlignment textBoxAlignment;
     private DividerType dividerType;
-    private Integer peOrder;
 
     public ProjectElementDto(ProjectElement projectElement){
         this.id = projectElement.getId();
@@ -33,7 +32,6 @@ public class ProjectElementDto {
         this.textBoxAlignment = projectElement.getTextBoxAlignment();
         //divider
         this.dividerType = projectElement.getDividerType();
-        this.peOrder = projectElement.getPeOrder();
         if(this.work != null){
             this.projectElementType = ProjectElementType.WORK;
         }else if(this.textBox != null){

@@ -5,6 +5,7 @@ import com.architrave.portfolio.api.dto.project.request.*;
 import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
+import com.architrave.portfolio.api.dto.projectElement.request.IndexDto;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "3. Project")  // => swagger 이름
@@ -68,14 +70,9 @@ public class ProjectController {
                 .map((pi) -> new ProjectInfoDto(pi))
                 .collect(Collectors.toList());
 
-        List<ProjectElementDto> projectElementDtoList = project.getProjectElementList()
-                .stream()
-                .map((pe) -> new ProjectElementDto(pe))
-                .collect(Collectors.toList());
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList, projectElementDtoList)));
+                .body(new ResultDto<>(new ProjectDto(project, projectInfoDtoList)));
     }
 
     @Operation(
@@ -120,7 +117,6 @@ public class ProjectController {
                     "createdProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "updatedProjectInfoList: 생성된 ProjectInfo <br/>" +
                     "removedProjectInfoList: 삭제된 ProjectInfo <br/><br/>" +
-                    "Project 삭제 시 isDeleted 를 true 로 변경합니다. <br/><br/>" +
                     "projectElement는 전용 API를 사용합니다."
     )
     @PutMapping
@@ -140,17 +136,20 @@ public class ProjectController {
                 updateProjectReq.getOriginUrl(),
                 updateProjectReq.getThumbnailUrl(),
                 updateProjectReq.getTitle(),
-                updateProjectReq.getDescription(),
-                updateProjectReq.getIsDeleted()
+                updateProjectReq.getDescription()
         );
 
         //projectInfo 업데이트
-        updateProjectInfo(updatedProject,
+        List<IndexDto> indexDtoList = updateProjectInfo(updatedProject,
                 updateProjectReq.getCreatedProjectInfoList(),
                 updateProjectReq.getUpdatedProjectInfoList(),
-                updateProjectReq.getRemovedProjectInfoList());
+                updateProjectReq.getRemovedProjectInfoList(),
+                updateProjectReq.getPiIndexList());
 
-        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(updatedProject);
+        String piIndex = convertToStringUsingMap(indexDtoList);
+        Project lastProject = projectService.updatePiIndex(updateProjectReq.getId(), piIndex);
+
+        List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(lastProject);
 
         List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
                 .map((p) -> new ProjectInfoDto(p))
@@ -158,27 +157,73 @@ public class ProjectController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectDto(updatedProject, projectInfoDtoList)));
+                .body(new ResultDto<>(new ProjectDto(lastProject, projectInfoDtoList)));
     }
 
-    private void updateProjectInfo(Project targetProject,
-                       List<CreateProjectInfoReq> createdList,
-                       List<UpdateProjectInfoReq> updatedList,
-                       List<RemoveProjectInfoReq> removedList
-                       ){
-        createdList.stream()
-                .forEach((p) -> projectInfoService.createProjectInfo(
-                        targetProject,
-                        p.getCustomName(),
-                        p.getCustomValue()));
+    private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
+        return indexDtoList.stream()
+                .map(dto -> Optional.ofNullable(dto.getId())
+                        .orElseThrow(() -> new IllegalStateException("Id is null for IndexDto")))
+                .map(Object::toString)
+                .collect(Collectors.joining("_"));
+    }
 
-        updatedList.stream()
-                .forEach((p) -> projectInfoService.updateProjectInfo(
-                        p.getId(),
-                        p.getCustomName(),
-                        p.getCustomValue()));
+    private List<IndexDto> updateProjectInfo(Project targetProject,
+                                             List<CreateProjectInfoReq> createdList,
+                                             List<UpdateProjectInfoReq> updatedList,
+                                             List<RemoveProjectInfoReq> removedList,
+                                             List<IndexDto> indexDtoList
+    ){
+        createdList.forEach(pi -> {
+            ProjectInfo projectInfo = projectInfoService.createProjectInfo(
+                    targetProject,
+                    pi.getCustomName(),
+                    pi.getCustomValue());
+            Long tempId = pi.getTempId();
+            Long piId = projectInfo.getId();
+            indexDtoList.stream()
+                    .filter(idxDto -> {
+                        Long tempPiId = idxDto.getTempId();
+                        return tempPiId != null && tempPiId.equals(tempId);
+                    })
+                    .forEach(idxDto -> idxDto.setId(piId));
+        });
 
-        removedList.stream()
-                .forEach((p) -> projectInfoService.removeProjectInfo(p.getId()));
+        updatedList.forEach((pi) -> projectInfoService.updateProjectInfo(
+                        pi.getId(),
+                        pi.getCustomName(),
+                        pi.getCustomValue()));
+
+        removedList.forEach((pi) -> projectInfoService.removeProjectInfoById(pi.getId()));
+
+        return indexDtoList;
+    }
+
+    @Operation(
+            summary = "Project 삭제하기",
+            description = "Project가 삭제되면 " +
+                    "관련된 ProjectInfo와 " +
+                    "ProjectElement가 모두 삭제됩니다."
+    )
+    @DeleteMapping
+    public ResponseEntity<ResultDto<String>> removeProject(
+            @RequestParam("aui") String aui,
+            @Valid @RequestBody RemoveProjectReq removeProjectReq
+    ){
+        log.info("hello from removeProject");
+        Member loginUser = authService.getMemberFromContext();
+        if(!loginUser.getAui().equals(aui)){
+            throw new UnauthorizedException("loginUser is not page owner");
+        }
+
+        Project project = projectService.findById(removeProjectReq.getProjectId());
+        //projectInfo 삭제
+        projectInfoService.removeProjectInfoByProject(project);
+        //project 삭제
+        projectService.removeProject(project);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("delete project success"));
     }
 }

@@ -1,12 +1,10 @@
 package com.architrave.portfolio.domain.model;
 
-import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +27,17 @@ public class Project extends BaseEntity{
     private UploadFile uploadFile;
     private String title;
     private String description;
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<ProjectElement> projectElementList = new ArrayList<>();
 
-    private Integer projectOrder;
-    private Boolean isDeleted;
+    //ProjectElement의 순서를 _ 구분자로 관리
+    private String peIndex;
+
+    //ProjectInfo의 순서를 _ 구분자로 관리
+    private String piIndex;
 
     public static Project createProject(
             Member member,
@@ -46,7 +50,6 @@ public class Project extends BaseEntity{
         project.uploadFile = uploadFile;
         project.title = title;
         project.description = description;
-        project.isDeleted = false;
         return project;
     }
 
@@ -60,6 +63,5 @@ public class Project extends BaseEntity{
      */
     public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
         this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
-        if(this.isDeleted) this.isDeleted = false;
     }
 }
