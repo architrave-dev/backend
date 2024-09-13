@@ -1,12 +1,10 @@
 package com.architrave.portfolio.domain.model;
 
-import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +30,12 @@ public class Project extends BaseEntity{
     @OneToMany(mappedBy = "project",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+            orphanRemoval = true)
     private List<ProjectElement> projectElementList = new ArrayList<>();
 
-    private Integer projectOrder;
+    //ProjectElement의 순서를 _ 구분자로 관리
+    private String peIndex;
+
 
     public static Project createProject(
             Member member,

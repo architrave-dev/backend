@@ -87,4 +87,11 @@ public class ProjectService {
         Project projectById = findById(projectId);
         projectRepository.delete(projectById);
     }
+
+    @Transactional
+    public Project updatePeIndex(Long projectId, String peIndex) {
+        Project project = findById(projectId);
+        project.setPeIndex(peIndex);
+        return project;
+    }
 }

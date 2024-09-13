@@ -18,6 +18,8 @@ public class CreateProjectElementReq {
 
     @NotNull
     private Long projectId;
+
+    private Long tempId;
     @NotNull
     private ProjectElementType projectElementType;
 
