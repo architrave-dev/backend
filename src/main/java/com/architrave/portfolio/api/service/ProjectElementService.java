@@ -1,13 +1,7 @@
 package com.architrave.portfolio.api.service;
 
-import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
-import com.architrave.portfolio.domain.model.TextBox;
-import com.architrave.portfolio.domain.model.Work;
-import com.architrave.portfolio.domain.model.enumType.DividerType;
-import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
-import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.domain.model.*;
+import com.architrave.portfolio.domain.model.enumType.*;
 import com.architrave.portfolio.domain.repository.ProjectElementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +36,9 @@ public class ProjectElementService {
     @Transactional
     public ProjectElement updateProjectElementWork(Work work,
                                                    Long projectElementId,
-                                                   WorkAlignment workAlignment) {
+                                                   WorkAlignment workAlignment,
+                                                   WorkDisplaySize workDisplaySize
+    ) {
         ProjectElement projectElement = findById(projectElementId);
         //work 내 변경사항은 이미 완료한 상태
         if(!projectElement.getWork().equals(work)){
@@ -50,6 +46,9 @@ public class ProjectElementService {
         }
         if(workAlignment != null){
             projectElement.setWorkAlignment(workAlignment);
+        }
+        if(workDisplaySize != null){
+            projectElement.setWorkDisplaySize(workDisplaySize);
         }
         return projectElement;
     }
@@ -89,10 +88,7 @@ public class ProjectElementService {
     }
 
     @Transactional
-    public void organizeOrder(Project project){
-        List<ProjectElement> projectElementList = findProjectElementByProject(project);
-        for(int i=0; i<projectElementList.size(); i++){
-            ProjectElement projectElement = projectElementList.get(i);
-        }
+    public void deleteByMemberAndWorkId(Member loginUser, Work work) {
+        projectElementRepository.deleteByProjectMemberAndWork(loginUser, work);
     }
 }

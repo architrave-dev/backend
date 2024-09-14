@@ -21,10 +21,13 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             @Param("member") Member member,
             @Param("title") String title);
 
-    @Query("select p from Project p" +
-            " left join fetch p.projectElementList" +
-            " where p.member = :member" +
-            " and p.title = :title")
+    @Query("""
+            select p 
+            from Project p 
+            left join fetch p.projectElementList 
+            where p.member = :member 
+            and p.title = :title
+            """)
     Optional<Project> findByMemberAndTitleWithElement(
             @Param("member") Member member,
             @Param("title") String title);

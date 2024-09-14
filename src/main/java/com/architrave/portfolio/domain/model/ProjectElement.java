@@ -1,9 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
-import com.architrave.portfolio.domain.model.enumType.DividerType;
-import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
-import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.domain.model.enumType.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,6 +27,9 @@ public class ProjectElement {
     @Enumerated(EnumType.STRING)
     private WorkAlignment workAlignment;
 
+    @Enumerated(EnumType.STRING)
+    private WorkDisplaySize workDisplaySize;
+
     @OneToOne
     @JoinColumn(name = "text_box_id")
     private TextBox textBox;
@@ -44,13 +44,15 @@ public class ProjectElement {
     public static ProjectElement createWorkElement(
             Project project,
             Work work,
-            WorkAlignment workAlignment
+            WorkAlignment workAlignment,
+            WorkDisplaySize workDisplaySize
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.WORK;
         projectElement.project = project;
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
+        projectElement.workDisplaySize = workDisplaySize;
         return projectElement;
     }
     public static ProjectElement createTextBoxElement(
