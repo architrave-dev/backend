@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateProjectElementListDto {
+public class ProjectElementListDto {
     private String peIndex;
     private List<ProjectElementDto> projectElementList;
 }

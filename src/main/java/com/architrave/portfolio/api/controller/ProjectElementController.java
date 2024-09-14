@@ -3,7 +3,7 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
-import com.architrave.portfolio.api.dto.projectElement.response.UpdateProjectElementListDto;
+import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
@@ -43,7 +43,7 @@ public class ProjectElementController {
 
     @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")
     @GetMapping
-    public ResponseEntity<ResultDto<List<ProjectElementDto>>> getProjectElementList(
+    public ResponseEntity<ResultDto<ProjectElementListDto>> getProjectElementList(
             @RequestParam("aui") String aui,
             @RequestParam("projectTitle") String projectTitle
     ){
@@ -52,14 +52,19 @@ public class ProjectElementController {
         Member member = memberService.findMemberByAui(aui);
         Project project = projectService.findByMemberAndTitle(member, projectTitle);
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
-
+        //peIndex 처리할 필요 없음, 프론트에서 없으면 그냥 무시해
         List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
                 .map((pe) -> new ProjectElementDto(pe))
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(projectElementDtoList));
+                .body(new ResultDto<>(
+                        new ProjectElementListDto(
+                                project.getPeIndex(),
+                                projectElementDtoList
+                        )
+                ));
     }
 
     @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
@@ -69,7 +74,7 @@ public class ProjectElementController {
                     "3. 삭제되는 ProjectElement 리스트를 받습니다."
     )
     @PutMapping
-    public ResponseEntity<ResultDto<UpdateProjectElementListDto>> updateProjectElementList(
+    public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
     ) {
@@ -99,7 +104,7 @@ public class ProjectElementController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(
-                        new UpdateProjectElementListDto(
+                        new ProjectElementListDto(
                                 peIndex,
                                 projectElementDtoList
                 )));
