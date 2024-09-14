@@ -1,9 +1,6 @@
 package com.architrave.portfolio.api.service;
 
-import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
-import com.architrave.portfolio.domain.model.TextBox;
-import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.enumType.*;
 import com.architrave.portfolio.domain.repository.ProjectElementRepository;
 import lombok.RequiredArgsConstructor;
@@ -91,10 +88,7 @@ public class ProjectElementService {
     }
 
     @Transactional
-    public void organizeOrder(Project project){
-        List<ProjectElement> projectElementList = findProjectElementByProject(project);
-        for(int i=0; i<projectElementList.size(); i++){
-            ProjectElement projectElement = projectElementList.get(i);
-        }
+    public void deleteByMemberAndWorkId(Member loginUser, Work work) {
+        projectElementRepository.deleteByProjectMemberAndWork(loginUser, work);
     }
 }

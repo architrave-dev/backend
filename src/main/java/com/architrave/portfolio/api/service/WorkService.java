@@ -84,5 +84,8 @@ public class WorkService {
         return work;
     }
 
-
+    @Transactional
+    public void removeWork(Work work) {
+        workRepository.delete(work);
+    }
 }

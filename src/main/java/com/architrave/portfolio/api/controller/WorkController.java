@@ -2,12 +2,13 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
+import com.architrave.portfolio.api.dto.work.request.RemoveWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.dto.work.response.WorkDto;
-import com.architrave.portfolio.api.service.AuthService;
-import com.architrave.portfolio.api.service.MemberService;
-import com.architrave.portfolio.api.service.WorkService;
+import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.Project;
+import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,9 @@ public class WorkController {
     private final AuthService authService;
     private final MemberService memberService;
     private final WorkService workService;
+    private final ProjectService projectService;
+    private final ProjectElementService peService;
+
 
 
     @Operation(summary = "작가의 Work List 조회하기")
@@ -110,5 +115,30 @@ public class WorkController {
                 .body(new ResultDto<>(new WorkDto(updatedWork)));
     }
 
-    //delete 없음
+
+    @Operation(summary = "Work 삭제하기" +
+            "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다.")
+    @DeleteMapping
+    public ResponseEntity<ResultDto<String>> removeWork(
+            @RequestParam("aui") String aui,
+            @Valid @RequestBody RemoveWorkReq removeWorkReq
+    ) {
+        log.info("hello from removeWork");
+        Member loginUser = authService.getMemberFromContext();
+        if (!loginUser.getAui().equals(aui)) {
+            throw new UnauthorizedException("loginUser is not page owner");
+        }
+
+        Work work = workService.findWorkById(removeWorkReq.getId());
+
+        //삭제대상 work와 관련된 ProjectElement 삭제
+        peService.deleteByMemberAndWorkId(loginUser, work);
+
+        //work 삭제
+        workService.removeWork(work);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("delete work success"));
+    }
 }
