@@ -180,7 +180,8 @@ public class ProjectElementServiceTest {
         projectElementService.updateProjectElementWork(
                 work,
                 1L,
-                TEST_WORK_ALIGNMENT_CHANGE
+                TEST_WORK_ALIGNMENT_CHANGE,
+                null
         );
 
         //then

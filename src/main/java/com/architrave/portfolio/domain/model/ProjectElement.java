@@ -44,13 +44,15 @@ public class ProjectElement {
     public static ProjectElement createWorkElement(
             Project project,
             Work work,
-            WorkAlignment workAlignment
+            WorkAlignment workAlignment,
+            WorkDisplaySize workDisplaySize
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.WORK;
         projectElement.project = project;
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
+        projectElement.workDisplaySize = workDisplaySize;
         return projectElement;
     }
     public static ProjectElement createTextBoxElement(

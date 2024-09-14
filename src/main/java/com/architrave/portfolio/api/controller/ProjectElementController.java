@@ -137,174 +137,174 @@ public class ProjectElementController {
         return indexDtoList;
     }
 
-    /**
-     * 향후에 변경되더라도
-     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
-     * projectElment를 하나씩 보내기 때문에 단건 create
-     */
-    @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
-    @Deprecated
-    @PostMapping
-    public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
-            @RequestParam("aui") String aui,
-            @Valid @RequestBody CreateProjectElementReq createProjectElementReq
-    ){
-        log.info("hello from createProjectElement");
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
-        ProjectElement projectElement = handleProjectElement(loginUser, createProjectElementReq);
-        ProjectElement createdProjectElement = projectElementService.createProjectElement(
-                projectElement);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
-    }
-
-    @Operation(summary = "특정 Project 내의 ProjectElement (Work) 수정하기",
-            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
-                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
-                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
-    )
-    @Deprecated
-    @PutMapping("/work")
-    public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
-            @RequestParam("aui") String aui,
-            @Valid @RequestBody UpdateWorkProjectElementReq updateWorkProjectElementReq
-    ) {
-        log.info("hello from updateWorkProjectElement");
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
-        UpdateWorkReq updateWorkReq = updateWorkProjectElementReq.getUpdateWorkReq();
-        //work update 먼저 하고
-        Work updatedWork = workService.updateWork(
-                updateWorkReq.getId(),
-                updateWorkReq.getOriginUrl(),
-                updateWorkReq.getThumbnailUrl(),
-                updateWorkReq.getTitle(),
-                updateWorkReq.getDescription(),
-                updateWorkReq.getSize(),
-                updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear()
-        );
-
-        // updated 된 work를 전달
-        ProjectElement projectElement = projectElementService.updateProjectElementWork(
-                updatedWork,
-                updateWorkProjectElementReq.getId(),
-                updateWorkProjectElementReq.getWorkAlignment()
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
-    }
-
-    @Operation(
-            summary = "특정 Project 내의 ProjectElement (TextBox) 수정하기",
-            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
-                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
-                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
-    )
-    @Deprecated
-    @PutMapping("/textBox")
-    public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
-            @RequestParam("aui") String aui,
-            @Valid @RequestBody UpdateTextBoxProjectElementReq updateTextBoxProjectElementReq
-    ) {
-        log.info("hello from updateTextBoxProjectElement");
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-        UpdateTextBoxReq updateTextBoxReq = updateTextBoxProjectElementReq.getUpdateTextBoxReq();
-
-        TextBox updatedTextBox = textBoxService.updateTextBox(
-                updateTextBoxReq.getId(),
-                updateTextBoxReq.getContent()
-        );
-
-        // updated 된 textBox 를 전달
-        ProjectElement projectElement = projectElementService.updateProjectElementTextBox(
-                updatedTextBox,
-                updateTextBoxProjectElementReq.getId(),
-                updateTextBoxProjectElementReq.getTextBoxAlignment()
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
-    }
-
-    @Operation(summary = "특정 Project 내의 ProjectElement (Divider) 수정하기" ,
-            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
-                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
-                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
-    )
-    @Deprecated
-    @PutMapping("/divider")
-    public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
-            @RequestParam("aui") String aui,
-            @Valid @RequestBody UpdateDividerProjectElementReq updateDividerProjectElementReq
-    ) {
-        log.info("hello from updateDividerProjectElement");
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
-        ProjectElement projectElement = projectElementService.updateProjectElementDivider(
-                updateDividerProjectElementReq.getId(),
-                updateDividerProjectElementReq.getDividerType()
-        );
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
-    }
-
-    /**
-     * 향후에 변경되더라도
-     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
-     * projectElment를 하나씩 보내기 때문에 단건 delete
-     */
-    @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
-    @Deprecated
-    @DeleteMapping
-    public ResponseEntity<ResultDto<String>> deleteProjectElement(
-            @RequestParam("aui") String aui,
-            @Valid @RequestBody RemoveProjectElementReq removeProjectElementReq
-    ){
-        log.info("hello from deleteProjectElement");
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-        projectElementService.removeById(removeProjectElementReq.getId());
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>("delete success"));
-    }
-
-    /**
-     * 전체 순서변경을 지금 만들어야하나...?
-     * 프론트에게 미안하더라도 일단 하나씩 하자.
-     */
-    @Operation(
-            summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
-            description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
-    )
-    @Deprecated
-    @GetMapping("/order")
-    private void changeOrderAtOnce(){}
-
+//    /**
+//     * 향후에 변경되더라도
+//     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
+//     * projectElment를 하나씩 보내기 때문에 단건 create
+//     */
+//    @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
+//    @Deprecated
+//    @PostMapping
+//    public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
+//            @RequestParam("aui") String aui,
+//            @Valid @RequestBody CreateProjectElementReq createProjectElementReq
+//    ){
+//        log.info("hello from createProjectElement");
+//        Member loginUser = authService.getMemberFromContext();
+//        if(!loginUser.getAui().equals(aui)){
+//            throw new UnauthorizedException("loginUser is not page owner");
+//        }
+//
+//        ProjectElement projectElement = handleProjectElement(loginUser, createProjectElementReq);
+//        ProjectElement createdProjectElement = projectElementService.createProjectElement(
+//                projectElement);
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
+//    }
+//
+//    @Operation(summary = "특정 Project 내의 ProjectElement (Work) 수정하기",
+//            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+//                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+//                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+//    )
+//    @Deprecated
+//    @PutMapping("/work")
+//    public ResponseEntity<ResultDto<ProjectElementDto>> updateWorkProjectElement(
+//            @RequestParam("aui") String aui,
+//            @Valid @RequestBody UpdateWorkProjectElementReq updateWorkProjectElementReq
+//    ) {
+//        log.info("hello from updateWorkProjectElement");
+//        Member loginUser = authService.getMemberFromContext();
+//        if (!loginUser.getAui().equals(aui)) {
+//            throw new UnauthorizedException("loginUser is not page owner");
+//        }
+//
+//        UpdateWorkReq updateWorkReq = updateWorkProjectElementReq.getUpdateWorkReq();
+//        //work update 먼저 하고
+//        Work updatedWork = workService.updateWork(
+//                updateWorkReq.getId(),
+//                updateWorkReq.getOriginUrl(),
+//                updateWorkReq.getThumbnailUrl(),
+//                updateWorkReq.getTitle(),
+//                updateWorkReq.getDescription(),
+//                updateWorkReq.getSize(),
+//                updateWorkReq.getMaterial(),
+//                updateWorkReq.getProdYear()
+//        );
+//
+//        // updated 된 work를 전달
+//        ProjectElement projectElement = projectElementService.updateProjectElementWork(
+//                updatedWork,
+//                updateWorkProjectElementReq.getId(),
+//                updateWorkProjectElementReq.getWorkAlignment()
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
+//    }
+//
+//    @Operation(
+//            summary = "특정 Project 내의 ProjectElement (TextBox) 수정하기",
+//            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+//                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+//                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+//    )
+//    @Deprecated
+//    @PutMapping("/textBox")
+//    public ResponseEntity<ResultDto<ProjectElementDto>> updateTextBoxProjectElement(
+//            @RequestParam("aui") String aui,
+//            @Valid @RequestBody UpdateTextBoxProjectElementReq updateTextBoxProjectElementReq
+//    ) {
+//        log.info("hello from updateTextBoxProjectElement");
+//        Member loginUser = authService.getMemberFromContext();
+//        if (!loginUser.getAui().equals(aui)) {
+//            throw new UnauthorizedException("loginUser is not page owner");
+//        }
+//        UpdateTextBoxReq updateTextBoxReq = updateTextBoxProjectElementReq.getUpdateTextBoxReq();
+//
+//        TextBox updatedTextBox = textBoxService.updateTextBox(
+//                updateTextBoxReq.getId(),
+//                updateTextBoxReq.getContent()
+//        );
+//
+//        // updated 된 textBox 를 전달
+//        ProjectElement projectElement = projectElementService.updateProjectElementTextBox(
+//                updatedTextBox,
+//                updateTextBoxProjectElementReq.getId(),
+//                updateTextBoxProjectElementReq.getTextBoxAlignment()
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
+//    }
+//
+//    @Operation(summary = "특정 Project 내의 ProjectElement (Divider) 수정하기" ,
+//            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
+//                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
+//                    "이는 향후 ProjectElement의 유형이 추가되거나 일괄변경 로직이 생길 경우 통합될 가능성이 있습니다."
+//    )
+//    @Deprecated
+//    @PutMapping("/divider")
+//    public ResponseEntity<ResultDto<ProjectElementDto>> updateDividerProjectElement(
+//            @RequestParam("aui") String aui,
+//            @Valid @RequestBody UpdateDividerProjectElementReq updateDividerProjectElementReq
+//    ) {
+//        log.info("hello from updateDividerProjectElement");
+//        Member loginUser = authService.getMemberFromContext();
+//        if (!loginUser.getAui().equals(aui)) {
+//            throw new UnauthorizedException("loginUser is not page owner");
+//        }
+//
+//        ProjectElement projectElement = projectElementService.updateProjectElementDivider(
+//                updateDividerProjectElementReq.getId(),
+//                updateDividerProjectElementReq.getDividerType()
+//        );
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>(new ProjectElementDto(projectElement)));
+//    }
+//
+//    /**
+//     * 향후에 변경되더라도
+//     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
+//     * projectElment를 하나씩 보내기 때문에 단건 delete
+//     */
+//    @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
+//    @Deprecated
+//    @DeleteMapping
+//    public ResponseEntity<ResultDto<String>> deleteProjectElement(
+//            @RequestParam("aui") String aui,
+//            @Valid @RequestBody RemoveProjectElementReq removeProjectElementReq
+//    ){
+//        log.info("hello from deleteProjectElement");
+//        Member loginUser = authService.getMemberFromContext();
+//        if(!loginUser.getAui().equals(aui)){
+//            throw new UnauthorizedException("loginUser is not page owner");
+//        }
+//        projectElementService.removeById(removeProjectElementReq.getId());
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>("delete success"));
+//    }
+//
+//    /**
+//     * 전체 순서변경을 지금 만들어야하나...?
+//     * 프론트에게 미안하더라도 일단 하나씩 하자.
+//     */
+//    @Operation(
+//            summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
+//            description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
+//    )
+//    @Deprecated
+//    @GetMapping("/order")
+//    private void changeOrderAtOnce(){}
+//
 
     private ProjectElement handleProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());
@@ -326,6 +326,7 @@ public class ProjectElementController {
                     .project(project)
                     .work(work)
                     .workAlignment(createProjectElementReq.getWorkAlignment())
+                    .workDisplaySize(createProjectElementReq.getWorkDisplaySize())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -349,8 +350,10 @@ public class ProjectElementController {
 
     private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){
         //work일 경우
-        if(updateProjectElementReq.getWorkAlignment() != null)
-        {
+        if(!(updateProjectElementReq.getUpdateWorkReq() == null &&
+                updateProjectElementReq.getWorkAlignment() == null &&
+                updateProjectElementReq.getWorkDisplaySize() == null)
+        ) {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
                     updateWorkReq.getId(),
@@ -366,11 +369,12 @@ public class ProjectElementController {
             projectElementService.updateProjectElementWork(
                     updatedWork,
                     updateProjectElementReq.getId(),
-                    updateProjectElementReq.getWorkAlignment()
+                    updateProjectElementReq.getWorkAlignment(),
+                    updateProjectElementReq.getWorkDisplaySize()
             );
         }
         //textBox일 경우
-        else if(updateProjectElementReq.getTextBoxAlignment() != null)
+        else if(updateProjectElementReq.getUpdateTextBoxReq() != null)
         {
             UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
             TextBox updatedTextBox = textBoxService.updateTextBox(
