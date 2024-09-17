@@ -2,6 +2,8 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.repository.MemberRepository;
+import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
+import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
 import com.architrave.portfolio.infra.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +36,25 @@ public class AuthService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public String login(String email){
-        Member member = loadUserByUsername(email);
-
+    public String getAccessToken(Member member){
         String jwtToken = jwtService.createJwt(member);
-        log.info("jwtToken: " + jwtToken);
         return "Bearer " + jwtToken;
     }
+    public String getRefreshToken(Member member){
+        return jwtService.createRefreshToken(member);
+    }
 
+    public String refreshToken(String refreshToken){
+        if(!jwtService.isExpired(refreshToken)){
+            throw new ExpiredTokenException("refresh token expired");
+        }
+        log.info("refresh 남은 시간: " + jwtService.getLeftTime(refreshToken));
+        String email = jwtService.extractEmailFromToken(refreshToken);
+        if (email == null) {
+            throw new InvalidTokenException("Invalid refresh token");
+        }
+        Member member = loadUserByUsername(email);
+        String accessToken = jwtService.createJwt(member);
+        return "Bearer " + accessToken;
+    }
 }

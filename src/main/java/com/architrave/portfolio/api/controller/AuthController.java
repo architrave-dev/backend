@@ -3,6 +3,7 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
+import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.MemberService;
@@ -34,7 +35,6 @@ public class AuthController {
     private final MemberService memberService;
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
-
     private final PasswordEncoder passwordEncoder;
 
 
@@ -67,10 +67,8 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<ResultDto<MemberSimpleDto>> login(@Valid @RequestBody LoginReq loginReq){
-
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();
-
         Member member = authService.loadUserByUsername(email);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -78,13 +76,29 @@ public class AuthController {
                         password
                 )
         );
-
-        String authHeader = authService.login(email);
+        String authHeader = authService.getAccessToken(member);
+        String refreshToken = authService.getRefreshToken(member);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
-                .body(new ResultDto<>(new MemberSimpleDto(member)));
+                .body(new ResultDto<>(new MemberSimpleDto(member, refreshToken)));
+    }
+
+    @Operation(
+            summary = "refresh accessToken",
+            description = "기존의 jwt 토큰이 만료되었다면 refreshToken을 검증합니다. <br />" +
+                    "Authorization 헤더에 새로운 jwt 토큰을 반환합니다."
+    )
+    @PostMapping("/refresh")
+    public ResponseEntity<ResultDto<String>> refresh(@Valid @RequestBody RefreshReq refreshReq){
+        String refreshToken = refreshReq.getRefreshToken();
+        String authHeader = authService.refreshToken(refreshToken);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .body(new ResultDto<>("refresh success"));
     }
 
     @Operation(

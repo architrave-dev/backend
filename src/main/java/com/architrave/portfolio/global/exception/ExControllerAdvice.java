@@ -2,8 +2,11 @@ package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
 import com.architrave.portfolio.domain.model.enumType.ErrorCode;
+import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
+import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,5 +85,16 @@ public class ExControllerAdvice {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorDto(ErrorCode.NAU, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({ExpiredTokenException.class, InvalidTokenException.class})
+    private ResponseEntity<ErrorDto> expiredExceptionHandler(
+            ExpiredTokenException e
+    ){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorDto(ErrorCode.RTX, e.getMessage()));
     }
 }
