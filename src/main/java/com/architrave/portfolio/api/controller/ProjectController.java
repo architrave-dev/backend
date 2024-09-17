@@ -6,7 +6,6 @@ import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
 import com.architrave.portfolio.api.dto.projectElement.request.IndexDto;
-import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
