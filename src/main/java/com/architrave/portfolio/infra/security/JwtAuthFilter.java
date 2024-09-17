@@ -1,6 +1,7 @@
 package com.architrave.portfolio.infra.security;
 
 import com.architrave.portfolio.api.service.AuthService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,24 +43,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         log.info("we should check token in here");
         String jwtToken = authHeader.substring(7);
 
-        email = jwtService.extractEmailFromToken(jwtToken);
-
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            //DB에서 email로 찾기
-            UserDetails userDetails = authService.loadUserByUsername(email);
-
-            //expire 여부 확인
-            if(!jwtService.isExpired(jwtToken)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        try{
+            email = jwtService.extractEmailFromToken(jwtToken); //expired 판별이 여기서 난다.
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                //DB에서 email로 찾기
+                UserDetails userDetails = authService.loadUserByUsername(email);
+                //expire 여부 확인
+                if(!jwtService.isExpired(jwtToken)){
+                    log.info("남은 시간: " + jwtService.getLeftTime(jwtToken));
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        }catch (ExpiredJwtException e){
+            request.setAttribute("exception", "ExpiredJwtException");
         }
         filterChain.doFilter(request, response);
     }
