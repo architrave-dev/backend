@@ -5,7 +5,10 @@ public enum ErrorCode {
     RVN("Required Value Null"),
     NFR("Not Found Result"),
     NAU("Not Authorized User"),
-    AEV("Already Exist Value");
+    AEV("Already Exist Value"),
+    ATX("Access Token Expired"),
+    RTX("Refresh Token Expired"),
+    UME("UnManaged Error");;
 
 
     private final String message;

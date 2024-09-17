@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,7 +22,7 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final CorsConfigurationSource corsConfigurationSource;
     private final AuthenticationProvider authenticationProvider;
-
+    private final AuthenticationEntryPoint jwtAuthenticationEntryPoint; // 추가된 필드
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -49,6 +50,9 @@ public class SecurityConfig {
         // 해당 유저가 해당 권한이 있는지 확인하진 않았다?
         // FilterSecurityInterceptor가 확인한데 AuthorizationFilter 도 함께 봐보자
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 예외 처리 설정 추가
+        http.exceptionHandling((ex) -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         //세션 세팅
         http.sessionManagement((session) -> session
