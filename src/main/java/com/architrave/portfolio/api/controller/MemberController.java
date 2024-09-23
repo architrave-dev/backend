@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.service.MemberService;
+import com.architrave.portfolio.global.aop.Trace;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "2. Member")  // => swagger 이름
 @Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/member")

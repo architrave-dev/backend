@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.repository.WorkRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Trace
 @Service
 @RequiredArgsConstructor
 public class WorkService {

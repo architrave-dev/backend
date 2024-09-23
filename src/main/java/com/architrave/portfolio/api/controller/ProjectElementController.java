@@ -13,6 +13,7 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.Divid
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "4. ProjectElement")  // => swagger 이름
 @Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/project-element")

@@ -10,6 +10,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "5. Work")  // => swagger 이름
 @Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/work")

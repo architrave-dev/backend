@@ -8,6 +8,7 @@ import com.architrave.portfolio.api.service.LandingBoxService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "6. LandingBox")  // => swagger 이름
 @Slf4j
+@Trace
 @RestController
 @RequestMapping("/api/v1/landing-box")
 @RequiredArgsConstructor

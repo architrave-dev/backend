@@ -11,6 +11,7 @@ import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/career")

@@ -4,6 +4,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.domain.repository.ProjectRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Trace
 @Service
 @RequiredArgsConstructor
 public class ProjectService {

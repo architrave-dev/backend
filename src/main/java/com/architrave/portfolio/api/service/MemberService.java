@@ -3,12 +3,14 @@ package com.architrave.portfolio.api.service;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.repository.MemberRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
+@Trace
 @Service
 @RequiredArgsConstructor
 public class MemberService {
