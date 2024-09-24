@@ -10,11 +10,11 @@ import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.global.aop.Trace;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "1. Auth")  // => swagger 이름
-@Slf4j
+@Trace
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

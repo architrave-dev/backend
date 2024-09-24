@@ -10,12 +10,12 @@ import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "3. Project")  // => swagger 이름
-@Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/project")
@@ -41,8 +41,6 @@ public class ProjectController {
     public ResponseEntity<ResultDto<List<ProjectSimpleDto>>> getProjectList(
             @RequestParam("aui") String aui
     ){
-        log.info("hello from getProjectList");
-
         Member member = memberService.findMemberByAui(aui);
         List<Project> projectList = projectService.findByMember(member);
         List<ProjectSimpleDto> result = projectList.stream()
@@ -60,7 +58,6 @@ public class ProjectController {
             @RequestParam("aui") String aui,
             @RequestParam("title") String title
     ){
-        log.info("hello from getProjectDetail");
         Member member = memberService.findMemberByAui(aui);
         Project project = projectService.findByMemberAndTitleWithElement(member, title);
         List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(project);
@@ -84,7 +81,6 @@ public class ProjectController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody CreateProjectReq createProjectReq
     ){
-        log.info("hello from createProject");
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
@@ -123,7 +119,6 @@ public class ProjectController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateProjectReq updateProjectReq
     ){
-        log.info("hello from updateProject");
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
@@ -209,7 +204,6 @@ public class ProjectController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody RemoveProjectReq removeProjectReq
     ){
-        log.info("hello from removeProject");
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");

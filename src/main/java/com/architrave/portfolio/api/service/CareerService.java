@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.CareerBuilder;
 import com.architrave.portfolio.domain.model.enumType.CareerType;
 import com.architrave.portfolio.domain.repository.CareerRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
+@Trace
 @Service
 @RequiredArgsConstructor
 public class CareerService {

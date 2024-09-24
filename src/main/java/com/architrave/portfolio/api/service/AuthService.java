@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.repository.MemberRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
 import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
 import com.architrave.portfolio.infra.security.JwtService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@Trace
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

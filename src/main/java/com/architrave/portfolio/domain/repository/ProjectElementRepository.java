@@ -4,6 +4,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.global.aop.Trace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Trace
 @Repository
 public interface ProjectElementRepository extends JpaRepository<ProjectElement, Long> {
     @Query("select pe from ProjectElement pe" +

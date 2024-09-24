@@ -4,12 +4,14 @@ import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.LandingBoxBuilder;
 import com.architrave.portfolio.domain.repository.LandingBoxRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
+@Trace
 @Service
 @RequiredArgsConstructor
 public class LandingBoxService {

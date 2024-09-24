@@ -11,10 +11,12 @@ import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
+@Tag(name = "6. Career")  // => swagger 이름
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/career")
@@ -34,11 +37,11 @@ public class CareerController {
 
     private final AuthService authService;
 
+    @Operation(summary = "작가의 Career 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<List<CareerDto>>> getCareerList(
             @RequestParam("aui") String aui
     ){
-        log.info("hello from getCareerList");
         Member member = memberService.findMemberByAui(aui);
         List<Career> careerList= careerService.findCareerByMember(member);
 
@@ -50,12 +53,16 @@ public class CareerController {
                 .body(new ResultDto<>(result));
     }
 
+    @Operation(summary = "작가의 Career 수정하기",
+            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
+                    "1. 새롭게 추가되는 Career 리스트 <br />" +
+                    "2. 기존 Career 변경 리스트 <br />" +
+                    "3. 삭제되는 Career 리스트를 받습니다. ")
     @PutMapping
     public ResponseEntity<ResultDto<List<CareerDto>>> updateCareerList(
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdatedCareerListReq updatedCareerListReq
     ){
-        log.info("hello from updateCareerList");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");

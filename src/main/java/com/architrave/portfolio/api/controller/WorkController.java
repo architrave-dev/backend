@@ -10,6 +10,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "5. Work")  // => swagger 이름
 @Slf4j
+@Trace
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/work")
@@ -44,8 +46,6 @@ public class WorkController {
     public ResponseEntity<ResultDto<List<WorkDto>>> getWorkListByMember(
             @RequestParam("aui") String aui
     ){
-        log.info("hello from getWorkListByMember");
-
         Member member = memberService.findMemberByAui(aui);
 
         List<Work> workList = workService.findWorkByMember(member);
@@ -65,7 +65,6 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody CreateWorkReq createWorkReq
     ){
-        log.info("hello from createWork");
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
@@ -93,7 +92,6 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateWorkReq updateWorkReq
     ) {
-        log.info("hello from updateWork");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");
@@ -116,14 +114,14 @@ public class WorkController {
     }
 
 
-    @Operation(summary = "Work 삭제하기" +
-            "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다.")
+    @Operation(summary = "Work 삭제하기",
+            description = "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다."
+    )
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> removeWork(
             @RequestParam("aui") String aui,
             @Valid @RequestBody RemoveWorkReq removeWorkReq
     ) {
-        log.info("hello from removeWork");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");

@@ -3,6 +3,7 @@ package com.architrave.portfolio.api.service;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.domain.repository.ProjectInfoRepository;
+import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Trace
 @Slf4j
 @Service
 @RequiredArgsConstructor
