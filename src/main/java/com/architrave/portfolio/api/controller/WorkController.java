@@ -46,8 +46,6 @@ public class WorkController {
     public ResponseEntity<ResultDto<List<WorkDto>>> getWorkListByMember(
             @RequestParam("aui") String aui
     ){
-        log.info("hello from getWorkListByMember");
-
         Member member = memberService.findMemberByAui(aui);
 
         List<Work> workList = workService.findWorkByMember(member);
@@ -67,7 +65,6 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody CreateWorkReq createWorkReq
     ){
-        log.info("hello from createWork");
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
@@ -95,7 +92,6 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateWorkReq updateWorkReq
     ) {
-        log.info("hello from updateWork");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");
@@ -125,7 +121,6 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody RemoveWorkReq removeWorkReq
     ) {
-        log.info("hello from removeWork");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");

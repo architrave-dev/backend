@@ -14,13 +14,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "6. LandingBox")  // => swagger 이름
-@Slf4j
 @Trace
 @RestController
 @RequestMapping("/api/v1/landing-box")
@@ -39,7 +37,6 @@ public class LandingBoxController {
     public ResponseEntity<ResultDto<LandingBoxDto>> getLandingBox(
             @RequestParam("aui") String aui
     ){
-        log.info("hello from getLandingBox");
         Member member = memberService.findMemberByAui(aui);
         LandingBox landingBox = landingBoxService.findByMember(member);
 
@@ -54,12 +51,9 @@ public class LandingBoxController {
             @RequestParam("aui") String aui,    // 현재 홈페이지 주인
             @Valid @RequestBody UpdateLandingBoxDto updateLandingBoxDto
     ){
-        log.info("hello from updateLandingBox");
         Member loginUser = authService.getMemberFromContext();
         //aui와 현재 로그인 한 Member가 같은 사람인지 확인
         //=> Security에서 처리할 수 있나?
-        log.info("loginUser.getAui(): " + loginUser.getAui());
-        log.info("aui: " + aui);
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
         }

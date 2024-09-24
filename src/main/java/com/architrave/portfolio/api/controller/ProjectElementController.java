@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "4. ProjectElement")  // => swagger 이름
-@Slf4j
 @Trace
 @RestController
 @RequiredArgsConstructor
@@ -49,8 +47,6 @@ public class ProjectElementController {
             @RequestParam("aui") String aui,
             @RequestParam("projectTitle") String projectTitle
     ){
-        log.info("hello from getProjectElementList");
-
         Member member = memberService.findMemberByAui(aui);
         Project project = projectService.findByMemberAndTitle(member, projectTitle);
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
@@ -80,7 +76,6 @@ public class ProjectElementController {
             @RequestParam("aui") String aui,
             @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
     ) {
-        log.info("hello from updateProjectElementList");
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");
@@ -156,7 +151,6 @@ public class ProjectElementController {
 //            @RequestParam("aui") String aui,
 //            @Valid @RequestBody CreateProjectElementReq createProjectElementReq
 //    ){
-//        log.info("hello from createProjectElement");
 //        Member loginUser = authService.getMemberFromContext();
 //        if(!loginUser.getAui().equals(aui)){
 //            throw new UnauthorizedException("loginUser is not page owner");
@@ -182,7 +176,6 @@ public class ProjectElementController {
 //            @RequestParam("aui") String aui,
 //            @Valid @RequestBody UpdateWorkProjectElementReq updateWorkProjectElementReq
 //    ) {
-//        log.info("hello from updateWorkProjectElement");
 //        Member loginUser = authService.getMemberFromContext();
 //        if (!loginUser.getAui().equals(aui)) {
 //            throw new UnauthorizedException("loginUser is not page owner");
@@ -225,7 +218,6 @@ public class ProjectElementController {
 //            @RequestParam("aui") String aui,
 //            @Valid @RequestBody UpdateTextBoxProjectElementReq updateTextBoxProjectElementReq
 //    ) {
-//        log.info("hello from updateTextBoxProjectElement");
 //        Member loginUser = authService.getMemberFromContext();
 //        if (!loginUser.getAui().equals(aui)) {
 //            throw new UnauthorizedException("loginUser is not page owner");
@@ -260,7 +252,6 @@ public class ProjectElementController {
 //            @RequestParam("aui") String aui,
 //            @Valid @RequestBody UpdateDividerProjectElementReq updateDividerProjectElementReq
 //    ) {
-//        log.info("hello from updateDividerProjectElement");
 //        Member loginUser = authService.getMemberFromContext();
 //        if (!loginUser.getAui().equals(aui)) {
 //            throw new UnauthorizedException("loginUser is not page owner");
@@ -288,7 +279,6 @@ public class ProjectElementController {
 //            @RequestParam("aui") String aui,
 //            @Valid @RequestBody RemoveProjectElementReq removeProjectElementReq
 //    ){
-//        log.info("hello from deleteProjectElement");
 //        Member loginUser = authService.getMemberFromContext();
 //        if(!loginUser.getAui().equals(aui)){
 //            throw new UnauthorizedException("loginUser is not page owner");
