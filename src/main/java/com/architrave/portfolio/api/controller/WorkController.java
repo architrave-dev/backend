@@ -114,8 +114,9 @@ public class WorkController {
     }
 
 
-    @Operation(summary = "Work 삭제하기" +
-            "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다.")
+    @Operation(summary = "Work 삭제하기",
+            description = "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다."
+    )
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> removeWork(
             @RequestParam("aui") String aui,

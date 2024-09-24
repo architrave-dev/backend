@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, CLIENT_WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.POST, USER_WHITELIST).hasRole("USER")
                 .requestMatchers(HttpMethod.PUT, USER_WHITELIST).hasRole("USER")
+                .requestMatchers(HttpMethod.DELETE, USER_WHITELIST).hasRole("USER")
                 .requestMatchers("/api/v1/**").hasRole("USER")
                 .anyRequest().authenticated()
         );

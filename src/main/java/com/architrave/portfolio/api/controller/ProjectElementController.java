@@ -66,10 +66,10 @@ public class ProjectElementController {
     }
 
     @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
-            description = "한번의 요청으로 다음의 것들을 처리합니다." +
-                    "1. 새롭게 추가되는 ProjectElement 리스트" +
-                    "2. 기존 ProjectElement 변경 리스트" +
-                    "3. 삭제되는 ProjectElement 리스트를 받습니다."
+            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
+                    "1. 새롭게 추가되는 ProjectElement 리스트 <br />" +
+                    "2. 기존 ProjectElement 변경 리스트 <br />" +
+                    "3. 삭제되는 ProjectElement 리스트를 받습니다. "
     )
     @PutMapping
     public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
