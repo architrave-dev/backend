@@ -47,7 +47,7 @@ public class AuthService implements UserDetailsService {
     }
 
     public String refreshToken(String refreshToken){
-        if(!jwtService.isExpired(refreshToken)){
+        if(jwtService.isExpired(refreshToken)){
             throw new ExpiredTokenException("refresh token expired");
         }
         log.info("refresh 남은 시간: " + jwtService.getLeftTime(refreshToken));
