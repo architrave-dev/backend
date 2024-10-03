@@ -54,4 +54,20 @@ public class MemberInfo extends BaseEntity{
         memberInfo.description = description;
         return memberInfo;
     }
+
+    // ----- 연관관계 메소드 -----
+    /**
+     * UploadFile의 이미지 url을 설정한다.
+     */
+    public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
+        this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
+    }
+
+    /**
+     * UploadFile의 이미지 url을 null 처리한다. <br/>
+     * 연결된 UploadFile과의 관계를 끊지 않는다.
+     */
+    public void removeUploadFile(){
+        this.uploadFile.removeImg();
+    }
 }
