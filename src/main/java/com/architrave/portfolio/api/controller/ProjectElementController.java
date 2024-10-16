@@ -134,7 +134,7 @@ public class ProjectElementController {
                     .forEach(idxDto -> idxDto.setId(peId));
         });
         updatedList.forEach(this::handleUpdateProjectElement);
-        removedList.forEach(p -> projectElementService.removeById(p.getId()));
+        removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
 
         return indexDtoList;
     }
@@ -365,7 +365,7 @@ public class ProjectElementController {
             // updated 된 work를 전달
             projectElementService.updateProjectElementWork(
                     updatedWork,
-                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getWorkAlignment(),
                     updateProjectElementReq.getWorkDisplaySize()
             );
@@ -381,14 +381,14 @@ public class ProjectElementController {
             // updated 된 textBox 를 전달
             projectElementService.updateProjectElementTextBox(
                     updatedTextBox,
-                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getTextBoxAlignment()
             );
         }
         //divider 일 경우
         else{
             projectElementService.updateProjectElementDivider(
-                    updateProjectElementReq.getId(),
+                    updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getDividerType()
             );
         }
