@@ -32,7 +32,6 @@ public class WorkController {
     private final AuthService authService;
     private final MemberService memberService;
     private final WorkService workService;
-    private final ProjectService projectService;
     private final ProjectElementService peService;
 
 
