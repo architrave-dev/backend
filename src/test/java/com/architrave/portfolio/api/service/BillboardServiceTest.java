@@ -1,8 +1,8 @@
 package com.architrave.portfolio.api.service;
 
-import com.architrave.portfolio.domain.model.LandingBox;
+import com.architrave.portfolio.domain.model.Billboard;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.builder.LandingBoxBuilder;
+import com.architrave.portfolio.domain.model.builder.BillboardBuilder;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 
@@ -20,10 +20,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class LandingBoxServiceTest {
+public class BillboardServiceTest {
 
     @Autowired
-    private LandingBoxService landingBoxService;
+    private BillboardService billboardService;
 
     @Autowired
     private MemberService memberService;
@@ -40,17 +40,17 @@ public class LandingBoxServiceTest {
 
 
     @Test
-    public void createLandingBox(){
+    public void createBillboard(){
         //given
         Member member = createMemberInTest();
         addContext(member);
-        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Billboard billboard = createBillboardInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
 
         //when
-        LandingBox createdLb = landingBoxService.createLb(landingBox);
+        Billboard createdLb = billboardService.createLb(billboard);
 
         //then
-        LandingBox findLb = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb = billboardService.findLbById(createdLb.getId());
         assertNotNull(findLb);
         assertNotNull(findLb.getUploadFile().getThumbnailUrl());
         assertEquals(findLb.getTitle(), TEST_LB_TITLE);
@@ -59,26 +59,26 @@ public class LandingBoxServiceTest {
     }
 
     @Test
-    public void IllegalArgumentExceptionWithEmptyImgWhenCreateLandingBox(){
+    public void IllegalArgumentExceptionWithEmptyImgWhenCreateBillboard(){
         //given
         Member member = createMemberInTest();
         addContext(member);
         //when
         assertThrows(IllegalArgumentException.class, () ->
-            createLandingBoxInTest(member, null, null)
+            createBillboardInTest(member, null, null)
         );
     }
 
     @Test
-    public void updateTitleDescriptionUploadFileInLandingBox(){
+    public void updateTitleDescriptionUploadFileInBillboard(){
         //given
         Member member = createMemberInTest();
         addContext(member);
-        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
-        LandingBox createdLb = landingBoxService.createLb(landingBox);
+        Billboard billboard = createBillboardInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Billboard createdLb = billboardService.createLb(billboard);
 
         //when
-        landingBoxService.updateLb(createdLb.getId(),
+        billboardService.updateLb(createdLb.getId(),
                 TEST_LB_THUMBNAIL_URL, TEST_LB_IMG_URL,
                 TEST_LB_DISCRIPTION,
                 TEST_LB_TITLE,
@@ -86,7 +86,7 @@ public class LandingBoxServiceTest {
         );
 
         //then
-        LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb2 = billboardService.findLbById(createdLb.getId());
         assertNotNull(findLb2);
         assertEquals(findLb2.getUploadFile().getOriginUrl(), TEST_LB_THUMBNAIL_URL);
         assertEquals(findLb2.getUploadFile().getThumbnailUrl(), TEST_LB_IMG_URL);
@@ -95,15 +95,15 @@ public class LandingBoxServiceTest {
         assertTrue(findLb2.getIsVisible());
     }
     @Test
-    public void updateLandingBoxImgToEmpty(){ //이래도 되나??? 고민!!
+    public void updateBillboardImgToEmpty(){ //이래도 되나??? 고민!!
         //given
         Member member = createMemberInTest();
         addContext(member);
-        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
-        LandingBox createdLb = landingBoxService.createLb(landingBox);
+        Billboard billboard = createBillboardInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Billboard createdLb = billboardService.createLb(billboard);
 
         //when
-        landingBoxService.updateLb(createdLb.getId(),
+        billboardService.updateLb(createdLb.getId(),
                 null, null,
                 null,
                 null,
@@ -111,27 +111,27 @@ public class LandingBoxServiceTest {
         );
 
         //then
-        LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb2 = billboardService.findLbById(createdLb.getId());
         assertEquals(findLb2.getTitle(), TEST_LB_TITLE);
         assertEquals(findLb2.getUploadFile().getOriginUrl(), TEST_LB_IMG_URL);
         assertEquals(findLb2.getUploadFile().getThumbnailUrl(), TEST_LB_THUMBNAIL_URL);
         assertFalse(findLb2.getIsVisible());
     }
     @Test
-    public void deleteLandingBox(){
-        //LandingBox를 테이블에서 제거하는 로직은 존재하지 않는다.
+    public void deleteBillboard(){
+        //Billboard를 테이블에서 제거하는 로직은 존재하지 않는다.
         //UploadFile의 이미지 url을 null처리 하는 로직으로 대체한다.
         //UploadFile이 null 처리 후 isVisible를 false로 변경한다.
     }
 
     @Test
-    public void EmptyImgWhenUpdateLandingBox(){
+    public void EmptyImgWhenUpdateBillboard(){
         //given
         Member member = createMemberInTest();
         addContext(member);
-        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
-        LandingBox createdLb = landingBoxService.createLb(landingBox);
-        landingBoxService.updateLb(createdLb.getId(),
+        Billboard billboard = createBillboardInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Billboard createdLb = billboardService.createLb(billboard);
+        billboardService.updateLb(createdLb.getId(),
                 null, null,
                 null,
                 null,
@@ -139,37 +139,37 @@ public class LandingBoxServiceTest {
         );
 
         //when
-        landingBoxService.updateLb(createdLb.getId(),
+        billboardService.updateLb(createdLb.getId(),
                 TEST_LB_THUMBNAIL_URL, TEST_LB_IMG_URL,
                 null,
                 null,
                 false
         );
         //then
-        LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb2 = billboardService.findLbById(createdLb.getId());
         assertNotNull(findLb2.getUploadFile().getOriginUrl());
         assertNotNull(findLb2.getUploadFile().getThumbnailUrl());
         assertFalse(findLb2.getIsVisible());
     }
 
     @Test
-    public void WrongMemberWhenUpdateLandingBox(){
+    public void WrongMemberWhenUpdateBillboard(){
         //context가 없거나 다른 Member인데 update 요청을 한다?
         //controller에서 짜름.
     }
 
     @Test
-    public void removeLandingBox(){
+    public void removeBillboard(){
         //given
         Member member = createMemberInTest();
         addContext(member);
-        LandingBox landingBox = createLandingBoxInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
-        LandingBox createdLb = landingBoxService.createLb(landingBox);
+        Billboard billboard = createBillboardInTest(member, TEST_LB_IMG_URL, TEST_LB_THUMBNAIL_URL);
+        Billboard createdLb = billboardService.createLb(billboard);
 
         //when
-        LandingBox findLb = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb = billboardService.findLbById(createdLb.getId());
         findLb.setIsVisible(true);
-        landingBoxService.updateLb(createdLb.getId(),
+        billboardService.updateLb(createdLb.getId(),
                 null, null,
                 null,
                 null,
@@ -177,7 +177,7 @@ public class LandingBoxServiceTest {
         );
 
         //then
-        LandingBox findLb2 = landingBoxService.findLbById(createdLb.getId());
+        Billboard findLb2 = billboardService.findLbById(createdLb.getId());
         assertFalse(findLb2.getIsVisible());
 
     }
@@ -200,8 +200,8 @@ public class LandingBoxServiceTest {
         return memberService.createMember(member);
     }
 
-    private LandingBox createLandingBoxInTest(Member member, String imgUrl, String thumbnailUrl){
-        return new LandingBoxBuilder()
+    private Billboard createBillboardInTest(Member member, String imgUrl, String thumbnailUrl){
+        return new BillboardBuilder()
                 .member(member)
                 .originUrl(imgUrl)
                 .thumbnailUrl(thumbnailUrl)

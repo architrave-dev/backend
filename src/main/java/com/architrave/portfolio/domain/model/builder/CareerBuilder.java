@@ -1,9 +1,7 @@
 package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.Career;
-import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.enumType.CareerType;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 
@@ -47,10 +45,10 @@ public class CareerBuilder {
     }
     private void validateCareer(){
         if(member == null || careerType == null || content == null){
-            throw new RequiredValueEmptyException("required value is empty in LandingBoxBuilder");
+            throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
         }
         if(yearTo != null && yearFrom == null){
-            throw new RequiredValueEmptyException("required value is empty in LandingBoxBuilder");
+            throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
         }
     }
 }
