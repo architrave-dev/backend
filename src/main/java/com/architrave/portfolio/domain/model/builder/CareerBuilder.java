@@ -10,7 +10,6 @@ public class CareerBuilder {
     private Member member;
     private CareerType careerType;
     private Integer yearFrom;
-    private Integer yearTo;
     private String content;
 
     public CareerBuilder member(Member member) {
@@ -29,17 +28,13 @@ public class CareerBuilder {
         this.yearFrom = yearFrom;
         return this;
     }
-    public CareerBuilder yearTo(Integer yearTo) {
-        this.yearTo = yearTo;
-        return this;
-    }
+
     public Career build(){
         validateCareer();
         return Career.createCareer(
                 this.member,
                 this.careerType,
                 this.yearFrom,
-                this.yearTo,
                 this.content
         );
     }
@@ -47,7 +42,7 @@ public class CareerBuilder {
         if(member == null || careerType == null || content == null){
             throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
         }
-        if(yearTo != null && yearFrom == null){
+        if(yearFrom == null){
             throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
         }
     }

@@ -34,13 +34,12 @@ public class CareerService {
     }
 
     @Transactional
-    public Career createCareer(Member loginUser, CareerType careerType, String content, Integer yearFrom, Integer yearTo) {
+    public Career createCareer(Member loginUser, CareerType careerType, String content, Integer yearFrom) {
         Career career = new CareerBuilder()
                 .member(loginUser)
                 .careerType(careerType)
                 .content(content)
                 .yearFrom(yearFrom)
-                .yearTo(yearTo)
                 .build();
         return careerRepository.save(career);
     }
@@ -52,16 +51,10 @@ public class CareerService {
     @Transactional
     public Career updateCareer(Long careerId,
                                String content,
-                               Integer yearFrom,
-                               Integer yearTo) {
+                               Integer yearFrom) {
         Career career = findCareerById(careerId);
         if(content != null)  career.setContent(content);
         if(yearFrom != null)  career.setYearFrom(yearFrom);
-        if(yearTo != null) {
-            //yearTo를 변경하는데 yearFrom이 null이라면...?
-            if(career.getYearTo() == null ) throw new RequiredValueEmptyException("you cannot change yearTo when yearFrom is null");
-            career.setYearTo(yearTo);
-        }
 
         return career;
     }
