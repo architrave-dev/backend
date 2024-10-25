@@ -37,7 +37,6 @@ public class CareerServiceTest {
     private final String TEST_CAREER_CONTENT_1 = "서울대학교";
     private final String TEST_CAREER_CONTENT_2 = "서울대학원";
     private final Integer TEST_CAREER_YEARFROM = 2023;
-    private final Integer TEST_CAREER_YEARTO = 2024;
 
     @Test
     public void getCareerListByMemberEmpty(){
@@ -89,7 +88,6 @@ public class CareerServiceTest {
                     .careerType(CareerType.EDU)
                     .content(TEST_CAREER_CONTENT_1)
                     .yearFrom(TEST_CAREER_YEARFROM)
-                    .yearTo(TEST_CAREER_YEARTO)
                     .build();
         });
     }
@@ -105,7 +103,6 @@ public class CareerServiceTest {
         Career updateCareer = careerService.updateCareer(
                 career.getId(),
                 TEST_CAREER_CONTENT_2,
-                null,
                 null);
 
         //then
@@ -124,8 +121,7 @@ public class CareerServiceTest {
             Career updateCareer = careerService.updateCareer(
                     career.getId(),
                     TEST_CAREER_CONTENT_2,
-                    null,
-                    TEST_CAREER_YEARTO);
+                    null);
         });
     }
 

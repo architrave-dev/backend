@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
 import java.util.NoSuchElementException;
 
 @Trace
@@ -78,8 +79,8 @@ public class MemberInfoService {
                 .originUrl("")
                 .thumbnailUrl("")
                 .name("")
-                .email(member.getEmail())
-                .year(1990)
+                .email("")
+                .year(null)
                 .contact("")
                 .description("")
                 .build();

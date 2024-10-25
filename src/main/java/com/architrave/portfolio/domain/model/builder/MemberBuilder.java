@@ -11,7 +11,6 @@ public class MemberBuilder {
     private String password;
     private String username;
     private RoleType role;
-    private String description;
 
     public MemberBuilder email(String email) {
         this.email = email;
@@ -31,19 +30,13 @@ public class MemberBuilder {
         return this;
     }
 
-    public MemberBuilder description(String description) {
-        this.description = description;
-        return this;
-    }
-
     public Member build() {
         validateMember();
         return Member.createMember(
                 this.email,
                 this.password,
                 this.username,
-                this.role,
-                this.description
+                this.role
         );
     }
     private void validateMember(){

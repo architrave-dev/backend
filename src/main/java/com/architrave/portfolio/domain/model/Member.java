@@ -39,8 +39,6 @@ public class Member extends BaseEntity implements UserDetails {
     @NotNull
     private RoleType role;
 
-    private String description;
-
     private String generateAui(String username){
         String uuid_8 = UUID.randomUUID().toString().substring(0,8);
         return username + "-" + uuid_8;
@@ -55,16 +53,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.role = role;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public static Member createMember(
             String email,
             String password,
             String username,
-            RoleType role,
-            String description
+            RoleType role
     ){
         Member member = new Member();
         member.email = email;
@@ -72,7 +65,6 @@ public class Member extends BaseEntity implements UserDetails {
         member.username = username;
         member.aui = member.generateAui(username);
         member.role = role;
-        member.description = description;
         return member;
     }
 

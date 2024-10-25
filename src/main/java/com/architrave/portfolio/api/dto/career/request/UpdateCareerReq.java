@@ -12,7 +12,6 @@ public class UpdateCareerReq {
     @NotNull
     private Long careerId;
     private Integer yearFrom;
-    private Integer yearTo;
     @NotNull
     private String content;
 }

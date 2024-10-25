@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RemoveProjectElementReq {
     @NotNull
-    private Long id;
+    private Long projectElementId;
 }

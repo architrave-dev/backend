@@ -202,14 +202,14 @@ public class ProjectController {
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> removeProject(
             @RequestParam("aui") String aui,
-            @Valid @RequestBody RemoveProjectReq removeProjectReq
+            @RequestParam("projectId") Long targetId
     ){
         Member loginUser = authService.getMemberFromContext();
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        Project project = projectService.findById(removeProjectReq.getProjectId());
+        Project project = projectService.findById(targetId);
         //projectInfo 삭제
         projectInfoService.removeProjectInfoByProject(project);
         //project 삭제

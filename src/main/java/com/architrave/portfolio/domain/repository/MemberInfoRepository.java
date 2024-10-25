@@ -1,6 +1,5 @@
 package com.architrave.portfolio.domain.repository;
 
-import com.architrave.portfolio.domain.model.LandingBox;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MemberInfo;
 import com.architrave.portfolio.global.aop.Trace;

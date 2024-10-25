@@ -52,7 +52,7 @@ public class WorkBuilder {
     /**
      * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
      * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
-     * @return LandingBox
+     * @return Billboard
      */
     public Work build(){
         validateWork();

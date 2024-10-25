@@ -95,15 +95,13 @@ public class CareerController {
                         loginUser,
                         c.getCareerType(),
                         c.getContent(),
-                        c.getYearFrom(),
-                        c.getYearTo()
+                        c.getYearFrom()
                 ));
         updateCareerReqList.stream()
                 .forEach((c) -> careerService.updateCareer(
                         c.getCareerId(),
                         c.getContent(),
-                        c.getYearFrom(),
-                        c.getYearTo()
+                        c.getYearFrom()
                 ));
         removeCareerReqList.stream()
                 .forEach((c) -> careerService.removeCareerById(c.getCareerId())

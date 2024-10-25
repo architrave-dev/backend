@@ -2,13 +2,10 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
-import com.architrave.portfolio.api.dto.work.request.RemoveWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.dto.work.response.WorkDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
@@ -21,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +32,6 @@ public class WorkController {
     private final AuthService authService;
     private final MemberService memberService;
     private final WorkService workService;
-    private final ProjectService projectService;
     private final ProjectElementService peService;
 
 
@@ -120,14 +115,14 @@ public class WorkController {
     @DeleteMapping
     public ResponseEntity<ResultDto<String>> removeWork(
             @RequestParam("aui") String aui,
-            @Valid @RequestBody RemoveWorkReq removeWorkReq
+            @RequestParam("workId") Long targetId
     ) {
         Member loginUser = authService.getMemberFromContext();
         if (!loginUser.getAui().equals(aui)) {
             throw new UnauthorizedException("loginUser is not page owner");
         }
 
-        Work work = workService.findWorkById(removeWorkReq.getId());
+        Work work = workService.findWorkById(targetId);
 
         //삭제대상 work와 관련된 ProjectElement 삭제
         peService.deleteByMemberAndWorkId(loginUser, work);

@@ -22,17 +22,15 @@ public class Career extends BaseEntity{
     private CareerType careerType;
 
     private Integer yearFrom;
-    private Integer yearTo;
     private String content;
 
 
-    public static Career createCareer(Member member, CareerType careerType, Integer yearFrom, Integer yearTo, String content) {
+    public static Career createCareer(Member member, CareerType careerType, Integer yearFrom, String content) {
         Career career = new Career();
         career.member = member;
         career.careerType = careerType;
         career.content = content;
         career.yearFrom = yearFrom;
-        career.yearTo = yearTo;
         return career;
     }
 }

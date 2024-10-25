@@ -26,6 +26,7 @@ public class Project extends BaseEntity{
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;
     private String title;
+    @Lob
     private String description;
     @OneToMany(mappedBy = "project",
             fetch = FetchType.LAZY,

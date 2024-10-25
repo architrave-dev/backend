@@ -13,7 +13,6 @@ public class CreateCareerReq {
     @NotNull
     private CareerType careerType;
     private Integer yearFrom;
-    private Integer yearTo;
     @NotNull
     private String content;
 }

@@ -1,4 +1,4 @@
-package com.architrave.portfolio.api.dto.landingBox.request;
+package com.architrave.portfolio.api.dto.billboard.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateLandingBoxDto {
+public class UpdateBillboardDto {
     @NotNull
     private Long id;
     private String originUrl;

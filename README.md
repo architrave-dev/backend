@@ -16,7 +16,7 @@ Contact us for a test Artist ID
 |-------------------|-------------------|------------------------------|
 | Auth              | -                 | Signin, Login                |
 | Member            | -                 | Read                         |
-| LandingBox        | -                 | Read, Update                 |
+| Billboard         | -                 | Read, Update                 |
 | Project           | -                 | Create, Read, Update         |
 | ->                | ProjectInfo       | Create, Read, Update, Delete |
 | ->                | ProjectElement    | Create, Read, Update, Delete |

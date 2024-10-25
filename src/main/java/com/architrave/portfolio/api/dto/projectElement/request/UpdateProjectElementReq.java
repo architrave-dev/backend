@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProjectElementReq {
-    private Long id;
+    private Long projectElementId;
     private UpdateWorkReq updateWorkReq;
     private WorkAlignment workAlignment;
     private WorkDisplaySize workDisplaySize;

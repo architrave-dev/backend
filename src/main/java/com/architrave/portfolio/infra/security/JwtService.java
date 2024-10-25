@@ -62,7 +62,7 @@ public class JwtService {
                     .parseSignedClaims(token)
                     .getPayload().getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
-            return false; // 토큰이 만료된 경우
+            return true; // 토큰이 만료된 경우
         } catch (JwtException e) {
             // 다른 JWT 예외 처리
             throw new InvalidTokenException("Invalid JWT token", e);
