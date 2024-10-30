@@ -12,9 +12,9 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 public class CreateWorkReq {
 
-    @NotEmpty @URL
+//    @NotEmpty @URL
     private String originUrl;
-    @NotEmpty @URL
+//    @NotEmpty @URL
     private String thumbnailUrl;
     @NotEmpty
     private String title;
