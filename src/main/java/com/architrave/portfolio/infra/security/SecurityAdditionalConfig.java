@@ -28,7 +28,7 @@ public class SecurityAdditionalConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",    // frontend 로컬
-//                "http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com"     //frontend prod (S3 직접접근)
+                "http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com",     //frontend prod (S3 직접접근)
                 "https://d2g0bttp8rbmkq.cloudfront.net" //cloudfront
         )); // 허용할 도메인
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메소드
