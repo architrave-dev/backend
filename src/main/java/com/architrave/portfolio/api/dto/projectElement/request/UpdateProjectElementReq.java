@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
+import com.architrave.portfolio.api.dto.document.request.UpdateDocumentReq;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
@@ -20,5 +21,7 @@ public class UpdateProjectElementReq {
     private WorkDisplaySize workDisplaySize;
     private UpdateTextBoxReq updateTextBoxReq;
     private TextBoxAlignment textBoxAlignment;
+    private UpdateDocumentReq updateDocumentReq;
+    private WorkAlignment documentAlignment;
     private DividerType dividerType;
 }

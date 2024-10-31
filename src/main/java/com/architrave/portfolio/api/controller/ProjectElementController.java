@@ -1,6 +1,8 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
+import com.architrave.portfolio.api.dto.document.request.CreateDocumentReq;
+import com.architrave.portfolio.api.dto.document.request.UpdateDocumentReq;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
@@ -10,6 +12,7 @@ import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DividerInProjectBuilder;
+import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DocumentInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
@@ -38,6 +41,7 @@ public class ProjectElementController {
     private final ProjectService projectService;
     private final WorkService workService;
     private final TextBoxService textBoxService;
+    private final DocumentService documentService;
     private final MemberService memberService;
     private final AuthService authService;
 
@@ -336,6 +340,18 @@ public class ProjectElementController {
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextBoxAlignment())
                     .build();
+        }else if(elementType.equals(ProjectElementType.DOCUMENT)){
+            CreateDocumentReq createDocumentReq = createProjectElementReq.getCreateDocumentReq();
+            Document document = documentService.createDocument(
+                    createDocumentReq.getOriginUrl(),
+                    createDocumentReq.getThumbnailUrl(),
+                    createDocumentReq.getDescription()
+            );
+            projectElement = new DocumentInProjectBuilder()
+                    .project(project)
+                    .document(document)
+                    .documentAlignment(createProjectElementReq.getDocumentAlignment())
+                    .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
             projectElement = new DividerInProjectBuilder()
                     .project(project)
@@ -383,6 +399,23 @@ public class ProjectElementController {
                     updatedTextBox,
                     updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getTextBoxAlignment()
+            );
+        }
+        else if(updateProjectElementReq.getUpdateDocumentReq() != null)
+        {
+            UpdateDocumentReq updateDocumentReq = updateProjectElementReq.getUpdateDocumentReq();
+            Document updatedDocument = documentService.updateDocument(
+                    updateDocumentReq.getId(),
+                    updateDocumentReq.getDescription(),
+                    updateDocumentReq.getOriginUrl(),
+                    updateDocumentReq.getThumbnailUrl()
+            );
+
+            // updated 된 textBox 를 전달
+            projectElementService.updateProjectElementDocument(
+                    updatedDocument,
+                    updateProjectElementReq.getProjectElementId(),
+                    updateProjectElementReq.getDocumentAlignment()
             );
         }
         //divider 일 경우
