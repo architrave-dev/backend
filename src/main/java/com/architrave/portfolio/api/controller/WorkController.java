@@ -32,6 +32,7 @@ public class WorkController {
     private final AuthService authService;
     private final MemberService memberService;
     private final WorkService workService;
+    private final WorkDetailService workDetailService;
     private final ProjectElementService peService;
 
 
@@ -123,6 +124,9 @@ public class WorkController {
         }
 
         Work work = workService.findWorkById(targetId);
+
+        //Work와 관련된 WorkDetail 전부 삭제
+        workDetailService.removeWorkDetailByWork(work);
 
         //삭제대상 work와 관련된 ProjectElement 삭제
         peService.deleteByMemberAndWorkId(loginUser, work);
