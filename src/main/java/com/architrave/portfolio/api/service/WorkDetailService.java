@@ -3,7 +3,6 @@ package com.architrave.portfolio.api.service;
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
-import com.architrave.portfolio.domain.repository.UploadFileRepository;
 import com.architrave.portfolio.domain.repository.WorkDetailRepository;
 import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.NoSuchElementException;
 public class WorkDetailService {
 
     private final WorkDetailRepository workDetailRepository;
-    private final UploadFileRepository uploadFileRepository;
 
     @Transactional(readOnly = true)
     public List<WorkDetail> findWorkDetailByWork(Work work){
@@ -58,16 +56,11 @@ public class WorkDetailService {
     @Transactional
     public void removeWorkDetailById(Long workDetailId){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
-        uploadFileRepository.delete(workDetail.getUploadFile());
         workDetailRepository.delete(workDetail);
     }
 
     @Transactional
     public void removeWorkDetailByWork(Work work){
-        List<WorkDetail> workDetailList = findWorkDetailByWork(work);
-        workDetailList.stream()
-                .map(WorkDetail::getUploadFile)
-                .forEach(uploadFileRepository::delete);
         workDetailRepository.deleteByWork(work);
     }
 }

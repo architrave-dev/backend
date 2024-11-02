@@ -8,7 +8,6 @@ import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
-import com.architrave.portfolio.domain.repository.UploadFileRepository;
 import com.architrave.portfolio.domain.repository.WorkDetailRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +29,6 @@ public class WorkDetailUnitTest {
 
     @Mock
     private WorkDetailRepository workDetailRepository;
-    @Mock
-    private UploadFileRepository uploadFileRepository;
     @InjectMocks
     private WorkDetailService workDetailService;
 
@@ -137,7 +134,7 @@ public class WorkDetailUnitTest {
     }
 
     @Test
-    @DisplayName("removeWorkDetailById should delete work detail and upload file")
+    @DisplayName("removeWorkDetailById should delete work detail and uploadFile(cascade.All)")
     void removeWorkDetailById_ShouldDeleteWorkDetailAndUploadFile() {
         // Arrange
         Long id = 1L;
@@ -147,7 +144,6 @@ public class WorkDetailUnitTest {
         workDetailService.removeWorkDetailById(id);
 
         // Assert
-        verify(uploadFileRepository).delete(testWorkDetail.getUploadFile());
         verify(workDetailRepository).delete(testWorkDetail);
     }
 }
