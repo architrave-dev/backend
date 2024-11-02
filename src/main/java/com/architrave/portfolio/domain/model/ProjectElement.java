@@ -37,6 +37,12 @@ public class ProjectElement {
     @Enumerated(EnumType.STRING)
     private TextBoxAlignment textBoxAlignment;
 
+    @OneToOne
+    @JoinColumn(name = "document_id")
+    private Document document;
+
+    @Enumerated(EnumType.STRING)
+    private WorkAlignment documentAlignment;
     @Enumerated
     private DividerType dividerType;
 
@@ -67,6 +73,20 @@ public class ProjectElement {
         projectElement.textBoxAlignment = textBoxAlignment;
         return projectElement;
     }
+
+    public static ProjectElement createDocumentElement(
+            Project project,
+            Document document,
+            WorkAlignment documentAlignment
+    ){
+        ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.DOCUMENT;
+        projectElement.project = project;
+        projectElement.document = document;
+        projectElement.documentAlignment = documentAlignment;
+        return projectElement;
+    }
+
     public static ProjectElement createDividerElement(
             Project project,
             DividerType dividerType

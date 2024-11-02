@@ -90,4 +90,9 @@ public class WorkService {
     public void removeWork(Work work) {
         workRepository.delete(work);
     }
+    @Transactional
+    public void removeWorkById(Long workId) {
+        Work target = findWorkById(workId);
+        workRepository.delete(target);
+    }
 }

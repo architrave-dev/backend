@@ -1,7 +1,12 @@
 package com.architrave.portfolio.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data

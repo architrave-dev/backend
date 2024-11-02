@@ -69,6 +69,20 @@ public class ProjectElementService {
         }
         return projectElement;
     }
+    @Transactional
+    public ProjectElement updateProjectElementDocument(Document document,
+                                             Long projectElementId,
+                                             WorkAlignment documentAlignment) {
+        ProjectElement projectElement = findById(projectElementId);
+        //document 내 변경사항은 이미 완료한 상태
+        if(!projectElement.getDocument().equals(document)){
+            projectElement.setDocument(document);
+        }
+        if(documentAlignment != null){
+            projectElement.setDocumentAlignment(documentAlignment);
+        }
+        return projectElement;
+    }
 
     @Transactional
     public ProjectElement updateProjectElementDivider(Long projectElementId,
