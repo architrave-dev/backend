@@ -34,10 +34,21 @@ public class WorkDetailController {
     private final WorkService workService;
     private final WorkDetailService workDetailService;
 
-
-
-    @Operation(summary = "work의  WorkDetail 조회하기")
+    @Operation(summary = "workDetailId로  WorkDetail 조회하기")
     @GetMapping
+    public ResponseEntity<ResultDto<WorkDetailDto>> getWorkDetailById(
+            @RequestParam("workDetailId") Long workDetailId
+    ){
+
+        WorkDetail workDetail = workDetailService.findWorkDetailById(workDetailId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new WorkDetailDto(workDetail)));
+    }
+
+    @Operation(summary = "work로  WorkDetail 조회하기")
+    @GetMapping("/list")
     public ResponseEntity<ResultDto<List<WorkDetailDto>>> getWorkDetailListByWork(
             @RequestParam("workId") Long workId
     ){
