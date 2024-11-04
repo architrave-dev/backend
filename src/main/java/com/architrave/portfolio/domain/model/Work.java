@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=false)

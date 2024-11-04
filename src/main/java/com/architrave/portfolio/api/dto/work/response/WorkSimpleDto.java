@@ -16,9 +16,9 @@ public class WorkSimpleDto {
         this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.title = work.getTitle();
     }
-    public WorkSimpleDto(Long id, String thumbnailUrl, String title) {
+    public WorkSimpleDto(Long id, String title, String thumbnailUrl) {
         this.id = id;
-        this.thumbnailUrl = thumbnailUrl;
         this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
     }
 }
