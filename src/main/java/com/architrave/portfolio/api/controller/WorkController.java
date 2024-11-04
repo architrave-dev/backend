@@ -3,10 +3,14 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
+import com.architrave.portfolio.api.dto.work.response.WorkDetailDto;
 import com.architrave.portfolio.api.dto.work.response.WorkDto;
+import com.architrave.portfolio.api.dto.work.response.WorkSimpleDto;
+import com.architrave.portfolio.api.dto.work.response.WorkWithDetailDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.global.aop.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,9 +40,23 @@ public class WorkController {
     private final ProjectElementService peService;
 
 
-
-    @Operation(summary = "작가의 Work List 조회하기")
+    @Operation(summary = "workId로 Work, 관련된 WorkDetail 조회하기")
     @GetMapping
+    public ResponseEntity<ResultDto<WorkWithDetailDto>> getWorkAndDetailById(
+            @RequestParam("workId") Long workId
+    ){
+        Work work = workService.findWorkById(workId);
+        List<WorkDetail> workDetailList = workDetailService.findWorkDetailByWork(work);
+        List<WorkDetailDto> workDetailDtoList = workDetailList.stream()
+                .map((wd) -> new WorkDetailDto(wd))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new WorkWithDetailDto(work, workDetailDtoList)));
+    }
+    @Operation(summary = "작가의 Work List 조회하기")
+    @GetMapping("/list")
     public ResponseEntity<ResultDto<List<WorkDto>>> getWorkListByMember(
             @RequestParam("aui") String aui
     ){
@@ -53,6 +71,24 @@ public class WorkController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(workDtoList));
+    }
+    @Operation(summary = "작가의 Work List 간단하게 조회하기",
+    description = "getWorkListByMember보다 (2배 이상 빠르다) <br />" +
+            "getWorkListByMember: test 시 평균 400ms (n+1 문제 있음)" +
+            "getSimpleWorkListByMember: test 시 평균 200ms <br />"
+    )
+    @GetMapping("/list/simple")
+    public ResponseEntity<ResultDto<List<WorkSimpleDto>>> getSimpleWorkListByMember(
+            @RequestParam("aui") String aui
+    ){
+        Member member = memberService.findMemberByAui(aui);
+
+        List<WorkSimpleDto> workSimpleList = workService.findSimpleWorkByMember(member);
+        log.info("workList.size(): ", workSimpleList.size());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(workSimpleList));
     }
 
     @Operation(summary = "Work 생성하기")

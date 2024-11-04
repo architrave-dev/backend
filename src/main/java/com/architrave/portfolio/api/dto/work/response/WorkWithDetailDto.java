@@ -3,10 +3,13 @@ package com.architrave.portfolio.api.dto.work.response;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.WorkDetail;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class WorkDto {
+public class WorkWithDetailDto {
     private Long id;
     private String originUrl;
     private String thumbnailUrl;
@@ -16,7 +19,9 @@ public class WorkDto {
     private String material;
     private Integer prodYear;
 
-    public WorkDto(Work work) {
+    private List<WorkDetailDto> workDetailDtoList;
+
+    public WorkWithDetailDto(Work work, List<WorkDetailDto> workDetailList) {
         this.id = work.getId();
         UploadFile uploadFile = work.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
@@ -26,5 +31,6 @@ public class WorkDto {
         this.size = work.getSize();
         this.material = work.getMaterial();
         this.prodYear = work.getProdYear();
+        this.workDetailDtoList = workDetailList;
     }
 }

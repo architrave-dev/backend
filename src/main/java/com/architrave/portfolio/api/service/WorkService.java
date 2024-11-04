@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.work.response.WorkSimpleDto;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.Work;
@@ -31,7 +32,10 @@ public class WorkService {
         return workRepository.findByMember(member);
     }
 
-
+    @Transactional(readOnly = true)
+    public List<WorkSimpleDto> findSimpleWorkByMember(Member member) {
+        return workRepository.findSimpleByMember(member);
+    }
     @Transactional
     public Work createWork(Work work) {
         return workRepository.save(work);
