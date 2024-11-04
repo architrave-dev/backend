@@ -104,13 +104,16 @@ public class WorkController {
 
         Work createdWork = workService.createWork(
                 loginUser,
+                createWorkReq.getWorkType(),
                 createWorkReq.getOriginUrl(),
                 createWorkReq.getThumbnailUrl(),
                 createWorkReq.getTitle(),
                 createWorkReq.getDescription(),
                 createWorkReq.getSize(),
                 createWorkReq.getMaterial(),
-                createWorkReq.getProdYear()
+                createWorkReq.getProdYear(),
+                createWorkReq.getPrice(),
+                createWorkReq.getCollection()
         );
 
         return ResponseEntity
@@ -131,13 +134,16 @@ public class WorkController {
 
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
+                updateWorkReq.getWorkType(),
                 updateWorkReq.getOriginUrl(),
                 updateWorkReq.getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),
                 updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear()
+                updateWorkReq.getProdYear(),
+                updateWorkReq.getPrice(),
+                updateWorkReq.getCollection()
         );
 
         return ResponseEntity

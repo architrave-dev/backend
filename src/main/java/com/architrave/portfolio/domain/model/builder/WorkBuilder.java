@@ -1,6 +1,7 @@
 package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.*;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class WorkBuilder {
 
     private Member member;
+    private WorkType workType;
     private String originUrl;
     private String thumbnailUrl;
     private String title;
@@ -15,9 +17,15 @@ public class WorkBuilder {
     private Size size;
     private String material;
     private Integer prodYear;
+    private String price;
+    private String collection;
 
     public WorkBuilder member(Member member) {
         this.member = member;
+        return this;
+    }
+    public WorkBuilder workType(WorkType workType) {
+        this.workType = workType;
         return this;
     }
     public WorkBuilder title(String title){
@@ -48,6 +56,14 @@ public class WorkBuilder {
         this.prodYear = prodYear;
         return this;
     }
+    public WorkBuilder price(String price){
+        this.price = price;
+        return this;
+    }
+    public WorkBuilder collection(String collection){
+        this.collection = collection;
+        return this;
+    }
 
     /**
      * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
@@ -64,18 +80,20 @@ public class WorkBuilder {
 
         return Work.createWork(
                 this.member,
+                this.workType,
                 uploadFile,
                 this.title,
                 this.description,
                 this.size,
                 this.material,
-                this.prodYear
+                this.prodYear,
+                this.price,
+                this.collection
         );
     }
     private void validateWork(){
-        if(member == null || originUrl == null || thumbnailUrl == null){
+        if(member == null|| workType == null || originUrl == null || thumbnailUrl == null){
             throw new RequiredValueEmptyException("required value is empty in WorkBuilder");
         }
     }
-
 }

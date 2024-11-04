@@ -1,5 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,10 @@ public class Work extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Enumerated(EnumType.STRING)
+    private WorkType workType;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;
@@ -26,24 +31,32 @@ public class Work extends BaseEntity {
     private Size size;
     private String material;
     private Integer prodYear;
+    private String price;
+    private String collection;
 
     public static Work createWork(
             Member member,
+            WorkType workType,
             UploadFile uploadFile,
             String title,
             String description,
             Size size,
             String material,
-            Integer prodYear
+            Integer prodYear,
+            String price,
+            String collection
     ){
         Work work = new Work();
         work.member = member;
+        work.workType = workType;
         work.uploadFile = uploadFile;
         work.title = title;
         work.description = description;
         work.size = size;
         work.material = material;
         work.prodYear = prodYear;
+        work.price = price;
+        work.collection = collection;
         return work;
     }
 

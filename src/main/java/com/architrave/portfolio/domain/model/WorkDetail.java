@@ -1,5 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,9 @@ public class WorkDetail {
     @ManyToOne
     @JoinColumn(name = "work_id")
     private Work work;
+
+    @Enumerated(EnumType.STRING)
+    private WorkType workType;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;

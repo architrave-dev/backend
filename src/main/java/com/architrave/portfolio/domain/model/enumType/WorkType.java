@@ -22,4 +22,5 @@ public enum WorkType {
     //영상
     //research_present
 
+    details             // 그저 디테일
 }
