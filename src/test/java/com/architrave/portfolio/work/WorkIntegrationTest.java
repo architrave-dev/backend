@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,9 +49,12 @@ public class WorkIntegrationTest {
         //Create
         Work created = workService.createWork(
                 testMember,
+                WorkType.painting_water,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork",
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -63,9 +67,12 @@ public class WorkIntegrationTest {
         //Update
         Work updated = workService.updateWork(
                 found.getId(),
+                WorkType.painting_water,
                 "updated-origin.jpg",
                 "updated-thumbnail.jpg",
                 "updated Artwork",
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -87,9 +94,12 @@ public class WorkIntegrationTest {
     void multipleWorks(){
         Work work1 = workService.createWork(
                 testMember,
+                WorkType.painting_water,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork1",
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -97,9 +107,12 @@ public class WorkIntegrationTest {
         );
         Work work2 = workService.createWork(
                 testMember,
+                WorkType.painting_oil,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork2",
+                null,
+                null,
                 null,
                 null,
                 null,

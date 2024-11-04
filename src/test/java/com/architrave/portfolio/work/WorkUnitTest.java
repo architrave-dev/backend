@@ -6,6 +6,7 @@ import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.WorkRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -109,9 +110,12 @@ public class WorkUnitTest {
 
         //Act
         Work result = workService.updateWork(id,
+                WorkType.painting_water,
                 "updated-origin.jpg",
                 "updated-thumbnail.jpg",
                 "updated-title",
+                null,
+                null,
                 null,
                 null,
                 null,

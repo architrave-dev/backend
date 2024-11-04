@@ -8,10 +8,7 @@ import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DividerInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
-import com.architrave.portfolio.domain.model.enumType.DividerType;
-import com.architrave.portfolio.domain.model.enumType.RoleType;
-import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.domain.model.enumType.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,9 +165,12 @@ public class ProjectElementServiceTest {
         //when
         workService.updateWork(
                 1L,
+                WorkType.painting_water,
                 null,
                 null,
                 TEST_WORK_TITLE_CHANGE,
+                null,
+                null,
                 null,
                 null,
                 null,

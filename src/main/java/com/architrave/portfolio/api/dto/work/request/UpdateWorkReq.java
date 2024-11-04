@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.dto.work.request;
 
 import com.architrave.portfolio.domain.model.Size;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateWorkReq {
     @NotNull
     private Long id;
+    private WorkType workType;
     private String originUrl;
     private String thumbnailUrl;
     private String title;
@@ -19,4 +21,6 @@ public class UpdateWorkReq {
     private Size size;
     private String material;
     private Integer prodYear;
+    private String price;
+    private String collection;
 }
