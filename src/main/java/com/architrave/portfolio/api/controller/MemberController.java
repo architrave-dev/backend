@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "2. Member")  // => swagger 이름
+@Tag(name = "02. Member")  // => swagger 이름
 @Trace
 @RestController
 @RequiredArgsConstructor

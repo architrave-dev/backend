@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "6. WorkDetail")  // => swagger 이름
+@Tag(name = "07. WorkDetail")  // => swagger 이름
 @Slf4j
 @Trace
 @RestController

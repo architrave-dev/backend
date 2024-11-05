@@ -53,15 +53,16 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addTagsItem(new Tag().name("1. Auth"))
-                .addTagsItem(new Tag().name("2. Member"))
-                .addTagsItem(new Tag().name("3. Project"))
-                .addTagsItem(new Tag().name("4. ProjectElement"))
-                .addTagsItem(new Tag().name("5. Work"))
-                .addTagsItem(new Tag().name("6. WorkDetail"))
-                .addTagsItem(new Tag().name("7. Career"))
-                .addTagsItem(new Tag().name("8. Billboard"))
-                .addTagsItem(new Tag().name("9. MemberInfo"));
+                .addTagsItem(new Tag().name("01. Auth"))
+                .addTagsItem(new Tag().name("02. Member"))
+                .addTagsItem(new Tag().name("03. Project"))
+                .addTagsItem(new Tag().name("04. ProjectElement"))
+                .addTagsItem(new Tag().name("05. Work"))
+                .addTagsItem(new Tag().name("06. WorkPropertyVisible"))
+                .addTagsItem(new Tag().name("07. WorkDetail"))
+                .addTagsItem(new Tag().name("08. Career"))
+                .addTagsItem(new Tag().name("09. Billboard"))
+                .addTagsItem(new Tag().name("10. MemberInfo"));
     }
 
     @Bean
