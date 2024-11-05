@@ -1,17 +1,12 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
-import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
-import com.architrave.portfolio.api.dto.work.request.UpdateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkPropertyVisibleReq;
-import com.architrave.portfolio.api.dto.work.response.WorkDetailDto;
 import com.architrave.portfolio.api.dto.work.response.WorkPropertyVisibleDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.Work;
-import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.domain.model.WorkPropertyVisible;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "06. WorkPropertyVisible")  // => swagger 이름
 @Slf4j

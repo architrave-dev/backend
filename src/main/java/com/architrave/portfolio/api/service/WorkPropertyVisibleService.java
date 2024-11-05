@@ -4,7 +4,7 @@ package com.architrave.portfolio.api.service;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.WorkPropertyVisible;
 import com.architrave.portfolio.domain.repository.WorkPropertyVisibleRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

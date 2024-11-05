@@ -8,7 +8,7 @@ import com.architrave.portfolio.api.service.MemberInfoService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MemberInfo;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

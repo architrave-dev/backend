@@ -16,7 +16,7 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.Docum
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

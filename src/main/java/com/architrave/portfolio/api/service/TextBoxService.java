@@ -2,7 +2,7 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.TextBox;
 import com.architrave.portfolio.domain.repository.TextBoxRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
