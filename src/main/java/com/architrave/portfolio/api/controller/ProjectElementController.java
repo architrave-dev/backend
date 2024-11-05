@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Tag(name = "4. ProjectElement")  // => swagger 이름
+@Tag(name = "04. ProjectElement")  // => swagger 이름
 @Trace
 @RestController
 @RequiredArgsConstructor
@@ -316,13 +316,17 @@ public class ProjectElementController {
             CreateWorkReq createWorkReq = createProjectElementReq.getCreateWorkReq();
             Work work = workService.createWork(
                     loginUser,
+                    createWorkReq.getWorkType(),
                     createWorkReq.getOriginUrl(),
                     createWorkReq.getThumbnailUrl(),
                     createWorkReq.getTitle(),
                     createWorkReq.getDescription(),
                     createWorkReq.getSize(),
                     createWorkReq.getMaterial(),
-                    createWorkReq.getProdYear());
+                    createWorkReq.getProdYear(),
+                    createWorkReq.getPrice(),
+                    createWorkReq.getCollection()
+            );
             projectElement = new WorkInProjectBuilder()
                     .project(project)
                     .work(work)
@@ -370,13 +374,16 @@ public class ProjectElementController {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
                     updateWorkReq.getId(),
+                    updateWorkReq.getWorkType(),
                     updateWorkReq.getOriginUrl(),
                     updateWorkReq.getThumbnailUrl(),
                     updateWorkReq.getTitle(),
                     updateWorkReq.getDescription(),
                     updateWorkReq.getSize(),
                     updateWorkReq.getMaterial(),
-                    updateWorkReq.getProdYear()
+                    updateWorkReq.getProdYear(),
+                    updateWorkReq.getPrice(),
+                    updateWorkReq.getCollection()
             );
             // updated 된 work를 전달
             projectElementService.updateProjectElementWork(

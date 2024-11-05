@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@Tag(name = "1. Auth")  // => swagger 이름
+@Tag(name = "01. Auth")  // => swagger 이름
 @Trace
 @RestController
 @RequestMapping("/api/v1/auth")

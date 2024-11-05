@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "5. Work")  // => swagger 이름
+@Tag(name = "05. Work")  // => swagger 이름
 @Slf4j
 @Trace
 @RestController
@@ -104,13 +104,16 @@ public class WorkController {
 
         Work createdWork = workService.createWork(
                 loginUser,
+                createWorkReq.getWorkType(),
                 createWorkReq.getOriginUrl(),
                 createWorkReq.getThumbnailUrl(),
                 createWorkReq.getTitle(),
                 createWorkReq.getDescription(),
                 createWorkReq.getSize(),
                 createWorkReq.getMaterial(),
-                createWorkReq.getProdYear()
+                createWorkReq.getProdYear(),
+                createWorkReq.getPrice(),
+                createWorkReq.getCollection()
         );
 
         return ResponseEntity
@@ -131,13 +134,16 @@ public class WorkController {
 
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
+                updateWorkReq.getWorkType(),
                 updateWorkReq.getOriginUrl(),
                 updateWorkReq.getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),
                 updateWorkReq.getMaterial(),
-                updateWorkReq.getProdYear()
+                updateWorkReq.getProdYear(),
+                updateWorkReq.getPrice(),
+                updateWorkReq.getCollection()
         );
 
         return ResponseEntity

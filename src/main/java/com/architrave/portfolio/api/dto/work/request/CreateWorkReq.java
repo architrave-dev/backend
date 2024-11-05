@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.dto.work.request;
 
 import com.architrave.portfolio.domain.model.Size;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 public class CreateWorkReq {
 
+    private WorkType workType;
     @NotEmpty @URL
     private String originUrl;
     @NotEmpty @URL
@@ -22,5 +24,6 @@ public class CreateWorkReq {
     private Size size;
     private String material;
     private Integer prodYear;
-
+    private String price;
+    private String collection;
 }

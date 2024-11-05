@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Tag(name = "3. Project")  // => swagger 이름
+@Tag(name = "03. Project")  // => swagger 이름
 @Trace
 @RestController
 @RequiredArgsConstructor

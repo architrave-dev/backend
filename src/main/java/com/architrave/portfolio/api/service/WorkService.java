@@ -5,6 +5,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.WorkRepository;
 import com.architrave.portfolio.global.aop.Trace;
 import lombok.RequiredArgsConstructor;
@@ -46,16 +47,20 @@ public class WorkService {
      */
     @Transactional
     public Work createWork(Member loginUser,
+                           WorkType workType,
                            String originUrl,
                            String thumbnailUrl,
                            String title,
                            String description,
                            Size size,
                            String material,
-                           Integer prodYear
+                           Integer prodYear,
+                           String price,
+                           String collection
     ) {
         Work work = new WorkBuilder()
                 .member(loginUser)
+                .workType(workType)
                 .originUrl(originUrl)
                 .thumbnailUrl(thumbnailUrl)
                 .title(title)
@@ -63,21 +68,27 @@ public class WorkService {
                 .size(size)
                 .material(material)
                 .prodYear(prodYear)
+                .price(price)
+                .collection(collection)
                 .build();
         return workRepository.save(work);
     }
 
     @Transactional
     public Work updateWork(Long workId,
+                           WorkType workType,
                            String originUrl,
                            String thumbnailUrl,
                            String title,
                            String description,
                            Size size,
                            String material,
-                           Integer prodYear
+                           Integer prodYear,
+                           String price,
+                           String collection
     ) {
         Work work = findWorkById(workId);
+        if(workType != null) work.setWorkType(workType);
         if(originUrl != null || thumbnailUrl != null){
             work.setUploadFileUrl(originUrl, thumbnailUrl);
         }
@@ -86,6 +97,8 @@ public class WorkService {
         if(size != null) work.setSize(size);
         if(material != null) work.setMaterial(material);
         if(prodYear != null) work.setProdYear(prodYear);
+        if(price != null) work.setPrice(price);
+        if(collection != null) work.setCollection(collection);
 
         return work;
     }

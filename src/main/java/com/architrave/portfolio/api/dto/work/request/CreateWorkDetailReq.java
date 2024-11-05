@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.work.request;
 
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ public class CreateWorkDetailReq {
 
     @NotNull
     private Long workId;
+    private WorkType workType;
     @NotEmpty @URL
     private String originUrl;
     @NotEmpty @URL
