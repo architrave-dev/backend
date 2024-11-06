@@ -7,6 +7,7 @@ import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class OwnerCheckAspect {
 
     private final AuthService authService;
+    private final OwnerContextHolder ownerContextHolder;
 
     @Pointcut("@annotation(com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck)")
     public void methodLevel(){};
@@ -40,6 +42,14 @@ public class OwnerCheckAspect {
         if(!loginUser.getAui().equals(aui)){
             throw new UnauthorizedException("loginUser is not page owner");
         }
+
+        ownerContextHolder.setOwner(loginUser);
         log.info("website owner checked. : " + aui);
+    }
+
+    @After("methodLevel()")     //정상실행, 예외 시에도 동작한다.
+    public void clearOwnerContext(JoinPoint joinPoint){
+        log.info("clear ownerContext: {}", joinPoint.getSignature().getName());
+        ownerContextHolder.clear();
     }
 }
