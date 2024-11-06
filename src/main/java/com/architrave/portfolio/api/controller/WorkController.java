@@ -12,6 +12,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -123,15 +124,11 @@ public class WorkController {
 
     @Operation(summary = "Work 수정하기")
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<WorkDto>> updateWork(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateWorkReq updateWorkReq
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
                 updateWorkReq.getWorkType(),

@@ -11,6 +11,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -115,15 +116,11 @@ public class ProjectController {
                     "projectElement는 전용 API를 사용합니다."
     )
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<ProjectDto>> updateProject(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateProjectReq updateProjectReq
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         //project 업데이트
         Project updatedProject = projectService.updateProject(
                 updateProjectReq.getId(),
@@ -200,15 +197,11 @@ public class ProjectController {
                     "ProjectElement가 모두 삭제됩니다."
     )
     @DeleteMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<String>> removeProject(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @RequestParam("projectId") Long targetId
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         Project project = projectService.findById(targetId);
         //projectInfo 삭제
         projectInfoService.removeProjectInfoByProject(project);

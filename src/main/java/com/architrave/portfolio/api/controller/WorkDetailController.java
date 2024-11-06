@@ -5,11 +5,10 @@ import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.response.WorkDetailDto;
 import com.architrave.portfolio.api.service.*;
-import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/work-detail")
 public class WorkDetailController {
-
-    private final AuthService authService;
     private final WorkService workService;
     private final WorkDetailService workDetailService;
 
@@ -68,15 +65,11 @@ public class WorkDetailController {
 
     @Operation(summary = "WorkDetail 생성하기")
     @PostMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<WorkDetailDto>> createWork(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody CreateWorkDetailReq createWorkDetailReq
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         Work work = workService.findWorkById(createWorkDetailReq.getWorkId());
 
         WorkDetail createdWorkDetail = workDetailService.createWorkDetail(
@@ -93,15 +86,11 @@ public class WorkDetailController {
 
     @Operation(summary = "WorkDetail 수정하기")
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<WorkDetailDto>> updateWorkDetail(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateWorkDetailReq updateWorkDetailReq
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                 updateWorkDetailReq.getWorkDetailId(),
                 updateWorkDetailReq.getOriginUrl(),
@@ -120,15 +109,11 @@ public class WorkDetailController {
             // => 아직 WorkDetail ProjectElement 지원 x
     )
     @DeleteMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<String>> removeWorkDetail(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @RequestParam("workDetailId") Long targetId
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         workDetailService.removeWorkDetailById(targetId);
 
         return ResponseEntity
