@@ -17,6 +17,7 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextB
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +45,7 @@ public class ProjectElementController {
     private final DocumentService documentService;
     private final MemberService memberService;
     private final AuthService authService;
+    private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")
     @GetMapping
@@ -77,16 +79,13 @@ public class ProjectElementController {
     )
     @PutMapping
     public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
+        Member owner = ownerContextHolder.getOwner();
 
         //projectElementList 업데이트
-        List<IndexDto> indexDtoList = updateProjectElementList(loginUser,
+        List<IndexDto> indexDtoList = updateProjectElementList(owner,
                 updateProjectElementListReq.getCreateProjectElements(),
                 updateProjectElementListReq.getUpdatedProjectElements(),
                 updateProjectElementListReq.getRemovedProjectElements(),

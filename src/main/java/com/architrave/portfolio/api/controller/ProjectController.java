@@ -12,7 +12,7 @@ import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final AuthService authService;
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
+    private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 Project List 조회하기")
     @GetMapping("/list")
@@ -78,17 +78,15 @@ public class ProjectController {
                     "이후 Project 내의 세부사항은 update 요청으로 진행합니다."
     )
     @PostMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<ProjectSimpleDto>> createProject(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody CreateProjectReq createProjectReq
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
+        Member owner = ownerContextHolder.getOwner();
 
         Project createdProject = projectService.createProject(
-                loginUser,
+                owner,
                 createProjectReq.getOriginUrl(),
                 createProjectReq.getThumbnailUrl(),
                 createProjectReq.getTitle(),

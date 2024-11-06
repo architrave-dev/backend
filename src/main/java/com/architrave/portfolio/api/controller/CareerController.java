@@ -6,13 +6,13 @@ import com.architrave.portfolio.api.dto.career.request.RemoveCareerReq;
 import com.architrave.portfolio.api.dto.career.request.UpdateCareerReq;
 import com.architrave.portfolio.api.dto.career.request.UpdatedCareerListReq;
 import com.architrave.portfolio.api.dto.career.response.CareerDto;
-import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -34,8 +34,7 @@ public class CareerController {
     private final CareerService careerService;
 
     private final MemberService memberService;
-
-    private final AuthService authService;
+    private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 Career 조회하기")
     @GetMapping
@@ -59,22 +58,21 @@ public class CareerController {
                     "2. 기존 Career 변경 리스트 <br />" +
                     "3. 삭제되는 Career 리스트를 받습니다. ")
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<List<CareerDto>>> updateCareerList(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdatedCareerListReq updatedCareerListReq
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
+        Member owner = ownerContextHolder.getOwner();
+
         handleUpdateCareer(
-                loginUser,
+                owner,
                 updatedCareerListReq.getCreateCareerReqList(),
                 updatedCareerListReq.getUpdateCareerReqList(),
                 updatedCareerListReq.getRemoveCareerReqList()
         );
 
-        List<Career> updatedCareerList = careerService.findCareerByMember(loginUser);
+        List<Career> updatedCareerList = careerService.findCareerByMember(owner);
         List<CareerDto> result = updatedCareerList.stream()
                 .map((c) -> new CareerDto(c))
                 .collect(Collectors.toList());
