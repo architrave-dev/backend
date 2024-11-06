@@ -4,7 +4,7 @@ import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.domain.repository.WorkDetailRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

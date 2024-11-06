@@ -1,4 +1,4 @@
-package com.architrave.portfolio.global.aop;
+package com.architrave.portfolio.global.aop.logTrace;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +16,10 @@ public class LogTraceAspect {
 
     private final LogTrace logTrace;
 
-    @Pointcut("@annotation(com.architrave.portfolio.global.aop.Trace)")
+    @Pointcut("@annotation(com.architrave.portfolio.global.aop.logTrace.Trace)")
     public void methodLevel(){};
 
-    @Pointcut("within(@com.architrave.portfolio.global.aop.Trace *)")
+    @Pointcut("within(@com.architrave.portfolio.global.aop.logTrace.Trace *)")
     public void classLevel(){};
 
     @Pointcut("methodLevel() || classLevel()")

@@ -3,13 +3,12 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.billboard.request.UpdateBillboardDto;
 import com.architrave.portfolio.api.dto.billboard.response.BillboardDto;
-import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.BillboardService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Billboard;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.global.aop.Trace;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,7 +26,6 @@ public class BillboardController {
 
     private final BillboardService billboardService;
     private final MemberService memberService;
-    private final AuthService authService;
 
     @Operation(
             summary = "작가의 Billboard 조회하기",
@@ -47,17 +45,11 @@ public class BillboardController {
 
     @Operation(summary = "작가의 Billboard 수정하기")
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<BillboardDto>> updateBillboard(
-            @RequestParam("aui") String aui,    // 현재 홈페이지 주인
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateBillboardDto updateBillboardDto
     ){
-        Member loginUser = authService.getMemberFromContext();
-        //aui와 현재 로그인 한 Member가 같은 사람인지 확인
-        //=> Security에서 처리할 수 있나?
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         Billboard updatedLb = billboardService.updateLb(
                 updateBillboardDto.getId(),
                 updateBillboardDto.getOriginUrl(),

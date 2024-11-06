@@ -11,8 +11,9 @@ import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
-import com.architrave.portfolio.global.aop.Trace;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,12 +33,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/work")
 public class WorkController {
-
-    private final AuthService authService;
     private final MemberService memberService;
     private final WorkService workService;
     private final WorkDetailService workDetailService;
     private final ProjectElementService peService;
+    private final OwnerContextHolder ownerContextHolder;
 
 
     @Operation(summary = "workId로 Work, 관련된 WorkDetail 조회하기")
@@ -93,17 +93,15 @@ public class WorkController {
 
     @Operation(summary = "Work 생성하기")
     @PostMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<WorkDto>> createWork(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody CreateWorkReq createWorkReq
     ){
-        Member loginUser = authService.getMemberFromContext();
-        if(!loginUser.getAui().equals(aui)){
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
+        Member owner = ownerContextHolder.getOwner();
 
         Work createdWork = workService.createWork(
-                loginUser,
+                owner,
                 createWorkReq.getWorkType(),
                 createWorkReq.getOriginUrl(),
                 createWorkReq.getThumbnailUrl(),
@@ -123,15 +121,11 @@ public class WorkController {
 
     @Operation(summary = "Work 수정하기")
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<WorkDto>> updateWork(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateWorkReq updateWorkReq
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
-
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
                 updateWorkReq.getWorkType(),
@@ -156,14 +150,12 @@ public class WorkController {
             description = "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다."
     )
     @DeleteMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<String>> removeWork(
-            @RequestParam("aui") String aui,
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @RequestParam("workId") Long targetId
     ) {
-        Member loginUser = authService.getMemberFromContext();
-        if (!loginUser.getAui().equals(aui)) {
-            throw new UnauthorizedException("loginUser is not page owner");
-        }
+        Member owner = ownerContextHolder.getOwner();
 
         Work work = workService.findWorkById(targetId);
 
@@ -171,7 +163,7 @@ public class WorkController {
         workDetailService.removeWorkDetailByWork(work);
 
         //삭제대상 work와 관련된 ProjectElement 삭제
-        peService.deleteByMemberAndWorkId(loginUser, work);
+        peService.deleteByMemberAndWorkId(owner, work);
 
         //work 삭제
         workService.removeWork(work);

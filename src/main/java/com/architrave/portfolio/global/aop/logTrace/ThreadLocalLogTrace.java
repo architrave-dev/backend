@@ -1,4 +1,4 @@
-package com.architrave.portfolio.global.aop;
+package com.architrave.portfolio.global.aop.logTrace;
 
 import lombok.extern.slf4j.Slf4j;
 

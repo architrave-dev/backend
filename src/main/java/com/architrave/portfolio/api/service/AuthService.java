@@ -2,7 +2,7 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.repository.MemberRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
 import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
 import com.architrave.portfolio.infra.security.JwtService;

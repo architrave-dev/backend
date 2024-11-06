@@ -4,7 +4,7 @@ import com.architrave.portfolio.domain.model.Billboard;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.BillboardBuilder;
 import com.architrave.portfolio.domain.repository.BillboardRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

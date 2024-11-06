@@ -2,7 +2,7 @@ package com.architrave.portfolio.domain.repository;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MemberInfo;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

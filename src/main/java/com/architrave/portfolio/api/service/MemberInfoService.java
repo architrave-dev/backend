@@ -5,12 +5,11 @@ import com.architrave.portfolio.domain.model.MemberInfo;
 import com.architrave.portfolio.domain.model.builder.MemberInfoBuilder;
 import com.architrave.portfolio.domain.model.enumType.CountryType;
 import com.architrave.portfolio.domain.repository.MemberInfoRepository;
-import com.architrave.portfolio.global.aop.Trace;
+import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Year;
 import java.util.NoSuchElementException;
 
 @Trace

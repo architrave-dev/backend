@@ -1,11 +1,11 @@
-package com.architrave.portfolio.global.aop;
+package com.architrave.portfolio.global.aop.ownerCheck;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE, ElementType.METHOD})     //아예 적용 안되는 중 고치셈
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Trace {
+public @interface OwnerCheck {
 }
