@@ -7,6 +7,7 @@ import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.MemberRepository;
 import com.architrave.portfolio.domain.repository.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class WorkDetailIntegrationTest {
 
         testWork = new WorkBuilder()
                 .member(testMember)
+                .workType(WorkType.digital)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
                 .thumbnailUrl("work-thumbnail.jpg")
