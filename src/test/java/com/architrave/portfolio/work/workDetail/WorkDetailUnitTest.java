@@ -1,4 +1,4 @@
-package com.architrave.portfolio.workDetail;
+package com.architrave.portfolio.work.workDetail;
 
 import com.architrave.portfolio.api.service.WorkDetailService;
 import com.architrave.portfolio.domain.model.Member;
