@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,10 +58,12 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ResultDto<ProjectDto>> getProjectDetail(
             @RequestParam("aui") String aui,
-            @RequestParam("title") String title
+            @RequestParam("projectId") Long projectId
     ){
-        Member member = memberService.findMemberByAui(aui);
-        Project project = projectService.findByMemberAndTitleWithElement(member, title);
+        Project project = projectService.findById(projectId);
+        if(project.getMember().getAui() != aui){
+            throw new NoSuchElementException("there is no project like that id: "+  projectId);
+        }
         List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(project);
 
         List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
