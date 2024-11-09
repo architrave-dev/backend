@@ -18,7 +18,6 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkI
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -44,7 +43,6 @@ public class ProjectElementController {
     private final TextBoxService textBoxService;
     private final DocumentService documentService;
     private final MemberService memberService;
-    private final AuthService authService;
     private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")

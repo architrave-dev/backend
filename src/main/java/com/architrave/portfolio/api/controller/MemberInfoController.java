@@ -33,7 +33,7 @@ public class MemberInfoController {
             @RequestParam("aui") String aui
     ){
         Member member = memberService.findMemberByAui(aui);
-        MemberInfo memberInfo = memberInfoService.findByMember(member);
+        MemberInfo memberInfo = memberInfoService.findMIByMember(member);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

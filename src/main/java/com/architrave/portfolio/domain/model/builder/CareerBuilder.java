@@ -39,11 +39,8 @@ public class CareerBuilder {
         );
     }
     private void validateCareer(){
-        if(member == null || careerType == null || content == null){
-            throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
-        }
-        if(yearFrom == null){
-            throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
+        if(member == null || careerType == null || content == null || yearFrom == null){
+            throw new RequiredValueEmptyException("required value is empty in CareerBuilder");
         }
     }
 }

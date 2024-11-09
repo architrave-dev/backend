@@ -20,9 +20,9 @@ public class MemberInfoService {
     private final MemberInfoRepository memberInfoRepository;
 
     @Transactional
-    public MemberInfo createLb(MemberInfo memberInfo) {
-        MemberInfo createdLb = memberInfoRepository.save(memberInfo);
-        return createdLb;
+    public MemberInfo createMI(MemberInfo memberInfo) {
+        MemberInfo createdMI = memberInfoRepository.save(memberInfo);
+        return createdMI;
     }
 
     @Transactional
@@ -37,7 +37,7 @@ public class MemberInfoService {
             String contact,
             String description
     ) {
-        MemberInfo memberInfo = findLbById(memberInfoId);
+        MemberInfo memberInfo = findMIById(memberInfoId);
         if(originUrl != null || thumbnailUrl != null){
             memberInfo.setUploadFileUrl(originUrl, thumbnailUrl);
         }
@@ -56,7 +56,7 @@ public class MemberInfoService {
      * @return MemberInfo
      */
     @Transactional(readOnly = true)
-    public MemberInfo findLbById(Long memberInfoId) {
+    public MemberInfo findMIById(Long memberInfoId) {
         return memberInfoRepository.findById(memberInfoId)
                 .orElseThrow(() -> new NoSuchElementException("there is no memberInfo that id: " + memberInfoId));
     }
@@ -66,7 +66,7 @@ public class MemberInfoService {
      * @return MemberInfo
      */
     @Transactional
-    public MemberInfo findByMember(Member member) {
+    public MemberInfo findMIByMember(Member member) {
         MemberInfo memberInfo = memberInfoRepository.findByMember(member)
                 .orElse(null);
         if(memberInfo != null){

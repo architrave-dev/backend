@@ -1,4 +1,4 @@
-package com.architrave.portfolio.workDetail;
+package com.architrave.portfolio.work.workDetail;
 
 import com.architrave.portfolio.api.service.WorkDetailService;
 import com.architrave.portfolio.domain.model.Member;
@@ -8,6 +8,7 @@ import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
+import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.WorkDetailRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,7 @@ public class WorkDetailUnitTest {
 
         testWork = new WorkBuilder()
                 .member(testMember)
+                .workType(WorkType.digital)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
                 .thumbnailUrl("work-thumbnail.jpg")

@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
+    private final ProjectElementService projectElementService;
     private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 Project List 조회하기")
@@ -57,10 +59,12 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ResultDto<ProjectDto>> getProjectDetail(
             @RequestParam("aui") String aui,
-            @RequestParam("title") String title
+            @RequestParam("projectId") Long projectId
     ){
-        Member member = memberService.findMemberByAui(aui);
-        Project project = projectService.findByMemberAndTitleWithElement(member, title);
+        Project project = projectService.findById(projectId);
+        if(project.getMember().getAui() != aui){
+            throw new NoSuchElementException("there is no project like that id: "+  projectId);
+        }
         List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(project);
 
         List<ProjectInfoDto> projectInfoDtoList = projectInfoList.stream()
@@ -203,6 +207,8 @@ public class ProjectController {
         Project project = projectService.findById(targetId);
         //projectInfo 삭제
         projectInfoService.removeProjectInfoByProject(project);
+        //projectElement 삭제
+        projectElementService.removeProjectElementByProject(project);
         //project 삭제
         projectService.removeProject(project);
 

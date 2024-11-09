@@ -47,10 +47,12 @@ public class WorkUnitTest {
 
         testWork = new WorkBuilder()
                 .member(testMember)
+                .workType(WorkType.digital)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
                 .thumbnailUrl("work-thumbnail.jpg")
                 .build();
+
     }
 
     @Test
