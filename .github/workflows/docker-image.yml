@@ -1,0 +1,52 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            tag: mvp-2-amd
+          - platform: linux/arm64
+            tag: mvp-2-arm
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        
+      - name: Setting Java 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          
+      - name: Build gradle 
+        run: ./gradlew build
+        
+      - name: Setting Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setting QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: all
+    
+      - name: Access Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and Puah Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          push: true
+          tags: youndong82/architrave:${{ matrix.tag }}
