@@ -43,7 +43,7 @@ public class ProjectElement {
 
     @Enumerated(EnumType.STRING)
     private WorkAlignment documentAlignment;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private DividerType dividerType;
 
 

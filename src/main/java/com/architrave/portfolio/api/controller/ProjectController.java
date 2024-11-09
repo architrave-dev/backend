@@ -36,6 +36,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final MemberService memberService;
     private final ProjectInfoService projectInfoService;
+    private final ProjectElementService projectElementService;
     private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "작가의 Project List 조회하기")
@@ -206,6 +207,8 @@ public class ProjectController {
         Project project = projectService.findById(targetId);
         //projectInfo 삭제
         projectInfoService.removeProjectInfoByProject(project);
+        //projectElement 삭제
+        projectElementService.removeProjectElementByProject(project);
         //project 삭제
         projectService.removeProject(project);
 

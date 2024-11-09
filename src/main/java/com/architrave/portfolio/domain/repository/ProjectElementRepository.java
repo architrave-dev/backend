@@ -1,9 +1,6 @@
 package com.architrave.portfolio.domain.repository;
 
-import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
-import com.architrave.portfolio.domain.model.Work;
+import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,10 +13,10 @@ import java.util.List;
 @Trace
 @Repository
 public interface ProjectElementRepository extends JpaRepository<ProjectElement, Long> {
-    @Query("select pe from ProjectElement pe" +
-            " where pe.project = :project")
-    List<ProjectElement> findByProject(
-            @Param("project") Project project);
+
+    List<ProjectElement> findByProject(Project project);
+
+    void deleteByProject(Project project);
 
     @Modifying
     @Query("""

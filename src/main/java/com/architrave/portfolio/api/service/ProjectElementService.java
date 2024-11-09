@@ -19,6 +19,7 @@ public class ProjectElementService {
     private final ProjectElementRepository projectElementRepository;
 
     private final TextBoxService textBoxService;
+    private final DocumentService documentService;
 
     @Transactional
     public ProjectElement createProjectElement(ProjectElement projectElement) {
@@ -97,10 +98,22 @@ public class ProjectElementService {
     @Transactional
     public void removeById(Long id) {
         ProjectElement projectElement = findById(id);
+        //Work는 ProjectElement가 삭제되어도 함께 삭제되지 않는다.
+        //TextBox라면 삭제
         if(projectElement.getProjectElementType() == ProjectElementType.TEXTBOX){
             textBoxService.removeTextBox(projectElement.getTextBox().getId());
         }
+        //Document라면 삭제
+        if(projectElement.getProjectElementType() == ProjectElementType.DOCUMENT){
+            documentService.removeDocument(projectElement.getDocument().getId());
+        }
+        //Divider는 ProjectElement와 한 몸
         projectElementRepository.delete(projectElement);
+    }
+
+    @Transactional
+    public void removeProjectElementByProject(Project project) {
+        projectElementRepository.deleteByProject(project);
     }
 
     @Transactional
