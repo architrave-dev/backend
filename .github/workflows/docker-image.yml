@@ -49,4 +49,4 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           push: true
-          tags: youndong82/architrave:${{ matrix.tag }}
+          tags: youngdong82/architrave:${{ matrix.tag }}
