@@ -27,7 +27,7 @@ jobs:
           distribution: 'temurin'
           
       - name: Build gradle 
-        run: ./gradlew build
+        run: ./gradlew bootJar
         
       - name: Setting Docker Buildx
         uses: docker/setup-buildx-action@v2
