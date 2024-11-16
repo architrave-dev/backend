@@ -51,8 +51,8 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public Project findByMemberAndTitle(Member member, String title) {
-        return projectRepository.findByMemberAndTitle(member, title)
+    public Project findByMemberAndProjectId(Member member, Long projectId) {
+        return projectRepository.findByMemberAndTitle(member, projectId)
                 .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
     }
   

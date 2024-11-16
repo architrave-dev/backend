@@ -62,8 +62,8 @@ public class ProjectController {
             @RequestParam("projectId") Long projectId
     ){
         Project project = projectService.findById(projectId);
-        if(project.getMember().getAui() != aui){
-            throw new NoSuchElementException("there is no project like that id: "+  projectId);
+        if(!project.getMember().getAui().equals(aui)){
+            throw new NoSuchElementException("project and member mismatch");
         }
         List<ProjectInfo> projectInfoList = projectInfoService.findProjectInfoByProject(project);
 

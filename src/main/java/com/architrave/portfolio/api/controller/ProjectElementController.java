@@ -49,10 +49,10 @@ public class ProjectElementController {
     @GetMapping
     public ResponseEntity<ResultDto<ProjectElementListDto>> getProjectElementList(
             @RequestParam("aui") String aui,
-            @RequestParam("projectTitle") String projectTitle
+            @RequestParam("projectId") Long projectId
     ){
         Member member = memberService.findMemberByAui(aui);
-        Project project = projectService.findByMemberAndTitle(member, projectTitle);
+        Project project = projectService.findByMemberAndProjectId(member, projectId);
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
         //peIndex 처리할 필요 없음, 프론트에서 없으면 그냥 무시해
         List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
