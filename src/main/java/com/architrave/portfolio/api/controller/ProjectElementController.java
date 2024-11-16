@@ -17,6 +17,7 @@ import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextB
 import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -76,6 +77,7 @@ public class ProjectElementController {
                     "3. 삭제되는 ProjectElement 리스트를 받습니다. "
     )
     @PutMapping
+    @OwnerCheck
     public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
             @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
