@@ -47,7 +47,7 @@ public class WorkUnitTest {
 
         testWork = new WorkBuilder()
                 .member(testMember)
-                .workType(WorkType.digital)
+                .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
                 .thumbnailUrl("work-thumbnail.jpg")
@@ -112,7 +112,7 @@ public class WorkUnitTest {
 
         //Act
         Work result = workService.updateWork(id,
-                WorkType.painting_water,
+                WorkType.PAINTING_WATER,
                 "updated-origin.jpg",
                 "updated-thumbnail.jpg",
                 "updated-title",
