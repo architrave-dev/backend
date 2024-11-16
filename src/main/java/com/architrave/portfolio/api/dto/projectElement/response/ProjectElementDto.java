@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.projectElement.response;
 
+import com.architrave.portfolio.api.dto.document.response.DocumentDto;
 import com.architrave.portfolio.api.dto.work.response.WorkDto;
 import com.architrave.portfolio.domain.model.Document;
 import com.architrave.portfolio.domain.model.ProjectElement;
@@ -18,7 +19,7 @@ public class ProjectElementDto {
     private WorkDisplaySize workDisplaySize;
     private TextBox textBox;
     private TextBoxAlignment textBoxAlignment;
-    private Document document;
+    private DocumentDto document;
     private WorkAlignment documentAlignment;
     private DividerType dividerType;
 
@@ -33,7 +34,7 @@ public class ProjectElementDto {
         this.textBox = projectElement.getTextBox();
         this.textBoxAlignment = projectElement.getTextBoxAlignment();
         //document
-        this.document = projectElement.getDocument();
+        this.document = (projectElement.getDocument() != null) ? new DocumentDto(projectElement.getDocument()): null;
         this.documentAlignment = projectElement.getDocumentAlignment();
         //divider
         this.dividerType = projectElement.getDividerType();
