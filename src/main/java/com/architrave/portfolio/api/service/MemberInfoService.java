@@ -79,7 +79,8 @@ public class MemberInfoService {
                 .thumbnailUrl("")
                 .name("")
                 .email("")
-                .year(null)
+                .country(CountryType.NONE)
+                .year(0)
                 .contact("")
                 .description("")
                 .build();
