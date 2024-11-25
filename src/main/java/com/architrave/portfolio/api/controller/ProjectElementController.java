@@ -142,32 +142,37 @@ public class ProjectElementController {
         return indexDtoList;
     }
 
-//    /**
-//     * 향후에 변경되더라도
-//     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
-//     * projectElment를 하나씩 보내기 때문에 단건 create
-//     */
-//    @Operation(summary = "특정 Project 내의 ProjectElement 생성하기")
-//    @Deprecated
-//    @PostMapping
-//    public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElement(
-//            @RequestParam("aui") String aui,
-//            @Valid @RequestBody CreateProjectElementReq createProjectElementReq
-//    ){
-//        Member loginUser = authService.getMemberFromContext();
-//        if(!loginUser.getAui().equals(aui)){
-//            throw new UnauthorizedException("loginUser is not page owner");
-//        }
-//
-//        ProjectElement projectElement = handleProjectElement(loginUser, createProjectElementReq);
-//        ProjectElement createdProjectElement = projectElementService.createProjectElement(
-//                projectElement);
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
-//    }
-//
+    /**
+     * Import ProjectElement with Work
+     * 기 존재하는 WorkId를 받아서
+     * ProjectElement를 생성하고 생성된 ProjectElement를 리턴한다.
+     * projectElment를 하나씩 보내기 때문에 단건 create
+     */
+    @Operation(summary = "import한 Work로 ProjectElement 생성하기")
+    @OwnerCheck
+    @PostMapping("/import")
+    public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElementWithWork(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody CreateProjectElementWithWorkReq createProjectElementWithWorkReq
+    ){
+        //work를 받아오고
+        Work work = workService.findWorkById(createProjectElementWithWorkReq.getWorkId());
+        Project project = projectService.findById(createProjectElementWithWorkReq.getProjectId());
+
+        ProjectElement projectElement = new WorkInProjectBuilder()
+                .project(project)
+                .work(work)
+                .workAlignment(createProjectElementWithWorkReq.getWorkAlignment())
+                .workDisplaySize(createProjectElementWithWorkReq.getWorkDisplaySize())
+                .build();
+
+        ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
+    }
+
 //    @Operation(summary = "특정 Project 내의 ProjectElement (Work) 수정하기",
 //            description = "ProjectElement는 Work, TextBox, Divider 3가지 유형이 있습니다. <br />" +
 //                    "수정 대상의 유형에 따라 다른 update 요청을 보내야 합니다. <br />" +
