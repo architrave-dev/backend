@@ -74,8 +74,6 @@ public class BillboardService {
                 .description("Brief description of your content")
                 .build();
 
-        billboardRepository.save(defaultLb);
-
-        return defaultLb;
+        return billboardRepository.save(defaultLb);
     }
 }

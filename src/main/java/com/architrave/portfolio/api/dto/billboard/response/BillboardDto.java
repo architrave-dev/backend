@@ -9,17 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BillboardDto {
     private Long id;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UploadFile uploadFile;
     private String title;
     private String description;
     private Boolean isVisible;
 
     public BillboardDto(Billboard billboard) {
         this.id = billboard.getId();
-        UploadFile uploadFile = billboard.getUploadFile();
-        this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
+        this.uploadFile = billboard.getUploadFile();
         this.title = billboard.getTitle();
         this.description = billboard.getDescription();
         this.isVisible = billboard.getIsVisible();
