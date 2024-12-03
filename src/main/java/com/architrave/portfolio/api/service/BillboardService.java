@@ -18,6 +18,9 @@ public class BillboardService {
 
     private final BillboardRepository billboardRepository;
 
+    private final UploadFileService uploadFileService;
+
+
     @Transactional
     public Billboard createLb(Billboard billboard) {
         Billboard createdLb = billboardRepository.save(billboard);
@@ -36,6 +39,10 @@ public class BillboardService {
         Billboard billboard = findLbById(billboardId);
         if(isVisible != null) billboard.setIsVisible(isVisible);
         if(originUrl != null || thumbnailUrl != null){
+            // S3에 있는 기존 S3 이미지 제거
+            // 제거하지 않으면 DB 상에서 해당 이미지 url은 사라지고
+            // orphan 객체가 되어버린다.
+            uploadFileService.deleteUploadFile(billboard.getUploadFile());
             billboard.setUploadFileUrl(originUrl, thumbnailUrl);
         }
         if(title != null)           billboard.setTitle(title);
