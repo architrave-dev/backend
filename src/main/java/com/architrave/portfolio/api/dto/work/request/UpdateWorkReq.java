@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.work.request;
 
+import com.architrave.portfolio.api.dto.uploadFile.request.UpdateUploadFileReq;
 import com.architrave.portfolio.domain.model.Size;
 import com.architrave.portfolio.domain.model.enumType.WorkType;
 import jakarta.validation.constraints.NotNull;
@@ -14,8 +15,7 @@ public class UpdateWorkReq {
     @NotNull
     private Long id;
     private WorkType workType;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UpdateUploadFileReq updateUploadFileReq;
     private String title;
     private String description;
     private Size size;
