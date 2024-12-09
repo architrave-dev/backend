@@ -26,7 +26,7 @@ public class BillboardService {
         Billboard createdLb = billboardRepository.save(billboard);
         return createdLb;
     }
-
+    
     @Transactional
     public Billboard updateLb(
             Long billboardId,
@@ -37,16 +37,20 @@ public class BillboardService {
             Boolean isVisible
     ) {
         Billboard billboard = findLbById(billboardId);
-        if(isVisible != null) billboard.setIsVisible(isVisible);
-        if(originUrl != null || thumbnailUrl != null){
+        if(!billboard.getIsVisible().equals(isVisible)) billboard.setIsVisible(isVisible);
+        if(
+                !billboard.getUploadFile().getOriginUrl().equals(originUrl) ||
+                !billboard.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+
+        ){
             // S3에 있는 기존 S3 이미지 제거
             // 제거하지 않으면 DB 상에서 해당 이미지 url은 사라지고
             // orphan 객체가 되어버린다.
             uploadFileService.deleteUploadFile(billboard.getUploadFile());
             billboard.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(title != null)           billboard.setTitle(title);
-        if(description != null)     billboard.setDescription(description);
+        if(!billboard.getTitle().equals(title)) billboard.setTitle(title);
+        if(!billboard.getDescription().equals(description)) billboard.setDescription(description);
         return billboard;
     }
 
