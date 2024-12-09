@@ -15,7 +15,7 @@ public enum WorkType {
     // 3D
     INSTALLATION,       // 설치
     SCULPTURE,          // 조각
-    CONCEPTUAL_OBJECT,  // 개념
+    CONCEPTUAL,  // 개념
 
     // Time
     //퍼포먼스,
