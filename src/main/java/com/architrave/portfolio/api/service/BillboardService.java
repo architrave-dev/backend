@@ -26,7 +26,7 @@ public class BillboardService {
         Billboard createdLb = billboardRepository.save(billboard);
         return createdLb;
     }
-    
+
     @Transactional
     public Billboard updateLb(
             Long billboardId,
