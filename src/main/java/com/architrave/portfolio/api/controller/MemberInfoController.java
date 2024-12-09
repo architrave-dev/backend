@@ -49,8 +49,8 @@ public class MemberInfoController {
     ){
         MemberInfo updatedMI = memberInfoService.updateMI(
                 updateMemberInfoReq.getId(),
-                updateMemberInfoReq.getOriginUrl(),
-                updateMemberInfoReq.getThumbnailUrl(),
+                updateMemberInfoReq.getUpdateUploadFileReq().getOriginUrl(),
+                updateMemberInfoReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateMemberInfoReq.getName(),
                 updateMemberInfoReq.getCountry(),
                 updateMemberInfoReq.getYear(),

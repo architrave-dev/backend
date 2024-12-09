@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.memberInfo.request;
 
+import com.architrave.portfolio.api.dto.uploadFile.request.UpdateUploadFileReq;
 import com.architrave.portfolio.domain.model.enumType.CountryType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,8 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateMemberInfoReq {
     @NotNull
     private Long id;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UpdateUploadFileReq updateUploadFileReq;
     @NotNull
     private String name;
     private CountryType country;
