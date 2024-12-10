@@ -418,8 +418,8 @@ public class ProjectElementController {
             Document updatedDocument = documentService.updateDocument(
                     updateDocumentReq.getId(),
                     updateDocumentReq.getDescription(),
-                    updateDocumentReq.getOriginUrl(),
-                    updateDocumentReq.getThumbnailUrl()
+                    updateDocumentReq.getUpdateUploadFileReq().getOriginUrl(),
+                    updateDocumentReq.getUpdateUploadFileReq().getThumbnailUrl()
             );
 
             // updated 된 textBox 를 전달

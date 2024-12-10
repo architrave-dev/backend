@@ -7,15 +7,12 @@ import lombok.Data;
 @Data
 public class DocumentDto {
     private Long id;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UploadFile uploadFile;
     private String description;
 
     public DocumentDto(Document document){
         this.id = document.getId();
-        UploadFile uploadFile = document.getUploadFile();
-        this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
+        this.uploadFile = document.getUploadFile();
         this.description = document.getDescription();
     }
 }

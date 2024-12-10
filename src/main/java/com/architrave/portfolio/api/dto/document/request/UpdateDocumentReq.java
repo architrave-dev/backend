@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.document.request;
 
+import com.architrave.portfolio.api.dto.uploadFile.request.UpdateUploadFileReq;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class UpdateDocumentReq {
     @NotNull
     private Long id;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UpdateUploadFileReq updateUploadFileReq;
     private String description;
 }
