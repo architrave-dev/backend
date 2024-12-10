@@ -9,16 +9,13 @@ import lombok.Data;
 public class WorkDetailDto {
     private Long id;
     private WorkType workType;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UploadFile uploadFile;
     private String description;
 
     public WorkDetailDto(WorkDetail workDetail) {
         this.id = workDetail.getId();
         this.workType = workDetail.getWorkType();
-        UploadFile uploadFile = workDetail.getUploadFile();
-        this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
+        this.uploadFile = workDetail.getUploadFile();
         this.description = workDetail.getDescription();
     }
 }

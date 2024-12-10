@@ -95,8 +95,8 @@ public class WorkDetailController {
     ) {
         WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                 updateWorkDetailReq.getWorkDetailId(),
-                updateWorkDetailReq.getOriginUrl(),
-                updateWorkDetailReq.getThumbnailUrl(),
+                updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
+                updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateWorkDetailReq.getDescription()
         );
 

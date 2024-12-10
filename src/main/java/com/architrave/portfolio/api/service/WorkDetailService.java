@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 public class WorkDetailService {
 
     private final WorkDetailRepository workDetailRepository;
+    private final UploadFileService uploadFileService;
 
     @Transactional(readOnly = true)
     public List<WorkDetail> findWorkDetailByWork(Work work){
@@ -45,10 +46,12 @@ public class WorkDetailService {
     @Transactional
     public WorkDetail updateWorkDetail(Long workDetailId, String originUrl, String thumbnailUrl,  String description){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
-        if(originUrl != null || thumbnailUrl != null){
+        if (!workDetail.getUploadFile().getOriginUrl().equals(originUrl) ||
+            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)) {
+            uploadFileService.deleteUploadFile(workDetail.getUploadFile());
             workDetail.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(description != null) workDetail.setDescription(description);
+        if (!workDetail.getDescription().equals(description)) workDetail.setDescription(description);
 
         return workDetail;
     }
