@@ -126,8 +126,8 @@ public class ProjectController {
         //project 업데이트
         Project updatedProject = projectService.updateProject(
                 updateProjectReq.getId(),
-                updateProjectReq.getOriginUrl(),
-                updateProjectReq.getThumbnailUrl(),
+                updateProjectReq.getUpdateUploadFileReq().getOriginUrl(),
+                updateProjectReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription()
         );

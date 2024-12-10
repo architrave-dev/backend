@@ -11,7 +11,6 @@ public class ProjectSimpleDto {
     private Long id;
     private String title;
     private String description;
-
     private String originUrl;
     private String thumbnailUrl;
 
