@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final UploadFileService uploadFileService;
 
     @Transactional(readOnly = true)
     public Document findDocumentById(Long id) {
@@ -49,10 +50,13 @@ public class DocumentService {
             String thumbnailUrl
     ){
         Document document = findDocumentById(documentId);
-        if(originUrl != null || thumbnailUrl != null){
+        if(!document.getDescription().equals(description)) document.setDescription(description);
+        if(!document.getUploadFile().getOriginUrl().equals(originUrl) ||
+                !document.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        ){
+            uploadFileService.deleteUploadFile(document.getUploadFile());
             document.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(description != null) document.setDescription(description);
         return document;
     }
 

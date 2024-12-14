@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 public class MemberInfoService {
 
     private final MemberInfoRepository memberInfoRepository;
+    private final UploadFileService uploadFileService;
 
     @Transactional
     public MemberInfo createMI(MemberInfo memberInfo) {
@@ -38,15 +39,23 @@ public class MemberInfoService {
             String description
     ) {
         MemberInfo memberInfo = findMIById(memberInfoId);
-        if(originUrl != null || thumbnailUrl != null){
+        if (
+                !memberInfo.getUploadFile().getOriginUrl().equals(originUrl) ||
+                !memberInfo.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        ) {
+            // S3에 있는 기존 S3 이미지 제거
+            // 제거하지 않으면 DB 상에서 해당 이미지 url은 사라지고
+            // orphan 객체가 되어버린다.
+            uploadFileService.deleteUploadFile(memberInfo.getUploadFile());
             memberInfo.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(name != null)           memberInfo.setName(name);
-        if(country != null)           memberInfo.setCountry(country);
-        if(year != null)           memberInfo.setYear(year);
-        if(email != null)           memberInfo.setEmail(email);
-        if(contact != null)           memberInfo.setContact(contact);
-        if(description != null)     memberInfo.setDescription(description);
+        if(!memberInfo.getName().equals(name)) memberInfo.setName(name);
+        if(!memberInfo.getCountry().equals(country)) memberInfo.setCountry(country);
+        if(!memberInfo.getYear().equals(year)) memberInfo.setYear(year);
+        if(!memberInfo.getEmail().equals(email)) memberInfo.setEmail(email);
+        if(!memberInfo.getContact().equals(contact)) memberInfo.setContact(contact);
+        if(!memberInfo.getDescription().equals(description)) memberInfo.setDescription(description);
+
         return memberInfo;
     }
 
@@ -79,7 +88,8 @@ public class MemberInfoService {
                 .thumbnailUrl("")
                 .name("")
                 .email("")
-                .year(null)
+                .country(CountryType.NONE)
+                .year(0)
                 .contact("")
                 .description("")
                 .build();

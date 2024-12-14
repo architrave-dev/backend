@@ -52,7 +52,7 @@ public class WorkDetailIntegrationTest {
 
         testWork = new WorkBuilder()
                 .member(testMember)
-                .workType(WorkType.digital)
+                .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
                 .thumbnailUrl("work-thumbnail.jpg")

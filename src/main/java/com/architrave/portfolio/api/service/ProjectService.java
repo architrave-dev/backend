@@ -19,6 +19,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
+    private final UploadFileService uploadFileService;
 
     @Transactional
     public Project createProject(
@@ -51,8 +52,8 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
-    public Project findByMemberAndTitle(Member member, String title) {
-        return projectRepository.findByMemberAndTitle(member, title)
+    public Project findByMemberAndProjectId(Member member, Long projectId) {
+        return projectRepository.findByMemberAndTitle(member, projectId)
                 .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
     }
   
@@ -71,11 +72,14 @@ public class ProjectService {
             String description
     ) {
         Project project = findById(projectId);
-        if(originUrl != null || thumbnailUrl != null){
+        if(!project.getTitle().equals(title)) project.setTitle(title);
+        if(!project.getDescription().equals(description)) project.setDescription(description);
+        if(!project.getUploadFile().getOriginUrl().equals(originUrl) ||
+           !project.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        ){
+            uploadFileService.deleteUploadFile(project.getUploadFile());
             project.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(title != null)           project.setTitle(title);
-        if(description != null)     project.setDescription(description);
 
         return project;
     }

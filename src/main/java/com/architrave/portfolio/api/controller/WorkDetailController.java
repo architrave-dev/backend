@@ -34,6 +34,7 @@ public class WorkDetailController {
     @Operation(summary = "workDetailId로  WorkDetail 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<WorkDetailDto>> getWorkDetailById(
+            @RequestParam("aui") String aui,
             @RequestParam("workDetailId") Long workDetailId
     ){
 
@@ -47,6 +48,7 @@ public class WorkDetailController {
     @Operation(summary = "work로  WorkDetail 조회하기")
     @GetMapping("/list")
     public ResponseEntity<ResultDto<List<WorkDetailDto>>> getWorkDetailListByWork(
+            @RequestParam("aui") String aui,
             @RequestParam("workId") Long workId
     ){
 
@@ -93,8 +95,8 @@ public class WorkDetailController {
     ) {
         WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                 updateWorkDetailReq.getWorkDetailId(),
-                updateWorkDetailReq.getOriginUrl(),
-                updateWorkDetailReq.getThumbnailUrl(),
+                updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
+                updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateWorkDetailReq.getDescription()
         );
 

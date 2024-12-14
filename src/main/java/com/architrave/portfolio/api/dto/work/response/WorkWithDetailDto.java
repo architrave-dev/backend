@@ -7,10 +7,10 @@ import java.util.List;
 
 @Getter
 public class WorkWithDetailDto extends WorkDto {
-    private List<WorkDetailDto> workDetailDtoList;
+    private List<WorkDetailDto> workDetailList;
 
     public WorkWithDetailDto(Work work, List<WorkDetailDto> workDetailList) {
         super(work);
-        this.workDetailDtoList = workDetailList;
+        this.workDetailList = workDetailList;
     }
 }

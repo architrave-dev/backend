@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberInfoDto {
     private Long id;
-    private String originUrl;
-    private String thumbnailUrl;
+    private UploadFile uploadFile;
     private String name;
     private CountryType country;
     private Integer year;
@@ -21,9 +20,7 @@ public class MemberInfoDto {
 
     public MemberInfoDto(MemberInfo memberInfo) {
         this.id = memberInfo.getId();
-        UploadFile uploadFile = memberInfo.getUploadFile();
-        this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
+        this.uploadFile = memberInfo.getUploadFile();
         this.name = memberInfo.getName();
         this.country = memberInfo.getCountry();
         this.year = memberInfo.getYear();

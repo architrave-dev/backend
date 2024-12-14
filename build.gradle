@@ -44,6 +44,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+    //AWS
+    implementation platform('software.amazon.awssdk:bom:2.27.21')
+    implementation 'software.amazon.awssdk:s3'
+
     //swagger ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 }

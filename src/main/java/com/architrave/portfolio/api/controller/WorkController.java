@@ -129,8 +129,8 @@ public class WorkController {
         Work updatedWork = workService.updateWork(
                 updateWorkReq.getId(),
                 updateWorkReq.getWorkType(),
-                updateWorkReq.getOriginUrl(),
-                updateWorkReq.getThumbnailUrl(),
+                updateWorkReq.getUpdateUploadFileReq().getOriginUrl(),
+                updateWorkReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateWorkReq.getTitle(),
                 updateWorkReq.getDescription(),
                 updateWorkReq.getSize(),

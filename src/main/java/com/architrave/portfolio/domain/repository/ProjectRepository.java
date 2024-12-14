@@ -18,10 +18,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query("select p from Project p" +
             " where p.member = :member" +
-            " and p.title = :title")
+            " and p.id = :projectId")
     Optional<Project> findByMemberAndTitle(
             @Param("member") Member member,
-            @Param("title") String title);
+            @Param("projectId") Long projectId);
 
     @Query("""
             select p 

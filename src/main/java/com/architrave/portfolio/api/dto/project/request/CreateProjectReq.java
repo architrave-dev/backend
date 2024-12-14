@@ -14,8 +14,6 @@ public class CreateProjectReq {
     @NotEmpty
     private String title;
     private String description;
-    @NotEmpty @URL
     private String originUrl;
-    @NotEmpty @URL
     private String thumbnailUrl;
 }

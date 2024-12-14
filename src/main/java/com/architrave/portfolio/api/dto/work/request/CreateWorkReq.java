@@ -14,9 +14,7 @@ import org.hibernate.validator.constraints.URL;
 public class CreateWorkReq {
 
     private WorkType workType;
-    @NotEmpty @URL
     private String originUrl;
-    @NotEmpty @URL
     private String thumbnailUrl;
     @NotEmpty
     private String title;

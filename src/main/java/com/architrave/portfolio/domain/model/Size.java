@@ -6,7 +6,7 @@ import lombok.Data;
 @Embeddable
 @Data
 public class Size {
-    private Integer width;
-    private Integer height;
-    private Integer depth;
+    private String width;
+    private String height;
+    private String depth;
 }

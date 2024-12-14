@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 public class WorkService {
 
     private final WorkRepository workRepository;
+    private final UploadFileService uploadFileService;
 
     @Transactional(readOnly = true)
     public Work findWorkById(Long id) {
@@ -88,17 +89,19 @@ public class WorkService {
                            String collection
     ) {
         Work work = findWorkById(workId);
-        if(workType != null) work.setWorkType(workType);
-        if(originUrl != null || thumbnailUrl != null){
+        if (!work.getWorkType().equals(workType)) work.setWorkType(workType);
+        if (!work.getUploadFile().getOriginUrl().equals(originUrl) ||
+            !work.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)) {
+            uploadFileService.deleteUploadFile(work.getUploadFile());
             work.setUploadFileUrl(originUrl, thumbnailUrl);
         }
-        if(title != null) work.setTitle(title);
-        if(description != null) work.setDescription(description);
-        if(size != null) work.setSize(size);
-        if(material != null) work.setMaterial(material);
-        if(prodYear != null) work.setProdYear(prodYear);
-        if(price != null) work.setPrice(price);
-        if(collection != null) work.setCollection(collection);
+        if (!work.getTitle().equals(title)) work.setTitle(title);
+        if (!work.getDescription().equals(description)) work.setDescription(description);
+        if (!work.getSize().equals(size)) work.setSize(size);
+        if (!work.getMaterial().equals(material)) work.setMaterial(material);
+        if (!work.getProdYear().equals(prodYear)) work.setProdYear(prodYear);
+        if (!work.getPrice().equals(price)) work.setPrice(price);
+        if (!work.getCollection().equals(collection)) work.setCollection(collection);
 
         return work;
     }

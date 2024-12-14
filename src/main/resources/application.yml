@@ -21,3 +21,11 @@ spring:
     expiration: ${SPRING_JWT_EXPIRE}
     refresh-token:
       expiration: ${SPRING_JWT_REFRESH_EXPIRE}
+
+  aws:
+    region: ${SPRING_AWS_REGION}
+    s3:
+      bucket-name: ${SPRING_AWS_S3_BUCKET_NAME}
+    credentials:
+      access-key: ${SPRING_AWS_ACCESS_KEY_ID}
+      secret-key: ${SPRING_AWS_SECRET_ACCESS_KEY}

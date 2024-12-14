@@ -3,24 +3,25 @@ package com.architrave.portfolio.domain.model.enumType;
 public enum WorkType {
 
     // 2D
-    painting_water,     // 수채화
-    painting_oil,       // 유화
-    painting_dry,       // 건식재료
+    PAINTING_WATER,     // 수채화
+    PAINTING_OIL,       // 유화
+    PAINTING_DRY,       // 건식재료
 
-    prints,             // 판화
-    photo,              // 사진
-    study,              // 습작
-    digital,            // 디지털
+    PRINTS,             // 판화
+    PHOTO,              // 사진
+    STUDY,              // 습작
+    DIGITAL,            // 디지털
 
     // 3D
-    installation,       // 설치
-    sculpture,          // 조각
-    conceptual_object,  // 개념
+    INSTALLATION,       // 설치
+    SCULPTURE,          // 조각
+    CONCEPTUAL,  // 개념
 
     // Time
     //퍼포먼스,
     //영상
     //research_present
 
-    details             // 그저 디테일
+    DETAILS,            // 그저 디테일
+    NONE
 }

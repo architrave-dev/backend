@@ -49,7 +49,7 @@ public class WorkIntegrationTest {
         //Create
         Work created = workService.createWork(
                 testMember,
-                WorkType.painting_water,
+                WorkType.PAINTING_WATER,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork",
@@ -67,7 +67,7 @@ public class WorkIntegrationTest {
         //Update
         Work updated = workService.updateWork(
                 found.getId(),
-                WorkType.painting_water,
+                WorkType.PAINTING_WATER,
                 "updated-origin.jpg",
                 "updated-thumbnail.jpg",
                 "updated Artwork",
@@ -94,7 +94,7 @@ public class WorkIntegrationTest {
     void multipleWorks(){
         Work work1 = workService.createWork(
                 testMember,
-                WorkType.painting_water,
+                WorkType.PAINTING_WATER,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork1",
@@ -107,7 +107,7 @@ public class WorkIntegrationTest {
         );
         Work work2 = workService.createWork(
                 testMember,
-                WorkType.painting_oil,
+                WorkType.PAINTING_OIL,
                 "work-origin.jpg",
                 "work-thumbnail.jpg",
                 "Test Artwork2",

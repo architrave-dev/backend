@@ -65,7 +65,7 @@ public class ProjectElementService {
         if(!projectElement.getTextBox().equals(textBox)){
             projectElement.setTextBox(textBox);
         }
-        if(textBoxAlignment != null){
+        if(!projectElement.getTextBoxAlignment().equals(textBoxAlignment)){
             projectElement.setTextBoxAlignment(textBoxAlignment);
         }
         return projectElement;
@@ -89,7 +89,7 @@ public class ProjectElementService {
     public ProjectElement updateProjectElementDivider(Long projectElementId,
                                                       DividerType dividerType) {
         ProjectElement projectElement = findById(projectElementId);
-        if(dividerType != null){
+        if(!projectElement.getDividerType().equals(dividerType)){
             projectElement.setDividerType(dividerType);
         }
         return projectElement;

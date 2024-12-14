@@ -76,6 +76,7 @@ public class SecurityConfig {
             "/api/v1/project-element/**",
             "/api/v1/work/**",
             "/api/v1/work-detail",
+            "/api/v1/work-detail/list",
             "/api/v1/work-property",
             "/api/v1/career",
             "/api/v1/member-info"
