@@ -28,7 +28,8 @@ public class SecurityAdditionalConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",    // frontend 로컬
-                "http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com"     //frontend prod
+                "http://architrave-mvp1-bucket.s3-website.ap-northeast-2.amazonaws.com",     //frontend prod
+                "https://www.architrive.com/"     //frontend prod2
         )); // 허용할 도메인
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메소드
         configuration.setAllowedHeaders(Arrays.asList("*")); // 허용할 헤더

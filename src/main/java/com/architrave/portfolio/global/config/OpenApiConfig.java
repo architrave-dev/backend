@@ -53,6 +53,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+                .addTagsItem(new Tag().name("00. AWS"))
                 .addTagsItem(new Tag().name("01. Auth"))
                 .addTagsItem(new Tag().name("02. Member"))
                 .addTagsItem(new Tag().name("03. Project"))
