@@ -32,6 +32,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers(SWAGGER_WHITELIST).permitAll()                                //swagger
+                .requestMatchers(HttpMethod.GET, AWS_WHITELIST).permitAll()
                 .requestMatchers("/api/v1/auth/**", "/error").permitAll()
                 .requestMatchers(HttpMethod.GET, CLIENT_WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.POST, USER_WHITELIST).hasRole("USER")
@@ -62,6 +63,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+    private static final String[] AWS_WHITELIST = {
+            "/health-check",
+    };
     private static final String[] SWAGGER_WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
