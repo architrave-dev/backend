@@ -108,6 +108,7 @@ public class WorkService {
 
     @Transactional
     public void removeWork(Work work) {
+        uploadFileService.deleteUploadFile(work.getUploadFile());
         workRepository.delete(work);
     }
     @Transactional

@@ -85,6 +85,7 @@ public class ProjectService {
     }
     @Transactional
     public void removeProject(Project project){
+        uploadFileService.deleteUploadFile(project.getUploadFile());
         projectRepository.delete(project);
     }
     @Transactional
