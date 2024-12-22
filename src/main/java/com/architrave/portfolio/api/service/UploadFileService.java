@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.net.URI;
+import java.time.Duration;
 
 @Trace
 @Service
@@ -18,6 +22,7 @@ import java.net.URI;
 @Slf4j
 public class UploadFileService {
     private final S3Client s3;
+    private final S3Presigner preSigner;
 
     @Value("${spring.aws.s3.bucket-name}")
     private String bucketName;
@@ -47,5 +52,23 @@ public class UploadFileService {
     public void deleteUploadFile(UploadFile uploadFile) {
         if(!uploadFile.getOriginUrl().equals("")) deleteFile(uploadFile.getOriginUrl());
         if(!uploadFile.getThumbnailUrl().equals("")) deleteFile(uploadFile.getThumbnailUrl());
+    }
+
+    public String generatePresignedUrl(String fileName, String fileType) {
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .contentType(fileType)
+                .build();
+
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(5)) // URL 유효기간: 5분
+                .putObjectRequest(objectRequest)
+                .build();
+
+        String preSignedUrl = preSigner.presignPutObject(presignRequest).url().toString();
+        System.out.println("preSignedUrl: "+ preSignedUrl);
+
+        return preSignedUrl;
     }
 }

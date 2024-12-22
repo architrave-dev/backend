@@ -65,6 +65,7 @@ public class SecurityConfig {
 
     private static final String[] AWS_WHITELIST = {
             "/health-check",
+//            "/pre-signed-url",치   //USER_WHITELIST에 위
     };
     private static final String[] SWAGGER_WHITELIST = {
             "/v3/api-docs/**",
@@ -95,6 +96,7 @@ public class SecurityConfig {
             "/api/v1/work-detail",
             "/api/v1/work-property",
             "/api/v1/career",
-            "/api/v1/member-info"
+            "/api/v1/member-info",
+            "/pre-signed-url",
     };
 }
