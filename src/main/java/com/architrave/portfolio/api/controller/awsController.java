@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.uploadFile.request.PreSignedUrlReq;
+import com.architrave.portfolio.api.dto.uploadFile.response.PreSignedUrlResponse;
 import com.architrave.portfolio.api.service.UploadFileService;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
@@ -37,7 +38,7 @@ public class awsController {
     )
     @PostMapping("/pre-signed-url")
     @OwnerCheck
-    public ResponseEntity<ResultDto<String>> getPreSignedUrl(
+    public ResponseEntity<ResultDto<PreSignedUrlResponse>> getPreSignedUrl(
             @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @RequestBody PreSignedUrlReq preSignedUrlReq
     ){
@@ -47,6 +48,6 @@ public class awsController {
         );
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(generated));
+                .body(new ResultDto<>(new PreSignedUrlResponse(generated)));
     }
 }
