@@ -59,11 +59,14 @@ public class WorkDetailService {
     @Transactional
     public void removeWorkDetailById(Long workDetailId){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
+        uploadFileService.deleteUploadFile(workDetail.getUploadFile());
         workDetailRepository.delete(workDetail);
     }
 
     @Transactional
     public void removeWorkDetailByWork(Work work){
+        List<WorkDetail> workDetailByWork = findWorkDetailByWork(work);
+        workDetailByWork.forEach(wd -> uploadFileService.deleteUploadFile(wd.getUploadFile()));
         workDetailRepository.deleteByWork(work);
     }
 }

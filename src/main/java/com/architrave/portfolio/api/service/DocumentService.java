@@ -63,6 +63,7 @@ public class DocumentService {
     @Transactional
     public void removeDocument(Long documentId) {
         Document document = findDocumentById(documentId);
+        uploadFileService.deleteUploadFile(document.getUploadFile());
         documentRepository.delete(document);
     }
 }

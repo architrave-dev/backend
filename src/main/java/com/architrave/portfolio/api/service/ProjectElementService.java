@@ -20,6 +20,8 @@ public class ProjectElementService {
 
     private final TextBoxService textBoxService;
     private final DocumentService documentService;
+    private final UploadFileService uploadFileService;
+
 
     @Transactional
     public ProjectElement createProjectElement(ProjectElement projectElement) {
@@ -113,6 +115,13 @@ public class ProjectElementService {
 
     @Transactional
     public void removeProjectElementByProject(Project project) {
+        List<ProjectElement> peList = findProjectElementByProject(project);
+        peList.forEach(pe -> {
+            if(pe.getProjectElementType().equals(ProjectElementType.DOCUMENT)){
+                uploadFileService.deleteUploadFile(pe.getDocument().getUploadFile());
+            }
+        });
+
         projectElementRepository.deleteByProject(project);
     }
 
