@@ -31,6 +31,16 @@ public class ProjectElement {
     private WorkDisplaySize workDisplaySize;
 
     @OneToOne
+    @JoinColumn(name = "work_detail_id")
+    private WorkDetail workDetail;
+
+    @Enumerated(EnumType.STRING)
+    private WorkAlignment workDetailAlignment;
+
+    @Enumerated(EnumType.STRING)
+    private WorkDisplaySize workDetailDisplaySize;
+
+    @OneToOne
     @JoinColumn(name = "text_box_id")
     private TextBox textBox;
 
