@@ -47,7 +47,8 @@ public class WorkDetailService {
     public WorkDetail updateWorkDetail(Long workDetailId, String originUrl, String thumbnailUrl,  String description){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
         if (!workDetail.getUploadFile().getOriginUrl().equals(originUrl) ||
-            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)) {
+            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        ) {
             uploadFileService.deleteUploadFile(workDetail.getUploadFile());
             workDetail.setUploadFileUrl(originUrl, thumbnailUrl);
         }

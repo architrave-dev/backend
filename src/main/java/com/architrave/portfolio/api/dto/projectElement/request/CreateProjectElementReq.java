@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.dto.projectElement.request;
 
 import com.architrave.portfolio.api.dto.document.request.CreateDocumentReq;
 import com.architrave.portfolio.api.dto.textBox.request.CreateTextBoxReq;
+import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.domain.model.enumType.*;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,10 @@ public class CreateProjectElementReq {
     private CreateWorkReq createWorkReq;
     private WorkAlignment workAlignment;
     private WorkDisplaySize workDisplaySize;
+    //workDetail 일 경우
+    private CreateWorkDetailReq createWorkDetailReq;
+    private WorkAlignment workDetailAlignment;
+    private WorkDisplaySize workDetailDisplaySize;
     //textbox 일 경우
     private CreateTextBoxReq createTextBoxReq;
     private TextBoxAlignment textBoxAlignment;
