@@ -14,7 +14,6 @@ public class UpdateWorkDetailReq {
 
     @NotNull
     private Long workDetailId;
-    private WorkType workType;
     private UpdateUploadFileReq updateUploadFileReq;
     private String description;
 }
