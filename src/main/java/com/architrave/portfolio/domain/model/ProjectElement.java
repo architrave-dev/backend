@@ -71,6 +71,20 @@ public class ProjectElement {
         projectElement.workDisplaySize = workDisplaySize;
         return projectElement;
     }
+    public static ProjectElement createWorkDetailElement(
+            Project project,
+            WorkDetail workDetail,
+            WorkAlignment workDetailAlignment,
+            WorkDisplaySize workDetailDisplaySize
+    ){
+        ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.DETAIL;
+        projectElement.project = project;
+        projectElement.workDetail = workDetail;
+        projectElement.workDetailAlignment = workDetailAlignment;
+        projectElement.workDetailDisplaySize = workDetailDisplaySize;
+        return projectElement;
+    }
     public static ProjectElement createTextBoxElement(
             Project project,
             TextBox textBox,
