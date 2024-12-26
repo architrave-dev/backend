@@ -4,7 +4,9 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.response.WorkDetailDto;
+import com.architrave.portfolio.api.dto.work.response.WorkDetailSimpleDto;
 import com.architrave.portfolio.api.service.*;
+import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
@@ -63,6 +65,20 @@ public class WorkDetailController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(workDetailDtoList));
+    }
+    @Operation(summary = "work로  WorkDetail 간단하게 조회하기")
+    @GetMapping("/list/simple")
+    public ResponseEntity<ResultDto<List<WorkDetailSimpleDto>>> getSimpleWorkDetailListByWork(
+            @RequestParam("aui") String aui,
+            @RequestParam("workId") Long workId
+    ){
+        Work work = workService.findWorkById(workId);
+
+        List<WorkDetailSimpleDto> workDetailSimpleList = workDetailService.findSimpleWorkDetailByWork(work);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(workDetailSimpleList));
     }
 
     @Operation(summary = "WorkDetail 생성하기")
