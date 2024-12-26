@@ -15,6 +15,6 @@ public class CreateProjectElementWithWorkDetailReq {
     private Long projectId;
     @NotNull
     private Long workDetailId;
-    private WorkAlignment workAlignment;
-    private WorkDisplaySize workDisplaySize;
+    private WorkAlignment workDetailAlignment;
+    private WorkDisplaySize workDetailDisplaySize;
 }
