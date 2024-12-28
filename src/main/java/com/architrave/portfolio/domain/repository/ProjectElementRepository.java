@@ -32,7 +32,7 @@ public interface ProjectElementRepository extends JpaRepository<ProjectElement, 
     @Query("""
             DELETE FROM ProjectElement pe
             WHERE pe.project.member = :member
-            AND pe.work_detail = :workDetail
+            AND pe.workDetail = :workDetail
             """)
     void deleteByProjectMemberAndWorkDetail(
             @Param("member")Member loginUser,

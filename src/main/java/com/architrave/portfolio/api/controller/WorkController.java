@@ -147,7 +147,10 @@ public class WorkController {
 
 
     @Operation(summary = "Work 삭제하기",
-            description = "Work 삭제 시 관련된 ProjectElement도 함께 삭제됩니다."
+            description = "Work 삭제 시 " +
+                    "Work와 관련된 ProjectElement," +
+                    "Work에 포함된 WorkDetail" +
+                    "Work와 관련된 ProjectElement 등이 함께 삭제됩니다."
     )
     @DeleteMapping
     @OwnerCheck
@@ -159,8 +162,14 @@ public class WorkController {
 
         Work work = workService.findWorkById(targetId);
 
-        //Work와 관련된 WorkDetail 전부 삭제
-        workDetailService.removeWorkDetailByWork(work);
+        List<WorkDetail> workDetailList = workDetailService.findWorkDetailByWork(work);
+
+        workDetailList.forEach((wd) -> {
+                    //삭제대상 workDetail과 관련된 ProjectElement 삭제
+                    peService.deleteByMemberAndWorkDetailId(owner, wd);
+                    //Work와 관련된 WorkDetail 전부 삭제
+                    workDetailService.removeWorkDetailById(wd.getId());
+        });
 
         //삭제대상 work와 관련된 ProjectElement 삭제
         peService.deleteByMemberAndWorkId(owner, work);
