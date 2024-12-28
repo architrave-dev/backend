@@ -8,6 +8,7 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -96,5 +97,22 @@ public class ExControllerAdvice {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorDto(ErrorCode.RTX, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PSQLException.class)
+    public ResponseEntity<ErrorDto> handlePSQLException(PSQLException e) {
+        log.info("handle in ExControllerAdvice: ", e);
+        // PostgreSQL unique constraint 위반은 SQLState = 23505
+        if ("23505".equals(e.getSQLState())) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(new ErrorDto(ErrorCode.DUK, "이미 존재하는 값입니다."));
+        } else {
+            // 그 외 PSQLException의 경우
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorDto(ErrorCode.DBE, "데이터베이스 처리 중 오류가 발생했습니다."));
+        }
     }
 }

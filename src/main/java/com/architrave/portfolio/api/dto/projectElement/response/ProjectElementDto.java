@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.dto.projectElement.response;
 
 import com.architrave.portfolio.api.dto.document.response.DocumentDto;
+import com.architrave.portfolio.api.dto.work.response.WorkDetailDto;
 import com.architrave.portfolio.api.dto.work.response.WorkDto;
 import com.architrave.portfolio.domain.model.Document;
 import com.architrave.portfolio.domain.model.ProjectElement;
@@ -17,6 +18,9 @@ public class ProjectElementDto {
     private WorkDto work;
     private WorkAlignment workAlignment;
     private WorkDisplaySize workDisplaySize;
+    private WorkDetailDto workDetail;
+    private WorkAlignment workDetailAlignment;
+    private WorkDisplaySize workDetailDisplaySize;
     private TextBox textBox;
     private TextBoxAlignment textBoxAlignment;
     private DocumentDto document;
@@ -27,9 +31,14 @@ public class ProjectElementDto {
         this.id = projectElement.getId();
         //work
         this.work = (projectElement.getWork() != null) ?  new WorkDto(projectElement.getWork()) : null;
-
         this.workAlignment = projectElement.getWorkAlignment();
         this.workDisplaySize = projectElement.getWorkDisplaySize();
+
+        //workDetail
+        this.workDetail = (projectElement.getWorkDetail() != null) ?  new WorkDetailDto(projectElement.getWorkDetail()) : null;
+        this.workDetailAlignment = projectElement.getWorkDetailAlignment();
+        this.workDetailDisplaySize = projectElement.getWorkDetailDisplaySize();
+
         //textbox
         this.textBox = projectElement.getTextBox();
         this.textBoxAlignment = projectElement.getTextBoxAlignment();
@@ -38,8 +47,12 @@ public class ProjectElementDto {
         this.documentAlignment = projectElement.getDocumentAlignment();
         //divider
         this.dividerType = projectElement.getDividerType();
+
+
         if(this.work != null){
             this.projectElementType = ProjectElementType.WORK;
+        }else if(this.workDetail != null){
+            this.projectElementType = ProjectElementType.DETAIL;
         }else if(this.textBox != null){
             this.projectElementType = ProjectElementType.TEXTBOX;
         }else if(this.document != null){

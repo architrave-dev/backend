@@ -7,14 +7,13 @@ import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
+import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
+import com.architrave.portfolio.api.dto.work.request.UpdateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.*;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DividerInProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DocumentInProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
+import com.architrave.portfolio.domain.model.builder.projectElementBuilder.*;
 import com.architrave.portfolio.domain.model.enumType.ProjectElementType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
@@ -41,6 +40,7 @@ public class ProjectElementController {
     private final ProjectElementService projectElementService;
     private final ProjectService projectService;
     private final WorkService workService;
+    private final WorkDetailService workDetailService;
     private final TextBoxService textBoxService;
     private final DocumentService documentService;
     private final MemberService memberService;
@@ -122,18 +122,6 @@ public class ProjectElementController {
                                    List<RemoveProjectElementReq> removedList,
                                           List<IndexDto> indexDtoList
     ){
-//        createdList.forEach(pe -> {
-//            ProjectElement projectElement = projectElementService.createProjectElement(
-//                    handleProjectElement(loginUser, pe));
-//            Long tempId = pe.getTempId();
-//            Long peId = projectElement.getId();
-//            indexDtoList.stream()
-//                    .filter(idxDto -> {
-//                        Long tempPeId = idxDto.getTempId();
-//                        return tempPeId != null && tempPeId.equals(tempId);
-//                    })
-//                    .forEach(idxDto -> idxDto.setId(peId));
-//        });
         updatedList.forEach(this::handleUpdateProjectElement);
         removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
 
@@ -162,6 +150,36 @@ public class ProjectElementController {
                 .work(work)
                 .workAlignment(createProjectElementWithWorkReq.getWorkAlignment())
                 .workDisplaySize(createProjectElementWithWorkReq.getWorkDisplaySize())
+                .build();
+
+        ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
+    }
+    /**
+     * Import ProjectElement with WorkDetail
+     * 기 존재하는 WorkDetailId를 받아서
+     * ProjectElement를 생성하고 생성된 ProjectElement를 리턴한다.
+     * projectElment를 하나씩 보내기 때문에 단건 create
+     */
+    @Operation(summary = "import한 WorkDetail로 ProjectElement 생성하기")
+    @OwnerCheck
+    @PostMapping("/import/detail")
+    public ResponseEntity<ResultDto<ProjectElementDto>> createProjectElementWithWorkDetail(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody CreateProjectElementWithWorkDetailReq createProjectElementWithWorkDetailReq
+    ){
+        //workDetail를 받아오고
+        WorkDetail workDetail = workDetailService.findWorkDetailById(createProjectElementWithWorkDetailReq.getWorkDetailId());
+        Project project = projectService.findById(createProjectElementWithWorkDetailReq.getProjectId());
+
+        ProjectElement projectElement = new WorkDetailInProjectBuilder()
+                .project(project)
+                .workDetail(workDetail)
+                .workDetailAlignment(createProjectElementWithWorkDetailReq.getWorkDetailAlignment())
+                .workDetailDisplaySize(createProjectElementWithWorkDetailReq.getWorkDetailDisplaySize())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -254,6 +272,21 @@ public class ProjectElementController {
                     .workAlignment(createProjectElementReq.getWorkAlignment())
                     .workDisplaySize(createProjectElementReq.getWorkDisplaySize())
                     .build();
+        }else if(elementType.equals(ProjectElementType.DETAIL)){
+            CreateWorkDetailReq createWorkDetailReq = createProjectElementReq.getCreateWorkDetailReq();
+            Work work = workService.findWorkById(createWorkDetailReq.getWorkId());
+            WorkDetail workDetail = workDetailService.createWorkDetail(
+                    work,
+                    createWorkDetailReq.getOriginUrl(),
+                    createWorkDetailReq.getThumbnailUrl(),
+                    createWorkDetailReq.getDescription()
+            );
+            projectElement = new WorkDetailInProjectBuilder()
+                    .project(project)
+                    .workDetail(workDetail)
+                    .workDetailAlignment(createProjectElementReq.getWorkDetailAlignment())
+                    .workDetailDisplaySize(createProjectElementReq.getWorkDetailDisplaySize())
+                    .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
                     createProjectElementReq
@@ -286,12 +319,8 @@ public class ProjectElementController {
         return projectElement;
     }
 
-    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){
-        //work일 경우
-        if(!(updateProjectElementReq.getUpdateWorkReq() == null &&
-                updateProjectElementReq.getWorkAlignment() == null &&
-                updateProjectElementReq.getWorkDisplaySize() == null)
-        ) {
+    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){ //work일 경우
+        if(updateProjectElementReq.getUpdateWorkReq() != null) {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
                     updateWorkReq.getId(),
@@ -314,8 +343,24 @@ public class ProjectElementController {
                     updateProjectElementReq.getWorkDisplaySize()
             );
         }
-        //textBox일 경우
-        else if(updateProjectElementReq.getUpdateTextBoxReq() != null)
+        else if(updateProjectElementReq.getUpdateWorkDetailReq() != null) { //workDetail일 경우
+            UpdateWorkDetailReq updateWorkDetailReq =  updateProjectElementReq.getUpdateWorkDetailReq();
+            WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
+                    updateWorkDetailReq.getId(),
+                    updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
+                    updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
+                    updateWorkDetailReq.getDescription()
+            );
+
+            // updated 된 workDetail를 전달
+            projectElementService.updateProjectElementWorkDetail(
+                    updatedWorkDetail,
+                    updateProjectElementReq.getProjectElementId(),
+                    updateProjectElementReq.getWorkDetailAlignment(),
+                    updateProjectElementReq.getWorkDetailDisplaySize()
+            );
+        }
+        else if(updateProjectElementReq.getUpdateTextBoxReq() != null)  //textBox일 경우
         {
             UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
             TextBox updatedTextBox = textBoxService.updateTextBox(
@@ -329,7 +374,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getTextBoxAlignment()
             );
         }
-        else if(updateProjectElementReq.getUpdateDocumentReq() != null)
+        else if(updateProjectElementReq.getUpdateDocumentReq() != null) //Document일 경우
         {
             UpdateDocumentReq updateDocumentReq = updateProjectElementReq.getUpdateDocumentReq();
             Document updatedDocument = documentService.updateDocument(
@@ -346,8 +391,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getDocumentAlignment()
             );
         }
-        //divider 일 경우
-        else{
+        else{   //divider 일 경우
             projectElementService.updateProjectElementDivider(
                     updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getDividerType()

@@ -19,8 +19,6 @@ public class WorkDetail {
     @JoinColumn(name = "work_id")
     private Work work;
 
-    @Enumerated(EnumType.STRING)
-    private WorkType workType;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;

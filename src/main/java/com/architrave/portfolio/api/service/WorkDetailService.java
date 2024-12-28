@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.work.response.WorkDetailSimpleDto;
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
@@ -47,7 +48,8 @@ public class WorkDetailService {
     public WorkDetail updateWorkDetail(Long workDetailId, String originUrl, String thumbnailUrl,  String description){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
         if (!workDetail.getUploadFile().getOriginUrl().equals(originUrl) ||
-            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)) {
+            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        ) {
             uploadFileService.deleteUploadFile(workDetail.getUploadFile());
             workDetail.setUploadFileUrl(originUrl, thumbnailUrl);
         }
@@ -68,5 +70,10 @@ public class WorkDetailService {
         List<WorkDetail> workDetailByWork = findWorkDetailByWork(work);
         workDetailByWork.forEach(wd -> uploadFileService.deleteUploadFile(wd.getUploadFile()));
         workDetailRepository.deleteByWork(work);
+    }
+
+    @Transactional(readOnly = true)
+    public List<WorkDetailSimpleDto> findSimpleWorkDetailByWork(Work work) {
+        return workDetailRepository.findSimpleByWork(work);
     }
 }

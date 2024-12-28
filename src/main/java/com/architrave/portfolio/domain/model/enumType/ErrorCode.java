@@ -8,6 +8,10 @@ public enum ErrorCode {
     AEV("Already Exist Value"),
     ATX("Access Token Expired"),
     RTX("Refresh Token Expired"),
+
+    DUK("Duplicated Unique Key"),
+
+    DBE("Database Error"),
     UME("UnManaged Error");;
 
 

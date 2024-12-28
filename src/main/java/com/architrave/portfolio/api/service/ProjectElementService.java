@@ -57,6 +57,25 @@ public class ProjectElementService {
         }
         return projectElement;
     }
+    @Transactional
+    public ProjectElement updateProjectElementWorkDetail(WorkDetail workDetail,
+                                               Long projectElementId,
+                                               WorkAlignment workDetailAlignment,
+                                               WorkDisplaySize workDetailDisplaySize
+    ){
+        ProjectElement projectElement = findById(projectElementId);
+        //workDetail 내 변경사항은 이미 완료한 상태
+        if(!projectElement.getWorkDetail().equals(workDetail)){
+            projectElement.setWorkDetail(workDetail);
+        }
+        if(workDetailAlignment != null){
+            projectElement.setWorkDetailAlignment(workDetailAlignment);
+        }
+        if(workDetailDisplaySize != null){
+            projectElement.setWorkDetailDisplaySize(workDetailDisplaySize);
+        }
+        return projectElement;
+    }
 
     @Transactional
     public ProjectElement updateProjectElementTextBox(TextBox textBox,
@@ -128,5 +147,10 @@ public class ProjectElementService {
     @Transactional
     public void deleteByMemberAndWorkId(Member loginUser, Work work) {
         projectElementRepository.deleteByProjectMemberAndWork(loginUser, work);
+    }
+
+    @Transactional
+    public void deleteByMemberAndWorkDetailId(Member loginUser, WorkDetail workDetail) {
+        projectElementRepository.deleteByProjectMemberAndWorkDetail(loginUser, workDetail);
     }
 }

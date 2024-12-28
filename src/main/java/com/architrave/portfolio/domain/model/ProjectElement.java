@@ -31,6 +31,16 @@ public class ProjectElement {
     private WorkDisplaySize workDisplaySize;
 
     @OneToOne
+    @JoinColumn(name = "work_detail_id")
+    private WorkDetail workDetail;
+
+    @Enumerated(EnumType.STRING)
+    private WorkAlignment workDetailAlignment;
+
+    @Enumerated(EnumType.STRING)
+    private WorkDisplaySize workDetailDisplaySize;
+
+    @OneToOne
     @JoinColumn(name = "text_box_id")
     private TextBox textBox;
 
@@ -59,6 +69,20 @@ public class ProjectElement {
         projectElement.work = work;
         projectElement.workAlignment = workAlignment;
         projectElement.workDisplaySize = workDisplaySize;
+        return projectElement;
+    }
+    public static ProjectElement createWorkDetailElement(
+            Project project,
+            WorkDetail workDetail,
+            WorkAlignment workDetailAlignment,
+            WorkDisplaySize workDetailDisplaySize
+    ){
+        ProjectElement projectElement = new ProjectElement();
+        projectElement.projectElementType = ProjectElementType.DETAIL;
+        projectElement.project = project;
+        projectElement.workDetail = workDetail;
+        projectElement.workDetailAlignment = workDetailAlignment;
+        projectElement.workDetailDisplaySize = workDetailDisplaySize;
         return projectElement;
     }
     public static ProjectElement createTextBoxElement(
