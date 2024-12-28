@@ -319,12 +319,8 @@ public class ProjectElementController {
         return projectElement;
     }
 
-    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){
-        //work일 경우
-        if(!(updateProjectElementReq.getUpdateWorkReq() == null &&
-                updateProjectElementReq.getWorkAlignment() == null &&
-                updateProjectElementReq.getWorkDisplaySize() == null)
-        ) {
+    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){ //work일 경우
+        if(updateProjectElementReq.getUpdateWorkReq() != null) {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
                     updateWorkReq.getId(),
@@ -347,11 +343,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getWorkDisplaySize()
             );
         }
-        //workDetail일 경우
-        if(!(updateProjectElementReq.getUpdateWorkDetailReq() == null &&
-                updateProjectElementReq.getWorkDetailAlignment() == null &&
-                updateProjectElementReq.getWorkDetailDisplaySize() == null)
-        ) {
+        else if(updateProjectElementReq.getUpdateWorkDetailReq() != null) { //workDetail일 경우
             UpdateWorkDetailReq updateWorkDetailReq =  updateProjectElementReq.getUpdateWorkDetailReq();
             WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                     updateWorkDetailReq.getId(),
@@ -368,9 +360,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getWorkDetailDisplaySize()
             );
         }
-
-        //textBox일 경우
-        else if(updateProjectElementReq.getUpdateTextBoxReq() != null)
+        else if(updateProjectElementReq.getUpdateTextBoxReq() != null)  //textBox일 경우
         {
             UpdateTextBoxReq updateTextBoxReq = updateProjectElementReq.getUpdateTextBoxReq();
             TextBox updatedTextBox = textBoxService.updateTextBox(
@@ -384,7 +374,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getTextBoxAlignment()
             );
         }
-        else if(updateProjectElementReq.getUpdateDocumentReq() != null)
+        else if(updateProjectElementReq.getUpdateDocumentReq() != null) //Document일 경우
         {
             UpdateDocumentReq updateDocumentReq = updateProjectElementReq.getUpdateDocumentReq();
             Document updatedDocument = documentService.updateDocument(
@@ -401,8 +391,7 @@ public class ProjectElementController {
                     updateProjectElementReq.getDocumentAlignment()
             );
         }
-        //divider 일 경우
-        else{
+        else{   //divider 일 경우
             projectElementService.updateProjectElementDivider(
                     updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getDividerType()
