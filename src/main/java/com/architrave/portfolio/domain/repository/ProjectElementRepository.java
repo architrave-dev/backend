@@ -27,4 +27,14 @@ public interface ProjectElementRepository extends JpaRepository<ProjectElement, 
     void deleteByProjectMemberAndWork(
             @Param("member")Member member,
             @Param("work")Work work);
+
+    @Modifying
+    @Query("""
+            DELETE FROM ProjectElement pe
+            WHERE pe.project.member = :member
+            AND pe.work_detail = :workDetail
+            """)
+    void deleteByProjectMemberAndWorkDetail(
+            @Param("member")Member loginUser,
+            @Param("workDetail")WorkDetail workDetail);
 }

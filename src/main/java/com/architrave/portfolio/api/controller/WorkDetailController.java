@@ -11,6 +11,7 @@ import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,6 +33,8 @@ import java.util.stream.Collectors;
 public class WorkDetailController {
     private final WorkService workService;
     private final WorkDetailService workDetailService;
+    private final ProjectElementService peService;
+    private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "workDetailId로  WorkDetail 조회하기")
     @GetMapping
@@ -110,7 +113,7 @@ public class WorkDetailController {
             @Valid @RequestBody UpdateWorkDetailReq updateWorkDetailReq
     ) {
         WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
-                updateWorkDetailReq.getWorkDetailId(),
+                updateWorkDetailReq.getId(),
                 updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
                 updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateWorkDetailReq.getDescription()
@@ -132,6 +135,13 @@ public class WorkDetailController {
             @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @RequestParam("workDetailId") Long targetId
     ) {
+        Member owner = ownerContextHolder.getOwner();
+        WorkDetail workDetail = workDetailService.findWorkDetailById(targetId);
+
+        //삭제대상 workDetail와 관련된 ProjectElement 삭제
+        peService.deleteByMemberAndWorkDetailId(owner, workDetail);
+
+        //workDetail 삭제
         workDetailService.removeWorkDetailById(targetId);
 
         return ResponseEntity

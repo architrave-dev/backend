@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateWorkDetailReq {
 
     @NotNull
-    private Long workDetailId;
+    private Long id;
     private UpdateUploadFileReq updateUploadFileReq;
     private String description;
 }

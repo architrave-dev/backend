@@ -148,4 +148,9 @@ public class ProjectElementService {
     public void deleteByMemberAndWorkId(Member loginUser, Work work) {
         projectElementRepository.deleteByProjectMemberAndWork(loginUser, work);
     }
+
+    @Transactional
+    public void deleteByMemberAndWorkDetailId(Member loginUser, WorkDetail workDetail) {
+        projectElementRepository.deleteByProjectMemberAndWorkDetail(loginUser, workDetail);
+    }
 }

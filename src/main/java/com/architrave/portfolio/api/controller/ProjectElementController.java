@@ -122,18 +122,6 @@ public class ProjectElementController {
                                    List<RemoveProjectElementReq> removedList,
                                           List<IndexDto> indexDtoList
     ){
-//        createdList.forEach(pe -> {
-//            ProjectElement projectElement = projectElementService.createProjectElement(
-//                    handleProjectElement(loginUser, pe));
-//            Long tempId = pe.getTempId();
-//            Long peId = projectElement.getId();
-//            indexDtoList.stream()
-//                    .filter(idxDto -> {
-//                        Long tempPeId = idxDto.getTempId();
-//                        return tempPeId != null && tempPeId.equals(tempId);
-//                    })
-//                    .forEach(idxDto -> idxDto.setId(peId));
-//        });
         updatedList.forEach(this::handleUpdateProjectElement);
         removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
 
@@ -366,7 +354,7 @@ public class ProjectElementController {
         ) {
             UpdateWorkDetailReq updateWorkDetailReq =  updateProjectElementReq.getUpdateWorkDetailReq();
             WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
-                    updateWorkDetailReq.getWorkDetailId(),
+                    updateWorkDetailReq.getId(),
                     updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
                     updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                     updateWorkDetailReq.getDescription()
