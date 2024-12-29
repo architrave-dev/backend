@@ -2,6 +2,7 @@ package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MemberInfo;
+import com.architrave.portfolio.domain.model.SocialMedia;
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.domain.model.enumType.CountryType;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
@@ -17,6 +18,8 @@ public class MemberInfoBuilder {
     private String email;
     private String contact;
     private String description;
+    private String address;
+    private SocialMedia sns;
 
     public MemberInfoBuilder member(Member member){
         this.member = member;
@@ -54,6 +57,14 @@ public class MemberInfoBuilder {
         this.description = description;
         return this;
     }
+    public MemberInfoBuilder address(String address){
+        this.address = address;
+        return this;
+    }
+    public MemberInfoBuilder sns(SocialMedia sns){
+        this.sns = sns;
+        return this;
+    }
 
 
     /**
@@ -77,7 +88,9 @@ public class MemberInfoBuilder {
                 this.year,
                 this.email,
                 this.contact,
-                this.description
+                this.description,
+                this.address,
+                this.sns
         );
     }
     private void validateMemberInfo(){

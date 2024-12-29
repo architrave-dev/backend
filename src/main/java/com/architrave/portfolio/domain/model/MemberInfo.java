@@ -31,6 +31,9 @@ public class MemberInfo extends BaseEntity{
     private String email;
     private String contact;
     private String description;
+    private String address;
+    @Embedded
+    private SocialMedia sns;
 
 
     public static MemberInfo createMemberInfo(
@@ -41,7 +44,9 @@ public class MemberInfo extends BaseEntity{
             Integer year,
             String email,
             String contact,
-            String description
+            String description,
+            String address,
+            SocialMedia sns
     ){
         MemberInfo memberInfo = new MemberInfo();
         memberInfo.member = member;
@@ -52,6 +57,8 @@ public class MemberInfo extends BaseEntity{
         memberInfo.email = email;
         memberInfo.contact = contact;
         memberInfo.description = description;
+        memberInfo.address = address;
+        memberInfo.sns = sns;
         return memberInfo;
     }
 

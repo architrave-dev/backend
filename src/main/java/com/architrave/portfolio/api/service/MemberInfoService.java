@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MemberInfo;
+import com.architrave.portfolio.domain.model.SocialMedia;
 import com.architrave.portfolio.domain.model.builder.MemberInfoBuilder;
 import com.architrave.portfolio.domain.model.enumType.CountryType;
 import com.architrave.portfolio.domain.repository.MemberInfoRepository;
@@ -59,6 +60,22 @@ public class MemberInfoService {
         return memberInfo;
     }
 
+    @Transactional
+    public MemberInfo updateContact(
+            Long memberInfoId,
+            String address,
+            String email,
+            String contact,
+            SocialMedia socialMedia
+    ) {
+        MemberInfo memberInfo = findMIById(memberInfoId);
+        if(!memberInfo.getAddress().equals(address)) memberInfo.setAddress(address);
+        if(!memberInfo.getEmail().equals(email)) memberInfo.setEmail(email);
+        if(!memberInfo.getContact().equals(contact)) memberInfo.setContact(contact);
+        if(!memberInfo.getSns().equals(socialMedia)) memberInfo.setSns(socialMedia);
+        return memberInfo;
+    }
+
     /**
      * 내부용
      * @param  memberInfoId
@@ -92,6 +109,8 @@ public class MemberInfoService {
                 .year(0)
                 .contact("")
                 .description("")
+                .address("")
+                .sns(new SocialMedia())
                 .build();
 
         memberInfoRepository.save(defaultMI);
