@@ -63,7 +63,8 @@ public class OpenApiConfig {
                 .addTagsItem(new Tag().name("07. WorkDetail"))
                 .addTagsItem(new Tag().name("08. Career"))
                 .addTagsItem(new Tag().name("09. Billboard"))
-                .addTagsItem(new Tag().name("10. MemberInfo"));
+                .addTagsItem(new Tag().name("10. MemberInfo"))
+                .addTagsItem(new Tag().name("11. Contact"));
     }
 
     @Bean
