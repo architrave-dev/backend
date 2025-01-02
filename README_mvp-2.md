@@ -6,21 +6,25 @@ Architrave is a portfolio web service that empowers contemporary artists\
 to directly manage their projects and works.
 
 ## Now Status
-MVP-3 released.
+MVP-2 released.
 
 Contact us for a test Artist ID
 
 ## Key Features
-### MVP-3
-Separate logic for verifying website owner with AOP.  \
-Implement CI/CD pipelines through GitHub Actions.  \
-Domain settings with AWS Route53.  \
-Use HTTPS with CloudFront(FE) and ALB(BE).  \
-Establish a system of prefix for image files in S3.  \
+### MVP-2
+Automatically token renewal using RefreshToken when AccessToken expires. \
+Project delete feature. \
+Resize feature for Work type in ProjectElement. \
+Create Works page. 
+- Sync with Work added when creating ProjectElement.
+
+Create About page.
+- Manage profile photo, name, nationality, email, and contact with MemberInfo
+- Manage artist's career history with Career
 
 ### APIs
-- [Swagger API](https://api.architrive.com/swagger-ui/index.html)
-  
+- [Swagger API](http://43.202.45.205:8080/swagger-ui/index.html)
+
 ## Tech Stack
 - Java with Spring Boot
 - Spring Data JPA, AWS RDS: PostgreSQL for DB
@@ -29,15 +33,13 @@ Establish a system of prefix for image files in S3.  \
 
 ## Settings
 ### ERD
-![arch_mvp-3 ERD]()
+![arch_mvp-2 ERD](https://github.com/user-attachments/assets/a8e80292-455e-4c80-b7eb-3b0347234e3b)
 
 
 ### Architecture
-![arch_mvp-3_Architecture]()
+![arch_mvp-2_Architecture](https://github.com/user-attachments/assets/c5efd860-57ed-4009-9554-b08114b74d8a)
 
 ## Considerations 
-### About AOP
-[Owner Verification as a Cross-Cutting Concern](https://github.com/architrave-dev/backend/wiki/Apply-AOP#ownercheck)
 ### About Auth
 [AccessToken and RefreshToken Usage Flow](https://github.com/architrave-dev/backend/wiki/About-Auth#mvp-2)
 ### About Deploy
