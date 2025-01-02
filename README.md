@@ -12,11 +12,11 @@ Contact us for a test Artist ID
 
 ## Key Features
 ### MVP-3
-Separate logic for verifying website owner with AOP.  \
-Implement CI/CD pipelines through GitHub Actions.  \
-Domain settings with AWS Route53.  \
-Use HTTPS with CloudFront(FE) and ALB(BE).  \
-Establish a system of prefix for image files in S3.  \
+- Separate logic for verifying website owner with AOP.  
+- Implement CI/CD pipelines through GitHub Actions.  
+- Domain settings with AWS Route53.  
+- Use HTTPS with CloudFront(FE) and ALB(BE).  
+- Establish a system of prefix for image files in S3.  
 
 ### APIs
 - [Swagger API](https://api.architrive.com/swagger-ui/index.html)
@@ -29,11 +29,14 @@ Establish a system of prefix for image files in S3.  \
 
 ## Settings
 ### ERD
-![arch_mvp-3 ERD]()
+![arch_mvp-3 ERD](https://github.com/user-attachments/assets/6f400435-4201-466f-b759-8cdaf7dcba67)
+
 
 
 ### Architecture
-![arch_mvp-3_Architecture]()
+![arch_mvp-3_Architecture](https://github.com/user-attachments/assets/0a7fa600-405e-46ee-bdd6-fbb610897052)
+
+
 
 ## Considerations 
 ### About AOP
