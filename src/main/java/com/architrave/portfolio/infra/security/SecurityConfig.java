@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, AWS_WHITELIST).permitAll()
                 .requestMatchers("/api/v1/auth/**", "/error").permitAll()
                 .requestMatchers(HttpMethod.GET, CLIENT_WHITELIST).permitAll()
+                .requestMatchers(HttpMethod.GET, USER_WHITELIST).hasRole("USER")    // setting의 경우 USER만 가능
                 .requestMatchers(HttpMethod.POST, USER_WHITELIST).hasRole("USER")
                 .requestMatchers(HttpMethod.PUT, USER_WHITELIST).hasRole("USER")
                 .requestMatchers(HttpMethod.DELETE, USER_WHITELIST).hasRole("USER")
@@ -98,6 +99,7 @@ public class SecurityConfig {
             "/api/v1/career",
             "/api/v1/member-info",
             "/api/v1/contact",
+            "/api/v1/setting",
             "/pre-signed-url",
     };
 }
