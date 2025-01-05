@@ -25,18 +25,12 @@ public class Setting {
     @Embedded
     private MenuVisible menuVisible;
 
-    public static Setting createSetting(Member member, String pageName,  Boolean pageVisible, Boolean projects, Boolean works, Boolean about, Boolean contact) {
+    public static Setting createSetting(Member member, String pageName,  Boolean pageVisible, MenuVisible menuVisible) {
 
         Setting setting = new Setting();
         setting.member = member;
         setting.pageName = pageName;
         setting.pageVisible = pageVisible;
-        MenuVisible menuVisible = new MenuVisible(
-                projects,
-                works,
-                about,
-                contact
-        );
         setting.menuVisible = menuVisible;
 
         return setting;

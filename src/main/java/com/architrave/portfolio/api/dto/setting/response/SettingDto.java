@@ -12,10 +12,7 @@ public class SettingDto {
     // ----- Setting 관련 -----
     private String pageName;
     private Boolean pageVisible;
-    private Boolean projects;
-    private Boolean works;
-    private Boolean about;
-    private Boolean contact;
+    private MenuVisible menuVisible;
 
     // ----- Member 관련 -----
     private String email;
@@ -25,11 +22,7 @@ public class SettingDto {
     public SettingDto(Setting setting, Member member) {
         this.pageName = setting.getPageName();
         this.pageVisible = setting.getPageVisible();
-        this.projects = setting.getMenuVisible().getProjects();
-        this.works = setting.getMenuVisible().getWorks();
-        this.about = setting.getMenuVisible().getAbout();
-        this.contact = setting.getMenuVisible().getContact();
-
+        this.menuVisible = setting.getMenuVisible();
         this.email = member.getEmail();
         this.aui = member.getAui();
         this.password = member.getPassword();

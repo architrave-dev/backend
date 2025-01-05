@@ -46,10 +46,7 @@ public class SettingService {
                 .member(member)
                 .pageName(member.getUsername())
                 .pageVisible(true)
-                .projects(true)
-                .works(true)
-                .about(true)
-                .contact(true)
+                .menuVisible(new MenuVisible(true, true, true, true))
                 .build();
 
         return settingRepository.save(defaultSetting);
