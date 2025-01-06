@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.setting.request;
 
+import com.architrave.portfolio.domain.model.MenuVisible;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +14,5 @@ public class UpdateSettingReq {
     private Long id;
     private String pageName;
     private Boolean pageVisible;
-    private Boolean projects;
-    private Boolean works;
-    private Boolean about;
-    private Boolean contact;
+    private MenuVisible menuVisible;
 }

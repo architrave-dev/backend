@@ -20,6 +20,7 @@ public class SettingDto {
     private String password;
 
     public SettingDto(Setting setting, Member member) {
+        this.id = setting.getId();
         this.pageName = setting.getPageName();
         this.pageVisible = setting.getPageVisible();
         this.menuVisible = setting.getMenuVisible();

@@ -58,10 +58,10 @@ public class SettingController {
                 updateSettingReq.getId(),
                 updateSettingReq.getPageName(),
                 updateSettingReq.getPageVisible(),
-                updateSettingReq.getProjects(),
-                updateSettingReq.getWorks(),
-                updateSettingReq.getAbout(),
-                updateSettingReq.getContact()
+                updateSettingReq.getMenuVisible().getProjects(),
+                updateSettingReq.getMenuVisible().getWorks(),
+                updateSettingReq.getMenuVisible().getAbout(),
+                updateSettingReq.getMenuVisible().getContact()
         );
 
         return ResponseEntity
