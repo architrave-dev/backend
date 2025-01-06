@@ -27,16 +27,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/setting")
 public class SettingController {
 
+    private final MemberService memberService;
     private final SettingService settingService;
     private final OwnerContextHolder ownerContextHolder;
 
     @Operation(summary = "member로  Setting 조회하기")
     @GetMapping
-    @OwnerCheck
     public ResponseEntity<ResultDto<SettingDto>> getSetting(
-            @RequestParam("aui") String aui     // aop OwnerCheck 에서 사용.
+            @RequestParam("aui") String aui
     ){
-        Member owner = ownerContextHolder.getOwner();
+        Member owner = memberService.findMemberByAui(aui);
+
         Setting setting = settingService.findSettingByMember(owner);
 
         return ResponseEntity

@@ -17,7 +17,6 @@ public class SettingDto {
     // ----- Member 관련 -----
     private String email;
     private String aui;
-    private String password;
 
     public SettingDto(Setting setting, Member member) {
         this.id = setting.getId();
@@ -26,6 +25,5 @@ public class SettingDto {
         this.menuVisible = setting.getMenuVisible();
         this.email = member.getEmail();
         this.aui = member.getAui();
-        this.password = member.getPassword();
     }
 }
