@@ -13,6 +13,8 @@ public class CreateProjectInfoReq {
 
     @NotNull
     private Long tempId;
+    @NotNull
+    private Long projectId;
     @NotEmpty
     private String customName;
     @NotEmpty
