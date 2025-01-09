@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "08. Career")  // => swagger 이름
+@Tag(name = "09. Career")  // => swagger 이름
 @Trace
 @RestController
 @RequiredArgsConstructor

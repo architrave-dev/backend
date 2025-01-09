@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "10. MemberInfo")  // => swagger 이름
+@Tag(name = "11. MemberInfo")  // => swagger 이름
 @Trace
 @RestController
 @RequestMapping("/api/v1/member-info")

@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "06. WorkPropertyVisible")  // => swagger 이름
+@Tag(name = "07. WorkPropertyVisible")  // => swagger 이름
 @Slf4j
 @Trace
 @RestController
