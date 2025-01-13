@@ -2,9 +2,7 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.career.request.CreateCareerReq;
-import com.architrave.portfolio.api.dto.career.request.RemoveCareerReq;
 import com.architrave.portfolio.api.dto.career.request.UpdateCareerReq;
-import com.architrave.portfolio.api.dto.career.request.UpdatedCareerListReq;
 import com.architrave.portfolio.api.dto.career.response.CareerDto;
 import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
@@ -51,58 +49,54 @@ public class CareerController {
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(result));
     }
-
-    @Operation(summary = "작가의 Career 수정하기",
-            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
-                    "1. 새롭게 추가되는 Career 리스트 <br />" +
-                    "2. 기존 Career 변경 리스트 <br />" +
-                    "3. 삭제되는 Career 리스트를 받습니다. ")
-    @PutMapping
+    @Operation(summary = "작가의 Career 생성하기")
+    @PostMapping
     @OwnerCheck
-    public ResponseEntity<ResultDto<List<CareerDto>>> updateCareerList(
+    public ResponseEntity<ResultDto<CareerDto>> createCareer(
             @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
-            @Valid @RequestBody UpdatedCareerListReq updatedCareerListReq
+            @Valid @RequestBody CreateCareerReq createCareerReq
     ){
         Member owner = ownerContextHolder.getOwner();
 
-        handleUpdateCareer(
+        Career created = careerService.createCareer(
                 owner,
-                updatedCareerListReq.getCreateCareerReqList(),
-                updatedCareerListReq.getUpdateCareerReqList(),
-                updatedCareerListReq.getRemoveCareerReqList()
+                createCareerReq.getCareerType(),
+                createCareerReq.getContent(),
+                createCareerReq.getYearFrom()
         );
 
-        List<Career> updatedCareerList = careerService.findCareerByMember(owner);
-        List<CareerDto> result = updatedCareerList.stream()
-                .map((c) -> new CareerDto(c))
-                .collect(Collectors.toList());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(result));
+                .body(new ResultDto<>(new CareerDto(created)));
     }
-
-    private void handleUpdateCareer(
-            Member loginUser,
-            List<CreateCareerReq> createCareerReqList,
-            List<UpdateCareerReq> updateCareerReqList,
-            List<RemoveCareerReq> removeCareerReqList
+    @Operation(summary = "작가의 Career 수정하기")
+    @PutMapping
+    @OwnerCheck
+    public ResponseEntity<ResultDto<CareerDto>> updateCareer(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateCareerReq updateCareerReq
     ){
-        //이러면 Transactional을 갯수만큼 열었다가 닫았다 하는거 아님...?
-        createCareerReqList.stream()
-                .forEach((c) -> careerService.createCareer(
-                        loginUser,
-                        c.getCareerType(),
-                        c.getContent(),
-                        c.getYearFrom()
-                ));
-        updateCareerReqList.stream()
-                .forEach((c) -> careerService.updateCareer(
-                        c.getCareerId(),
-                        c.getContent(),
-                        c.getYearFrom()
-                ));
-        removeCareerReqList.stream()
-                .forEach((c) -> careerService.removeCareerById(c.getCareerId())
-                );
+        Career updated = careerService.updateCareer(
+                updateCareerReq.getCareerId(),
+                updateCareerReq.getContent(),
+                updateCareerReq.getYearFrom()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new CareerDto(updated)));
+    }
+    @Operation(summary = "작가의 Career 삭제하기")
+    @DeleteMapping
+    @OwnerCheck
+    public ResponseEntity<ResultDto<String>> deleteCareer(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @RequestParam("careerId") Long targetId
+    ){
+        careerService.removeCareerById(targetId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("delete career success"));
     }
 }
