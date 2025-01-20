@@ -1,7 +1,7 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
+import com.architrave.portfolio.domain.model.enumType.DisplayAlignment;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +16,5 @@ public class UpdateWorkProjectElementReq {
     @NotNull
     private Long projectId;
     private UpdateWorkReq updateWorkReq;
-    private WorkAlignment workAlignment;
+    private DisplayAlignment displayAlignment;
 }

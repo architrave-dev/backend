@@ -1,5 +1,5 @@
 package com.architrave.portfolio.domain.model.enumType;
 
-public enum TextBoxAlignment {
+public enum TextAlignment {
     LEFT, CENTER, RIGHT
 }

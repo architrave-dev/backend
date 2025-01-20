@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemoveProjectElementReq {
+public class DeleteProjectElementReq {
     @NotNull
     private Long projectElementId;
 }

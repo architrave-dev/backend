@@ -70,44 +70,44 @@ public class ProjectElementController {
                 ));
     }
 
-    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
-            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
-                    "1. 새롭게 추가되는 ProjectElement 리스트 <br />" +
-                    "2. 기존 ProjectElement 변경 리스트 <br />" +
-                    "3. 삭제되는 ProjectElement 리스트를 받습니다. "
-    )
-    @PutMapping
-    @OwnerCheck
-    public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
-            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
-            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
-    ) {
-        Member owner = ownerContextHolder.getOwner();
-
-        //projectElementList 업데이트
-        List<IndexDto> indexDtoList = updateProjectElementList(owner,
-                updateProjectElementListReq.getUpdatedProjectElements(),
-                updateProjectElementListReq.getRemovedProjectElements(),
-                updateProjectElementListReq.getPeIndexList()
-        );
-
-        String peIndex = convertToStringUsingMap(indexDtoList);
-        Project targetProject = projectService.updatePeIndex(updateProjectElementListReq.getProjectId(), peIndex);
-
-        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
-
-        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
-                .map((pe) -> new ProjectElementDto(pe))
-                .collect(Collectors.toList());
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>(
-                        new ProjectElementListDto(
-                                peIndex,
-                                projectElementDtoList
-                )));
-    }
+//    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
+//            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
+//                    "1. 새롭게 추가되는 ProjectElement 리스트 <br />" +
+//                    "2. 기존 ProjectElement 변경 리스트 <br />" +
+//                    "3. 삭제되는 ProjectElement 리스트를 받습니다. "
+//    )
+//    @PutMapping
+//    @OwnerCheck
+//    public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
+//            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+//            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
+//    ) {
+//        Member owner = ownerContextHolder.getOwner();
+//
+//        //projectElementList 업데이트
+//        List<IndexDto> indexDtoList = updateProjectElementList(owner,
+//                updateProjectElementListReq.getUpdatedProjectElements(),
+//                updateProjectElementListReq.getRemovedProjectElements(),
+//                updateProjectElementListReq.getPeIndexList()
+//        );
+//
+//        String peIndex = convertToStringUsingMap(indexDtoList);
+//        Project targetProject = projectService.updatePeIndex(updateProjectElementListReq.getProjectId(), peIndex);
+//
+//        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
+//
+//        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
+//                .map((pe) -> new ProjectElementDto(pe))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(new ResultDto<>(
+//                        new ProjectElementListDto(
+//                                peIndex,
+//                                projectElementDtoList
+//                )));
+//    }
 
     private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
         return indexDtoList.stream()
@@ -117,16 +117,16 @@ public class ProjectElementController {
                 .collect(Collectors.joining("_"));
     }
 
-    private List<IndexDto> updateProjectElementList(Member loginUser,
-                                   List<UpdateProjectElementReq> updatedList,
-                                   List<RemoveProjectElementReq> removedList,
-                                          List<IndexDto> indexDtoList
-    ){
-        updatedList.forEach(this::handleUpdateProjectElement);
-        removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
-
-        return indexDtoList;
-    }
+//    private List<IndexDto> updateProjectElementList(Member loginUser,
+//                                   List<UpdateProjectElementReq> updatedList,
+//                                   List<DeleteProjectElementReq> removedList,
+//                                          List<IndexDto> indexDtoList
+//    ){
+//        updatedList.forEach(this::handleUpdateProjectElement);
+//        removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
+//
+//        return indexDtoList;
+//    }
 
     /**
      * Import ProjectElement with Work
@@ -148,8 +148,8 @@ public class ProjectElementController {
         ProjectElement projectElement = new WorkInProjectBuilder()
                 .project(project)
                 .work(work)
-                .workAlignment(createProjectElementWithWorkReq.getWorkAlignment())
-                .workDisplaySize(createProjectElementWithWorkReq.getWorkDisplaySize())
+                .workAlignment(createProjectElementWithWorkReq.getDisplayAlignment())
+                .workDisplaySize(createProjectElementWithWorkReq.getDisplaySize())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -189,10 +189,6 @@ public class ProjectElementController {
                 .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
     }
 
-    /**
-     * 단건 ProjectElement 생성
-     * ProjectElement를 생성하고 리턴한다.
-     */
     @Operation(summary = "단건 ProjectElement 생성하기")
     @OwnerCheck
     @PostMapping
@@ -203,36 +199,41 @@ public class ProjectElementController {
         Member owner = ownerContextHolder.getOwner();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(
-                handleProjectElement(owner, createProjectElementReq));
+                handleCreateProjectElement(owner, createProjectElementReq));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new ProjectElementDto(createdProjectElement)));
     }
 
-//    /**
-//     * 향후에 변경되더라도
-//     * 현재는 project 내의 projectElement 변경사항 쿼리를 한 번에 보내지 않는다.
-//     * projectElment를 하나씩 보내기 때문에 단건 delete
-//     */
-//    @Operation(summary = "특정 Project 내의 ProjectElement 삭제하기")
-//    @Deprecated
-//    @DeleteMapping
-//    public ResponseEntity<ResultDto<String>> deleteProjectElement(
-//            @RequestParam("aui") String aui,
-//            @Valid @RequestBody RemoveProjectElementReq removeProjectElementReq
-//    ){
-//        Member loginUser = authService.getMemberFromContext();
-//        if(!loginUser.getAui().equals(aui)){
-//            throw new UnauthorizedException("loginUser is not page owner");
-//        }
-//        projectElementService.removeById(removeProjectElementReq.getId());
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(new ResultDto<>("delete success"));
-//    }
-//
+    @Operation(summary = "단건 ProjectElement 수정하기")
+    @OwnerCheck
+    @PutMapping
+    public ResponseEntity<ResultDto<ProjectElementDto>> updateProjectElement(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateProjectElementReq updateProjectElementReq
+    ){
+        ProjectElement updated = handleUpdateProjectElement(updateProjectElementReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new ProjectElementDto(updated)));
+    }
+
+    @Operation(summary = "단건 ProjectElement 삭제하기")
+    @OwnerCheck
+    @DeleteMapping
+    public ResponseEntity<ResultDto<String>> deleteProjectElement(
+            @RequestParam("aui") String aui, // aop OwnerCheck 에서 사용.
+            @RequestParam("peId") Long targetId
+    ){
+        projectElementService.removeById(targetId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("delete project-element success"));
+    }
+
 //    /**
 //     * 전체 순서변경을 지금 만들어야하나...?
 //     * 프론트에게 미안하더라도 일단 하나씩 하자.
@@ -246,7 +247,7 @@ public class ProjectElementController {
 //    private void changeOrderAtOnce(){}
 //
 
-    private ProjectElement handleProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
+    private ProjectElement handleCreateProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());
         ProjectElementType elementType = createProjectElementReq.getProjectElementType();
         ProjectElement projectElement = null;
@@ -269,8 +270,8 @@ public class ProjectElementController {
             projectElement = new WorkInProjectBuilder()
                     .project(project)
                     .work(work)
-                    .workAlignment(createProjectElementReq.getWorkAlignment())
-                    .workDisplaySize(createProjectElementReq.getWorkDisplaySize())
+                    .workAlignment(createProjectElementReq.getDisplayAlignment())
+                    .workDisplaySize(createProjectElementReq.getDisplaySize())
                     .build();
         }else if(elementType.equals(ProjectElementType.DETAIL)){
             CreateWorkDetailReq createWorkDetailReq = createProjectElementReq.getCreateWorkDetailReq();
@@ -284,8 +285,8 @@ public class ProjectElementController {
             projectElement = new WorkDetailInProjectBuilder()
                     .project(project)
                     .workDetail(workDetail)
-                    .workDetailAlignment(createProjectElementReq.getWorkDetailAlignment())
-                    .workDetailDisplaySize(createProjectElementReq.getWorkDetailDisplaySize())
+                    .workDetailAlignment(createProjectElementReq.getDisplayAlignment())
+                    .workDetailDisplaySize(createProjectElementReq.getDisplaySize())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -296,7 +297,7 @@ public class ProjectElementController {
             projectElement = new TextBoxInProjectBuilder()
                     .project(project)
                     .textBox(textBox)
-                    .textBoxAlignment(createProjectElementReq.getTextBoxAlignment())
+                    .textBoxAlignment(createProjectElementReq.getTextAlignment())
                     .build();
         }else if(elementType.equals(ProjectElementType.DOCUMENT)){
             CreateDocumentReq createDocumentReq = createProjectElementReq.getCreateDocumentReq();
@@ -308,7 +309,7 @@ public class ProjectElementController {
             projectElement = new DocumentInProjectBuilder()
                     .project(project)
                     .document(document)
-                    .documentAlignment(createProjectElementReq.getDocumentAlignment())
+                    .documentAlignment(createProjectElementReq.getDisplayAlignment())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
             projectElement = new DividerInProjectBuilder()
@@ -319,7 +320,8 @@ public class ProjectElementController {
         return projectElement;
     }
 
-    private void handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){ //work일 경우
+    private ProjectElement handleUpdateProjectElement(UpdateProjectElementReq updateProjectElementReq){ //work일 경우
+        ProjectElement projectElement;
         if(updateProjectElementReq.getUpdateWorkReq() != null) {
             UpdateWorkReq updateWorkReq = updateProjectElementReq.getUpdateWorkReq();
             Work updatedWork = workService.updateWork(
@@ -336,11 +338,11 @@ public class ProjectElementController {
                     updateWorkReq.getCollection()
             );
             // updated 된 work를 전달
-            projectElementService.updateProjectElementWork(
+            projectElement = projectElementService.updateProjectElementWork(
                     updatedWork,
                     updateProjectElementReq.getProjectElementId(),
-                    updateProjectElementReq.getWorkAlignment(),
-                    updateProjectElementReq.getWorkDisplaySize()
+                    updateProjectElementReq.getDisplayAlignment(),
+                    updateProjectElementReq.getDisplaySize()
             );
         }
         else if(updateProjectElementReq.getUpdateWorkDetailReq() != null) { //workDetail일 경우
@@ -353,11 +355,11 @@ public class ProjectElementController {
             );
 
             // updated 된 workDetail를 전달
-            projectElementService.updateProjectElementWorkDetail(
+            projectElement = projectElementService.updateProjectElementWorkDetail(
                     updatedWorkDetail,
                     updateProjectElementReq.getProjectElementId(),
-                    updateProjectElementReq.getWorkDetailAlignment(),
-                    updateProjectElementReq.getWorkDetailDisplaySize()
+                    updateProjectElementReq.getDisplayAlignment(),
+                    updateProjectElementReq.getDisplaySize()
             );
         }
         else if(updateProjectElementReq.getUpdateTextBoxReq() != null)  //textBox일 경우
@@ -368,10 +370,10 @@ public class ProjectElementController {
                     updateTextBoxReq.getContent()
             );
             // updated 된 textBox 를 전달
-            projectElementService.updateProjectElementTextBox(
+            projectElement = projectElementService.updateProjectElementTextBox(
                     updatedTextBox,
                     updateProjectElementReq.getProjectElementId(),
-                    updateProjectElementReq.getTextBoxAlignment()
+                    updateProjectElementReq.getTextAlignment()
             );
         }
         else if(updateProjectElementReq.getUpdateDocumentReq() != null) //Document일 경우
@@ -384,18 +386,19 @@ public class ProjectElementController {
                     updateDocumentReq.getUpdateUploadFileReq().getThumbnailUrl()
             );
 
-            // updated 된 textBox 를 전달
-            projectElementService.updateProjectElementDocument(
+            // updated 된 document 를 전달
+            projectElement = projectElementService.updateProjectElementDocument(
                     updatedDocument,
                     updateProjectElementReq.getProjectElementId(),
-                    updateProjectElementReq.getDocumentAlignment()
+                    updateProjectElementReq.getDisplayAlignment()
             );
         }
         else{   //divider 일 경우
-            projectElementService.updateProjectElementDivider(
+            projectElement = projectElementService.updateProjectElementDivider(
                     updateProjectElementReq.getProjectElementId(),
                     updateProjectElementReq.getDividerType()
             );
         }
+        return projectElement;
     }
 }

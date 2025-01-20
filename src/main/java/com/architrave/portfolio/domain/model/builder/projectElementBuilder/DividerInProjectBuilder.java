@@ -2,9 +2,7 @@ package com.architrave.portfolio.domain.model.builder.projectElementBuilder;
 
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
-import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.enumType.DividerType;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 

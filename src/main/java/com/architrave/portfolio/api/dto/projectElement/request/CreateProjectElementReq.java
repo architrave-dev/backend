@@ -22,20 +22,13 @@ public class CreateProjectElementReq {
     @NotNull
     private ProjectElementType projectElementType;
 
-    //work 일 경우
     private CreateWorkReq createWorkReq;
-    private WorkAlignment workAlignment;
-    private WorkDisplaySize workDisplaySize;
-    //workDetail 일 경우
     private CreateWorkDetailReq createWorkDetailReq;
-    private WorkAlignment workDetailAlignment;
-    private WorkDisplaySize workDetailDisplaySize;
-    //textbox 일 경우
     private CreateTextBoxReq createTextBoxReq;
-    private TextBoxAlignment textBoxAlignment;
-    //document 일 경우
     private CreateDocumentReq createDocumentReq;
-    private WorkAlignment documentAlignment;
-    //divider일 경우
     private DividerType dividerType;
+
+    private DisplayAlignment displayAlignment;
+    private DisplaySize displaySize;
+    private TextAlignment textAlignment;
 }
