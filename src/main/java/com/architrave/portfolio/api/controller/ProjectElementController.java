@@ -178,8 +178,8 @@ public class ProjectElementController {
         ProjectElement projectElement = new WorkDetailInProjectBuilder()
                 .project(project)
                 .workDetail(workDetail)
-                .workDetailAlignment(createProjectElementWithWorkDetailReq.getWorkDetailAlignment())
-                .workDetailDisplaySize(createProjectElementWithWorkDetailReq.getWorkDetailDisplaySize())
+                .workDetailAlignment(createProjectElementWithWorkDetailReq.getDisplayAlignment())
+                .workDetailDisplaySize(createProjectElementWithWorkDetailReq.getDisplaySize())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
