@@ -1,8 +1,7 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
-import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
-import com.architrave.portfolio.domain.model.enumType.WorkAlignment;
-import com.architrave.portfolio.domain.model.enumType.WorkDisplaySize;
+import com.architrave.portfolio.domain.model.enumType.DisplayAlignment;
+import com.architrave.portfolio.domain.model.enumType.DisplaySize;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +15,6 @@ public class CreateProjectElementWithWorkReq {
     private Long projectId;
     @NotNull
     private Long workId;
-    private WorkAlignment workAlignment;
-    private WorkDisplaySize workDisplaySize;
+    private DisplayAlignment displayAlignment;
+    private DisplaySize displaySize;
 }

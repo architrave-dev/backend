@@ -94,27 +94,27 @@ public class ProjectElementIntegrationTest {
         ProjectElement workPe = new WorkInProjectBuilder()
                 .project(testProject)
                 .work(testWork)
-                .workAlignment(WorkAlignment.CENTER)
-                .workDisplaySize(WorkDisplaySize.BIG)
+                .workAlignment(DisplayAlignment.CENTER)
+                .workDisplaySize(DisplaySize.BIG)
                 .build();
         ProjectElement created = projectElementService.createProjectElement(workPe);
 
         //verify
         assertThat(created).isNotNull();
         assertThat(created.getWork()).isEqualTo(testWork);
-        assertThat(created.getWorkAlignment()).isEqualTo(WorkAlignment.CENTER);
+        assertThat(created.getDisplayAlignment()).isEqualTo(DisplayAlignment.CENTER);
 
         //Update
         ProjectElement updated = projectElementService.updateProjectElementWork(
                 testWork,
                 created.getId(),
-                WorkAlignment.LEFT,
+                DisplayAlignment.LEFT,
                 null
         );
         //verify
         assertThat(updated).isNotNull();
         assertThat(updated.getWork()).isEqualTo(testWork);
-        assertThat(updated.getWorkAlignment()).isEqualTo(WorkAlignment.LEFT);
+        assertThat(updated.getDisplayAlignment()).isEqualTo(DisplayAlignment.LEFT);
 
         //Update2
 
@@ -132,27 +132,27 @@ public class ProjectElementIntegrationTest {
         ProjectElement textBoxPe = new TextBoxInProjectBuilder()
                 .project(testProject)
                 .textBox(testTextBox)
-                .textBoxAlignment(TextBoxAlignment.CENTER)
+                .textBoxAlignment(TextAlignment.CENTER)
                 .build();
         ProjectElement created = projectElementService.createProjectElement(textBoxPe);
 
         //verify
         assertThat(created).isNotNull();
         assertThat(created.getWork()).isNull();
-        assertThat(created.getWorkAlignment()).isNull();
+        assertThat(created.getDisplayAlignment()).isNull();
         assertThat(created.getTextBox()).isEqualTo(testTextBox);
-        assertThat(created.getTextBoxAlignment()).isEqualTo(TextBoxAlignment.CENTER);
+        assertThat(created.getTextAlignment()).isEqualTo(TextAlignment.CENTER);
 
         //Update
         ProjectElement updated = projectElementService.updateProjectElementTextBox(
                 testTextBox,
                 created.getId(),
-                TextBoxAlignment.LEFT
+                TextAlignment.LEFT
         );
         //verify
         assertThat(updated).isNotNull();
         assertThat(updated.getTextBox()).isEqualTo(testTextBox);
-        assertThat(updated.getTextBoxAlignment()).isEqualTo(TextBoxAlignment.LEFT);
+        assertThat(updated.getTextAlignment()).isEqualTo(TextAlignment.LEFT);
 
         //Update2
 
@@ -169,31 +169,31 @@ public class ProjectElementIntegrationTest {
         ProjectElement documentPe = new DocumentInProjectBuilder()
                 .project(testProject)
                 .document(testDocument)
-                .documentAlignment(WorkAlignment.CENTER)
+                .documentAlignment(DisplayAlignment.CENTER)
                 .build();
         ProjectElement created = projectElementService.createProjectElement(documentPe);
 
         //verify
         assertThat(created).isNotNull();
         assertThat(created.getWork()).isNull();
-        assertThat(created.getWorkAlignment()).isNull();
+        assertThat(created.getDisplayAlignment()).isNull();
         assertThat(created.getTextBox()).isNull();
-        assertThat(created.getTextBoxAlignment()).isNull();
+        assertThat(created.getTextAlignment()).isNull();
         assertThat(created.getDocument()).isEqualTo(testDocument);
-        assertThat(created.getDocumentAlignment()).isEqualTo(WorkAlignment.CENTER);
+        assertThat(created.getDocumentAlignment()).isEqualTo(DisplayAlignment.CENTER);
 
 
         ProjectElement updated = projectElementService.updateProjectElementDocument(
                 testDocument,
                 created.getId(),
-                WorkAlignment.LEFT
+                DisplayAlignment.LEFT
         );
         //verify
         assertThat(updated).isNotNull();
         assertThat(updated.getTextBox()).isNull();
-        assertThat(updated.getTextBoxAlignment()).isNull();
+        assertThat(updated.getTextAlignment()).isNull();
         assertThat(updated.getDocument()).isEqualTo(testDocument);
-        assertThat(updated.getDocumentAlignment()).isEqualTo(WorkAlignment.LEFT);
+        assertThat(updated.getDocumentAlignment()).isEqualTo(DisplayAlignment.LEFT);
 
         //Remove
         projectElementService.removeById(updated.getId());
@@ -208,22 +208,22 @@ public class ProjectElementIntegrationTest {
         ProjectElement textBoxPe = new TextBoxInProjectBuilder()
                 .project(testProject)
                 .textBox(testTextBox)
-                .textBoxAlignment(TextBoxAlignment.CENTER)
+                .textBoxAlignment(TextAlignment.CENTER)
                 .build();
         projectElementService.createProjectElement(textBoxPe);
 
         ProjectElement workPe = new WorkInProjectBuilder()
                 .project(testProject)
                 .work(testWork)
-                .workAlignment(WorkAlignment.CENTER)
-                .workDisplaySize(WorkDisplaySize.BIG)
+                .workAlignment(DisplayAlignment.CENTER)
+                .workDisplaySize(DisplaySize.BIG)
                 .build();
         projectElementService.createProjectElement(workPe);
 
         ProjectElement documentPe = new DocumentInProjectBuilder()
                 .project(testProject)
                 .document(testDocument)
-                .documentAlignment(WorkAlignment.CENTER)
+                .documentAlignment(DisplayAlignment.CENTER)
                 .build();
         projectElementService.createProjectElement(documentPe);
 

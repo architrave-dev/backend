@@ -57,15 +57,16 @@ public class OpenApiConfig {
                 .addTagsItem(new Tag().name("01. Auth"))
                 .addTagsItem(new Tag().name("02. Member"))
                 .addTagsItem(new Tag().name("03. Project"))
-                .addTagsItem(new Tag().name("04. ProjectElement"))
-                .addTagsItem(new Tag().name("05. Work"))
-                .addTagsItem(new Tag().name("06. WorkPropertyVisible"))
-                .addTagsItem(new Tag().name("07. WorkDetail"))
-                .addTagsItem(new Tag().name("08. Career"))
-                .addTagsItem(new Tag().name("09. Billboard"))
-                .addTagsItem(new Tag().name("10. MemberInfo"))
-                .addTagsItem(new Tag().name("11. Contact"))
-                .addTagsItem(new Tag().name("12. Setting"));
+                .addTagsItem(new Tag().name("04. ProjectInfo"))
+                .addTagsItem(new Tag().name("05. ProjectElement"))
+                .addTagsItem(new Tag().name("06. Work"))
+                .addTagsItem(new Tag().name("07. WorkPropertyVisible"))
+                .addTagsItem(new Tag().name("08. WorkDetail"))
+                .addTagsItem(new Tag().name("09. Career"))
+                .addTagsItem(new Tag().name("10. Billboard"))
+                .addTagsItem(new Tag().name("11. MemberInfo"))
+                .addTagsItem(new Tag().name("12. Contact"))
+                .addTagsItem(new Tag().name("13. Setting"));
     }
 
     @Bean

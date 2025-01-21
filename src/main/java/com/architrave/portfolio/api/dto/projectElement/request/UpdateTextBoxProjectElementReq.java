@@ -1,7 +1,7 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
-import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
+import com.architrave.portfolio.domain.model.enumType.TextAlignment;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +16,5 @@ public class UpdateTextBoxProjectElementReq {
     @NotNull
     private Long projectId;
     private UpdateTextBoxReq updateTextBoxReq;
-    private TextBoxAlignment textBoxAlignment;
+    private TextAlignment textAlignment;
 }

@@ -41,38 +41,38 @@ public class ProjectElementService {
     @Transactional
     public ProjectElement updateProjectElementWork(Work work,
                                                    Long projectElementId,
-                                                   WorkAlignment workAlignment,
-                                                   WorkDisplaySize workDisplaySize
+                                                   DisplayAlignment displayAlignment,
+                                                   DisplaySize displaySize
     ) {
         ProjectElement projectElement = findById(projectElementId);
         //work 내 변경사항은 이미 완료한 상태
         if(!projectElement.getWork().equals(work)){
            projectElement.setWork(work);
         }
-        if(workAlignment != null){
-            projectElement.setWorkAlignment(workAlignment);
+        if(displayAlignment != null){
+            projectElement.setDisplayAlignment(displayAlignment);
         }
-        if(workDisplaySize != null){
-            projectElement.setWorkDisplaySize(workDisplaySize);
+        if(displaySize != null){
+            projectElement.setDisplaySize(displaySize);
         }
         return projectElement;
     }
     @Transactional
     public ProjectElement updateProjectElementWorkDetail(WorkDetail workDetail,
                                                Long projectElementId,
-                                               WorkAlignment workDetailAlignment,
-                                               WorkDisplaySize workDetailDisplaySize
+                                               DisplayAlignment displayAlignment,
+                                               DisplaySize displaySize
     ){
         ProjectElement projectElement = findById(projectElementId);
         //workDetail 내 변경사항은 이미 완료한 상태
         if(!projectElement.getWorkDetail().equals(workDetail)){
             projectElement.setWorkDetail(workDetail);
         }
-        if(workDetailAlignment != null){
-            projectElement.setWorkDetailAlignment(workDetailAlignment);
+        if(displayAlignment != null){
+            projectElement.setDisplayAlignment(displayAlignment);
         }
-        if(workDetailDisplaySize != null){
-            projectElement.setWorkDetailDisplaySize(workDetailDisplaySize);
+        if(displaySize != null){
+            projectElement.setDisplaySize(displaySize);
         }
         return projectElement;
     }
@@ -80,28 +80,28 @@ public class ProjectElementService {
     @Transactional
     public ProjectElement updateProjectElementTextBox(TextBox textBox,
                                                       Long projectElementId,
-                                                      TextBoxAlignment textBoxAlignment) {
+                                                      TextAlignment textAlignment) {
         ProjectElement projectElement = findById(projectElementId);
         //textBox 내 변경사항은 이미 완료한 상태
         if(!projectElement.getTextBox().equals(textBox)){
             projectElement.setTextBox(textBox);
         }
-        if(!projectElement.getTextBoxAlignment().equals(textBoxAlignment)){
-            projectElement.setTextBoxAlignment(textBoxAlignment);
+        if(!projectElement.getTextAlignment().equals(textAlignment)){
+            projectElement.setTextAlignment(textAlignment);
         }
         return projectElement;
     }
     @Transactional
     public ProjectElement updateProjectElementDocument(Document document,
                                              Long projectElementId,
-                                             WorkAlignment documentAlignment) {
+                                             DisplayAlignment documentAlignment) {
         ProjectElement projectElement = findById(projectElementId);
         //document 내 변경사항은 이미 완료한 상태
         if(!projectElement.getDocument().equals(document)){
             projectElement.setDocument(document);
         }
         if(documentAlignment != null){
-            projectElement.setDocumentAlignment(documentAlignment);
+            projectElement.setDisplayAlignment(documentAlignment);
         }
         return projectElement;
     }

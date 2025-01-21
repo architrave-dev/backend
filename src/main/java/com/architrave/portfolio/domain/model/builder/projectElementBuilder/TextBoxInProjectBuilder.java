@@ -3,7 +3,7 @@ package com.architrave.portfolio.domain.model.builder.projectElementBuilder;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.TextBox;
-import com.architrave.portfolio.domain.model.enumType.TextBoxAlignment;
+import com.architrave.portfolio.domain.model.enumType.TextAlignment;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class TextBoxInProjectBuilder {
     private Project project;
     private TextBox textBox;
-    private TextBoxAlignment textBoxAlignment;
+    private TextAlignment textAlignment;
 
     public TextBoxInProjectBuilder project(Project project){
         this.project = project;
@@ -22,8 +22,8 @@ public class TextBoxInProjectBuilder {
         this.textBox = textBox;
         return this;
     }
-    public TextBoxInProjectBuilder textBoxAlignment(TextBoxAlignment textBoxAlignment){
-        this.textBoxAlignment = textBoxAlignment;
+    public TextBoxInProjectBuilder textBoxAlignment(TextAlignment textAlignment){
+        this.textAlignment = textAlignment;
         return this;
     }
 
@@ -32,11 +32,11 @@ public class TextBoxInProjectBuilder {
         return ProjectElement.createTextBoxElement(
                 project,
                 textBox,
-                textBoxAlignment
+                textAlignment
         );
     }
     private void validateProject(){
-        if(project == null || textBox == null || textBoxAlignment == null ){
+        if(project == null || textBox == null || textAlignment == null ){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

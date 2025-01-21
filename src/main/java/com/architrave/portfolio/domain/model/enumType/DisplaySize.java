@@ -1,5 +1,5 @@
 package com.architrave.portfolio.domain.model.enumType;
 
-public enum WorkAlignment {
-    LEFT, CENTER, RIGHT
+public enum DisplaySize {
+    BIG, REGULAR, SMALL
 }

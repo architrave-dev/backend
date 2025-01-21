@@ -1,6 +1,5 @@
 package com.architrave.portfolio.api.dto.project.request;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +12,8 @@ public class CreateProjectInfoReq {
 
     @NotNull
     private Long tempId;
-    @NotEmpty
+    @NotNull
+    private Long projectId;
     private String customName;
-    @NotEmpty
     private String customValue;
 }
