@@ -66,8 +66,8 @@ public class MemberInfo extends BaseEntity{
     /**
      * UploadFile의 이미지 url을 설정한다.
      */
-    public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
-        this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
+    public void setUploadFileUrl(String originUrl ){
+        this.uploadFile.setImgUrls(originUrl);
     }
 
     /**
