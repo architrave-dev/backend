@@ -177,7 +177,7 @@ public class ProjectElementIntegrationTest {
         assertThat(created.getTextBox()).isNull();
         assertThat(created.getTextAlignment()).isNull();
         assertThat(created.getDocument()).isEqualTo(testDocument);
-        assertThat(created.getDocumentAlignment()).isEqualTo(DisplayAlignment.CENTER);
+        assertThat(created.getDisplayAlignment()).isEqualTo(DisplayAlignment.CENTER);
 
 
         ProjectElement updated = projectElementService.updateProjectElementDocument(
@@ -190,7 +190,7 @@ public class ProjectElementIntegrationTest {
         assertThat(updated.getTextBox()).isNull();
         assertThat(updated.getTextAlignment()).isNull();
         assertThat(updated.getDocument()).isEqualTo(testDocument);
-        assertThat(updated.getDocumentAlignment()).isEqualTo(DisplayAlignment.LEFT);
+        assertThat(updated.getDisplayAlignment()).isEqualTo(DisplayAlignment.LEFT);
 
         //Remove
         projectElementService.removeById(updated.getId());
