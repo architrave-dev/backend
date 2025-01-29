@@ -54,7 +54,6 @@ public class MemberInfoIntegrationTest {
         //Update
         MemberInfo updated = memberInfoService.updateMI(found.getId(),
                 "updated originUrl",
-                "updated thumbnailUrl",
                 "updated name",
                 null,
                 null,

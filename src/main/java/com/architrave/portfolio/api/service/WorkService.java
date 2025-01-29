@@ -50,7 +50,6 @@ public class WorkService {
     public Work createWork(Member loginUser,
                            WorkType workType,
                            String originUrl,
-                           String thumbnailUrl,
                            String title,
                            String description,
                            Size size,
@@ -63,7 +62,6 @@ public class WorkService {
                 .member(loginUser)
                 .workType(workType)
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .title(title)
                 .description(description)
                 .size(size)
@@ -79,7 +77,6 @@ public class WorkService {
     public Work updateWork(Long workId,
                            WorkType workType,
                            String originUrl,
-                           String thumbnailUrl,
                            String title,
                            String description,
                            Size size,
@@ -90,10 +87,9 @@ public class WorkService {
     ) {
         Work work = findWorkById(workId);
         if (!work.getWorkType().equals(workType)) work.setWorkType(workType);
-        if (!work.getUploadFile().getOriginUrl().equals(originUrl) ||
-            !work.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)) {
+        if (!work.getUploadFile().getOriginUrl().equals(originUrl)) {
             uploadFileService.deleteUploadFile(work.getUploadFile());
-            work.setUploadFileUrl(originUrl, thumbnailUrl);
+            work.setUploadFileUrl(originUrl);
         }
         if (!work.getTitle().equals(title)) work.setTitle(title);
         if (!work.getDescription().equals(description)) work.setDescription(description);

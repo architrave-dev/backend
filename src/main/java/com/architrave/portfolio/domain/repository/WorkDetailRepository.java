@@ -14,7 +14,7 @@ import java.util.List;
 public interface WorkDetailRepository extends JpaRepository<WorkDetail, Long> {
     List<WorkDetail> findByWork(Work work);
     void deleteByWork(Work work);
-    @Query("Select new com.architrave.portfolio.api.dto.work.response.WorkDetailSimpleDto(wd.id, wd.uploadFile.thumbnailUrl) " +
+    @Query("Select new com.architrave.portfolio.api.dto.work.response.WorkDetailSimpleDto(wd.id, wd.uploadFile.originalUrl) " +
             "FROM WorkDetail wd WHERE wd.work = :work")
     List<WorkDetailSimpleDto> findSimpleByWork(@Param("work") Work work);
 }

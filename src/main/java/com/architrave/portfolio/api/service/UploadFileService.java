@@ -51,7 +51,6 @@ public class UploadFileService {
 
     public void deleteUploadFile(UploadFile uploadFile) {
         if(!uploadFile.getOriginUrl().equals("")) deleteFile(uploadFile.getOriginUrl());
-        if(!uploadFile.getThumbnailUrl().equals("")) deleteFile(uploadFile.getThumbnailUrl());
     }
 
     public String generatePresignedUrl(String fileName, String fileType) {

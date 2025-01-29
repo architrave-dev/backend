@@ -55,7 +55,6 @@ public class WorkDetailIntegrationTest {
                 .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
-                .thumbnailUrl("work-thumbnail.jpg")
                 .build();
         workRepository.save(testWork);
     }
@@ -67,7 +66,6 @@ public class WorkDetailIntegrationTest {
         WorkDetail created = workDetailService.createWorkDetail(
                 testWork,
                 "detail-origin.jpg",
-                "detail-thumbnail.jpg",
                 "Test Detail"
         );
 
@@ -79,7 +77,6 @@ public class WorkDetailIntegrationTest {
         WorkDetail updated = workDetailService.updateWorkDetail(
                 found.getId(),
                 "updated-origin.jpg",
-                "updated-thumbnail.jpg",
                 "Updated Detail"
         );
         assertThat(updated.getDescription()).isEqualTo("Updated Detail");
@@ -98,14 +95,12 @@ public class WorkDetailIntegrationTest {
         WorkDetail detail1 = workDetailService.createWorkDetail(
                 testWork,
                 "origin1.jpg",
-                "thumb1.jpg",
                 "Detail 1"
         );
 
         WorkDetail detail2 = workDetailService.createWorkDetail(
                 testWork,
                 "origin2.jpg",
-                "thumb2.jpg",
                 "Detail 2"
         );
 

@@ -52,12 +52,10 @@ public class WorkDetailUnitTest {
                 .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
-                .thumbnailUrl("work-thumbnail.jpg")
                 .build();
 
         UploadFile detailUploadFile = UploadFile.builder()
                 .originUrl("detail-origin.jpg")
-                .thumbnailUrl("detail-thumbnail.jpg")
                 .build();
 
         // Create test work detail
@@ -105,7 +103,6 @@ public class WorkDetailUnitTest {
         WorkDetail result = workDetailService.createWorkDetail(
                 testWork,
                 "new-origin.jpg",
-                "new-thumbnail.jpg",
                 "New Description"
         );
 
@@ -125,7 +122,6 @@ public class WorkDetailUnitTest {
         WorkDetail result = workDetailService.updateWorkDetail(
                 id,
                 "updated-origin.jpg",
-                "updated-thumbnail.jpg",
                 "Updated Description"
         );
 

@@ -33,8 +33,8 @@ public class SettingBuilder {
     }
 
     /**
-     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl는 필수값 입니다. <br/>
+     * originUrl로 UploadFile을 생성합니다.
      * @return Billboard
      */
     public Setting build(){

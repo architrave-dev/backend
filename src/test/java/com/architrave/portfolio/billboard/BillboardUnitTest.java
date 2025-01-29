@@ -48,7 +48,6 @@ public class BillboardUnitTest {
         testBillboard = new BillboardBuilder()
                 .member(testMember)
                 .originUrl("billboard origin")
-                .thumbnailUrl("billboard thumbnail")
                 .title("billboard title")
                 .build();
     }
@@ -122,7 +121,6 @@ public class BillboardUnitTest {
         // Act
         Billboard result = billboardService.updateLb(id,
                 "updated billboard origin",
-                "updated billboard thumbnail",
                 "updated title",
                 null,
                 null

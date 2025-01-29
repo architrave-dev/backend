@@ -50,7 +50,6 @@ public class WorkUnitTest {
                 .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
-                .thumbnailUrl("work-thumbnail.jpg")
                 .build();
 
     }
@@ -114,7 +113,6 @@ public class WorkUnitTest {
         Work result = workService.updateWork(id,
                 WorkType.PAINTING_WATER,
                 "updated-origin.jpg",
-                "updated-thumbnail.jpg",
                 "updated-title",
                 null,
                 null,

@@ -62,7 +62,6 @@ public class ProjectElementIntegrationTest {
                 .member(testMember)
                 .title("Test Title")
                 .originUrl("test origin")
-                .thumbnailUrl("test thumbnail")
                 .description("Test Description")
                 .build();
         projectRepository.save(testProject);
@@ -72,7 +71,6 @@ public class ProjectElementIntegrationTest {
                 .workType(WorkType.DIGITAL)
                 .title("Test Artwork")
                 .originUrl("work-origin.jpg")
-                .thumbnailUrl("work-thumbnail.jpg")
                 .build();
         workRepository.save(testWork);
 
@@ -81,7 +79,6 @@ public class ProjectElementIntegrationTest {
 
         UploadFile uploadFile = UploadFile.builder()
                 .originUrl("document-origin.jpg")
-                .thumbnailUrl("document-thumbnail.jpg")
                 .build();
         testDocument = Document.createDocument(uploadFile, "Test Document Description");
         documentRepository.save(testDocument);

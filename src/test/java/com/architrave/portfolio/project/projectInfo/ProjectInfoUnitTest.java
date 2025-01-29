@@ -52,7 +52,6 @@ public class ProjectInfoUnitTest {
                 .member(testMember)
                 .title("test title")
                 .originUrl("test origin")
-                .thumbnailUrl("test thumbnail")
                 .build();
         testProjectInfo = ProjectInfo.createProjectInfo(
                 testProject,

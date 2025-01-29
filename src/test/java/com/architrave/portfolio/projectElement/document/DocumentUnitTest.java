@@ -36,7 +36,6 @@ public class DocumentUnitTest {
     void setUp() {
         UploadFile testUploadFile = UploadFile.builder()
                 .originUrl("document-origin.jpg")
-                .thumbnailUrl("document-thumbnail.jpg")
                 .build();
 
         testDocument = Document.createDocument(testUploadFile, "Test Description");
@@ -79,7 +78,6 @@ public class DocumentUnitTest {
         // Act
         Document result = documentService.createDocument(
                 "document-origin.jpg",
-                "document-thumbnail.jpg",
                 "Test Description"
         );
 
@@ -87,7 +85,6 @@ public class DocumentUnitTest {
         assertThat(result).isNotNull();
         assertThat(result.getDescription()).isEqualTo("Test Description");
         assertThat(result.getUploadFile().getOriginUrl()).isEqualTo("document-origin.jpg");
-        assertThat(result.getUploadFile().getThumbnailUrl()).isEqualTo("document-thumbnail.jpg");
         verify(documentRepository).save(any(Document.class));
     }
 
@@ -102,14 +99,12 @@ public class DocumentUnitTest {
         Document result = documentService.updateDocument(
                 id,
                 "Updated Description",
-                "updated-origin.jpg",
-                "updated-thumbnail.jpg"
+                "updated-origin.jpg"
         );
 
         // Assert
         assertThat(result.getDescription()).isEqualTo("Updated Description");
         assertThat(result.getUploadFile().getOriginUrl()).isEqualTo("updated-origin.jpg");
-        assertThat(result.getUploadFile().getThumbnailUrl()).isEqualTo("updated-thumbnail.jpg");
         verify(documentRepository).findById(id);
     }
 

@@ -25,14 +25,12 @@ public class ProjectService {
     public Project createProject(
             Member loginUser,
             String originUrl,
-            String thumbnailUrl,
             String title,
             String description
     ) {
         Project project = new ProjectBuilder()
                 .member(loginUser)
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .title(title)
                 .description(description)
                 .build();
@@ -67,18 +65,16 @@ public class ProjectService {
     public Project updateProject(
             Long projectId,
             String originUrl,
-            String thumbnailUrl,
             String title,
             String description
     ) {
         Project project = findById(projectId);
         if(!project.getTitle().equals(title)) project.setTitle(title);
         if(!project.getDescription().equals(description)) project.setDescription(description);
-        if(!project.getUploadFile().getOriginUrl().equals(originUrl) ||
-           !project.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        if(!project.getUploadFile().getOriginUrl().equals(originUrl)
         ){
             uploadFileService.deleteUploadFile(project.getUploadFile());
-            project.setUploadFileUrl(originUrl, thumbnailUrl);
+            project.setUploadFileUrl(originUrl);
         }
 
         return project;
