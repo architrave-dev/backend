@@ -2,26 +2,34 @@ package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.UploadFile;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvocationType;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.net.URI;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Trace
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UploadFileService {
+
     private final S3Client s3;
+    private final LambdaClient lambda;
     private final S3Presigner preSigner;
 
     @Value("${spring.aws.s3.bucket-name}")
@@ -36,16 +44,33 @@ public class UploadFileService {
     //AWS S3 이미지 삭제
     private void deleteFile(String fileUrl){
         String keyName = extractFileKeyFromUrl(fileUrl);
-        try{
-            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(keyName)
-                    .build();
-            s3.deleteObject(deleteRequest);
-            log.info("delete success: {}", keyName);
-        }catch (S3Exception e){
-            log.error("S3 file deletion failed: {}", keyName, e);
-            throw new RuntimeException("Failed to delete file from S3", e);
+
+        Map<String, String> payloadMap = new HashMap<>();
+        payloadMap.put("bucket", bucketName);
+        payloadMap.put("key", keyName);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String payload;
+        try {
+            payload = objectMapper.writeValueAsString(payloadMap);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error creating JSON payload for Lambda invocation");
+            e.printStackTrace();
+            return;
+        }
+
+        // imageClean Lambda 함수 호출 요청 생성 (비동기 호출)
+        InvokeRequest invokeRequest = InvokeRequest.builder()
+                .functionName("imageClean")
+                .invocationType(InvocationType.EVENT)
+                .payload(SdkBytes.fromUtf8String(payload))
+                .build();
+
+        try {
+            lambda.invoke(invokeRequest);
+        } catch (Exception e) {
+            System.err.println("Error invoking imageClean Lambda: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
