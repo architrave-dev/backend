@@ -52,7 +52,6 @@ public class ProjectInfoIntegrationTest {
                 .member(testMember)
                 .title("test title")
                 .originUrl("test origin")
-                .thumbnailUrl("test thumbnail")
                 .build();
         projectRepository.save(testProject);
     }

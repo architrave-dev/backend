@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class CreateDocumentReq {
 
     private String originUrl;
-    private String thumbnailUrl;
     private String description;
 }

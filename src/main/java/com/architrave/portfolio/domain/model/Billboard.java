@@ -47,8 +47,8 @@ public class Billboard extends BaseEntity {
      * UploadFile의 이미지 url을 설정한다. <br/>
      * Billboard의 UploadFile과 isVisible은 전혀 관계가 없다.
      */
-    public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
-        this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
+    public void setUploadFileUrl(String originUrl ){
+        this.uploadFile.setImgUrls(originUrl);
     }
 
     /**

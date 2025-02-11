@@ -27,12 +27,10 @@ public class DocumentService {
     @Transactional
     public Document createDocument(
             String originUrl,
-            String thumbnailUrl,
             String description
     ){
         UploadFile uploadFile = UploadFile.builder()
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .build();
 
         Document document = Document.createDocument(
@@ -46,16 +44,14 @@ public class DocumentService {
     public Document updateDocument(
             Long documentId,
             String description,
-            String originUrl,
-            String thumbnailUrl
+            String originUrl
     ){
         Document document = findDocumentById(documentId);
         if(!document.getDescription().equals(description)) document.setDescription(description);
-        if(!document.getUploadFile().getOriginUrl().equals(originUrl) ||
-                !document.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        if(!document.getUploadFile().getOriginUrl().equals(originUrl)
         ){
             uploadFileService.deleteUploadFile(document.getUploadFile());
-            document.setUploadFileUrl(originUrl, thumbnailUrl);
+            document.setUploadFileUrl(originUrl);
         }
         return document;
     }

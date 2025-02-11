@@ -53,7 +53,6 @@ public class ProjectIntegrationTest {
         Project createdProject = projectService.createProject(
                 testMember,
                 "test origin",
-                "test thumbnail",
                 "test title",
                 "test description"
         );
@@ -67,7 +66,6 @@ public class ProjectIntegrationTest {
         Project updatedProject = projectService.updateProject(
                 createdProject.getId(),
                 "updated origin",
-                "updated thumbnail",
                 "updated title",
                 "updated description"
         );
@@ -92,14 +90,12 @@ public class ProjectIntegrationTest {
         projectService.createProject(
                 testMember,
                 "test origin 1",
-                "test thumbnail 1",
                 "test title 1",
                 "test description 1"
         );
         projectService.createProject(
                 testMember,
                 "test origin 2",
-                "test thumbnail 2",
                 "test title 2",
                 "test description 2"
         );

@@ -96,7 +96,6 @@ public class WorkDetailController {
         WorkDetail createdWorkDetail = workDetailService.createWorkDetail(
                 work,
                 createWorkDetailReq.getOriginUrl(),
-                createWorkDetailReq.getThumbnailUrl(),
                 createWorkDetailReq.getDescription()
         );
 
@@ -115,7 +114,6 @@ public class WorkDetailController {
         WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                 updateWorkDetailReq.getId(),
                 updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
-                updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateWorkDetailReq.getDescription()
         );
 

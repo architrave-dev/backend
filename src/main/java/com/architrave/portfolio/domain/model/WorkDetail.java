@@ -41,8 +41,8 @@ public class WorkDetail {
     /**
      * WorkDetail의 이미지 url을 설정한다.
      */
-    public void setUploadFileUrl(String originUrl, String thumbnailUrl ){
-        this.uploadFile.setImgUrls(originUrl, thumbnailUrl);
+    public void setUploadFileUrl(String originUrl){
+        this.uploadFile.setImgUrls(originUrl);
     }
     /**
      * WorkDetail의 이미지 url을 null 처리한다. <br/>

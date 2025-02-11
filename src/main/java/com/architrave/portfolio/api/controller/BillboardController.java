@@ -53,7 +53,6 @@ public class BillboardController {
         Billboard updatedLb = billboardService.updateLb(
                 updateBillboardDto.getId(),
                 updateBillboardDto.getUpdateUploadFileReq().getOriginUrl(),
-                updateBillboardDto.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateBillboardDto.getTitle(),
                 updateBillboardDto.getDescription(),
                 updateBillboardDto.getIsVisible()

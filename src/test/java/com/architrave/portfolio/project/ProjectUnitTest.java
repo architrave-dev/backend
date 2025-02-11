@@ -51,7 +51,6 @@ public class ProjectUnitTest {
                 .member(testMember)
                 .title("Test Title")
                 .originUrl("test origin")
-                .thumbnailUrl("test thumbnail")
                 .description("Test Description")
                 .build();
     }
@@ -66,7 +65,6 @@ public class ProjectUnitTest {
         Project result = projectService.createProject(
                 testMember,
                 "test origin",
-                "test thumbnail",
                 "Test Title",
                 "Test Description"
         );
@@ -132,14 +130,12 @@ public class ProjectUnitTest {
         Project updatedProject = projectService.updateProject(
                 projectId,
                 "new origin",
-                "new thumbnail",
                 "New Title",
                 "New Description"
         );
 
         // Assert
         assertThat(updatedProject.getUploadFile().getOriginUrl()).isEqualTo("new origin");
-        assertThat(updatedProject.getUploadFile().getThumbnailUrl()).isEqualTo("new thumbnail");
         assertThat(updatedProject.getTitle()).isEqualTo("New Title");
         assertThat(updatedProject.getDescription()).isEqualTo("New Description");
         verify(projectRepository).findById(projectId);

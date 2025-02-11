@@ -258,7 +258,6 @@ public class ProjectElementController {
                     loginUser,
                     createWorkReq.getWorkType(),
                     createWorkReq.getOriginUrl(),
-                    createWorkReq.getThumbnailUrl(),
                     createWorkReq.getTitle(),
                     createWorkReq.getDescription(),
                     createWorkReq.getSize(),
@@ -279,7 +278,6 @@ public class ProjectElementController {
             WorkDetail workDetail = workDetailService.createWorkDetail(
                     work,
                     createWorkDetailReq.getOriginUrl(),
-                    createWorkDetailReq.getThumbnailUrl(),
                     createWorkDetailReq.getDescription()
             );
             projectElement = new WorkDetailInProjectBuilder()
@@ -303,7 +301,6 @@ public class ProjectElementController {
             CreateDocumentReq createDocumentReq = createProjectElementReq.getCreateDocumentReq();
             Document document = documentService.createDocument(
                     createDocumentReq.getOriginUrl(),
-                    createDocumentReq.getThumbnailUrl(),
                     createDocumentReq.getDescription()
             );
             projectElement = new DocumentInProjectBuilder()
@@ -328,7 +325,6 @@ public class ProjectElementController {
                     updateWorkReq.getId(),
                     updateWorkReq.getWorkType(),
                     updateWorkReq.getUpdateUploadFileReq().getOriginUrl(),
-                    updateWorkReq.getUpdateUploadFileReq().getThumbnailUrl(),
                     updateWorkReq.getTitle(),
                     updateWorkReq.getDescription(),
                     updateWorkReq.getSize(),
@@ -350,7 +346,6 @@ public class ProjectElementController {
             WorkDetail updatedWorkDetail = workDetailService.updateWorkDetail(
                     updateWorkDetailReq.getId(),
                     updateWorkDetailReq.getUpdateUploadFileReq().getOriginUrl(),
-                    updateWorkDetailReq.getUpdateUploadFileReq().getThumbnailUrl(),
                     updateWorkDetailReq.getDescription()
             );
 
@@ -382,8 +377,7 @@ public class ProjectElementController {
             Document updatedDocument = documentService.updateDocument(
                     updateDocumentReq.getId(),
                     updateDocumentReq.getDescription(),
-                    updateDocumentReq.getUpdateUploadFileReq().getOriginUrl(),
-                    updateDocumentReq.getUpdateUploadFileReq().getThumbnailUrl()
+                    updateDocumentReq.getUpdateUploadFileReq().getOriginUrl()
             );
 
             // updated 된 document 를 전달

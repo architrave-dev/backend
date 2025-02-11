@@ -14,7 +14,7 @@ import java.util.List;
 public interface WorkRepository extends JpaRepository<Work, Long> {
     List<Work> findByMember(Member member);
 
-    @Query("Select new com.architrave.portfolio.api.dto.work.response.WorkSimpleDto(w.id, w.title, w.uploadFile.thumbnailUrl) " +
+    @Query("Select new com.architrave.portfolio.api.dto.work.response.WorkSimpleDto(w.id, w.title, w.uploadFile.originUrl) " +
             "FROM Work w WHERE w.member = :member")
     List<WorkSimpleDto> findSimpleByMember(@Param("member") Member member);
 }

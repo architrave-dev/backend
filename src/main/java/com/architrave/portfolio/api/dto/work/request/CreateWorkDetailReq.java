@@ -16,7 +16,6 @@ public class CreateWorkDetailReq {
     @NotNull
     private Long workId;
     private String originUrl;
-    private String thumbnailUrl;
     private String description;
 
 }

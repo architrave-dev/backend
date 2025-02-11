@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class UpdateUploadFileReq {
     private Long uploadFileId;
     private String originUrl;
-    private String thumbnailUrl;
 }

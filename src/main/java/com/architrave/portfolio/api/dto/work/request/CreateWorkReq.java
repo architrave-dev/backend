@@ -15,7 +15,6 @@ public class CreateWorkReq {
 
     private WorkType workType;
     private String originUrl;
-    private String thumbnailUrl;
     @NotEmpty
     private String title;
     private String description;

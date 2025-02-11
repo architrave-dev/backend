@@ -35,23 +35,21 @@ public class WorkDetailService {
     }
 
     @Transactional
-    public WorkDetail createWorkDetail(Work work, String originUrl, String thumbnailUrl, String description) {
+    public WorkDetail createWorkDetail(Work work, String originUrl, String description) {
         UploadFile uploadFile = UploadFile.builder()
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .build();
         WorkDetail workDetail = WorkDetail.createWorkDetail(work, uploadFile, description);
         return workDetailRepository.save(workDetail);
     }
 
     @Transactional
-    public WorkDetail updateWorkDetail(Long workDetailId, String originUrl, String thumbnailUrl,  String description){
+    public WorkDetail updateWorkDetail(Long workDetailId, String originUrl, String description){
         WorkDetail workDetail = findWorkDetailById(workDetailId);
-        if (!workDetail.getUploadFile().getOriginUrl().equals(originUrl) ||
-            !workDetail.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        if (!workDetail.getUploadFile().getOriginUrl().equals(originUrl)
         ) {
             uploadFileService.deleteUploadFile(workDetail.getUploadFile());
-            workDetail.setUploadFileUrl(originUrl, thumbnailUrl);
+            workDetail.setUploadFileUrl(originUrl);
         }
         if (!workDetail.getDescription().equals(description)) workDetail.setDescription(description);
 

@@ -7,18 +7,18 @@ import lombok.Data;
 @Data
 public class WorkSimpleDto {
     private Long id;
-    private String thumbnailUrl;
     private String title;
+    private String originUrl;
 
     public WorkSimpleDto(Work work) {
         this.id = work.getId();
         UploadFile uploadFile = work.getUploadFile();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
         this.title = work.getTitle();
+        this.originUrl = uploadFile.getOriginUrl();
     }
-    public WorkSimpleDto(Long id, String title, String thumbnailUrl) {
+    public WorkSimpleDto(Long id, String title, String originUrl) {
         this.id = id;
         this.title = title;
-        this.thumbnailUrl = thumbnailUrl;
+        this.originUrl = originUrl;
     }
 }

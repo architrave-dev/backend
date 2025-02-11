@@ -12,7 +12,6 @@ public class ProjectSimpleDto {
     private String title;
     private String description;
     private String originUrl;
-    private String thumbnailUrl;
 
     public ProjectSimpleDto(Project project){
         this.id = project.getId();
@@ -20,6 +19,5 @@ public class ProjectSimpleDto {
         this.description = project.getDescription();
         UploadFile uploadFile = project.getUploadFile();
         this.originUrl = uploadFile.getOriginUrl();
-        this.thumbnailUrl = uploadFile.getThumbnailUrl();
     }
 }

@@ -92,7 +92,6 @@ public class ProjectController {
         Project createdProject = projectService.createProject(
                 owner,
                 createProjectReq.getOriginUrl(),
-                createProjectReq.getThumbnailUrl(),
                 createProjectReq.getTitle(),
                 createProjectReq.getDescription()
         );
@@ -127,7 +126,6 @@ public class ProjectController {
         Project updatedProject = projectService.updateProject(
                 updateProjectReq.getId(),
                 updateProjectReq.getUpdateUploadFileReq().getOriginUrl(),
-                updateProjectReq.getUpdateUploadFileReq().getThumbnailUrl(),
                 updateProjectReq.getTitle(),
                 updateProjectReq.getDescription()
         );

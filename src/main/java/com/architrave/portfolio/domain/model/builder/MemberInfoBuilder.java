@@ -11,7 +11,6 @@ public class MemberInfoBuilder {
 
     private Member member;
     private String originUrl;
-    private String thumbnailUrl;
     private String name;
     private CountryType country;
     private Integer year;
@@ -27,10 +26,6 @@ public class MemberInfoBuilder {
     }
     public MemberInfoBuilder originUrl(String originUrl){
         this.originUrl = originUrl;
-        return this;
-    }
-    public MemberInfoBuilder thumbnailUrl(String thumbnailUrl){
-        this.thumbnailUrl = thumbnailUrl;
         return this;
     }
     public MemberInfoBuilder name(String name){
@@ -68,8 +63,8 @@ public class MemberInfoBuilder {
 
 
     /**
-     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl는 필수값 입니다. <br/>
+     * originUrl로 UploadFile을 생성합니다.
      * @return MemberInfo
      */
     public MemberInfo build(){
@@ -77,7 +72,6 @@ public class MemberInfoBuilder {
         //일단 무지성 UploadFile 생성
         UploadFile uploadFile = UploadFile.builder()
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .build();
 
         return MemberInfo.createMemberInfo(
@@ -94,7 +88,7 @@ public class MemberInfoBuilder {
         );
     }
     private void validateMemberInfo(){
-        if(member == null || originUrl == null || thumbnailUrl == null || name == null){
+        if(member == null || originUrl == null || name == null){
             throw new RequiredValueEmptyException("required value is empty in MemberInfoBuilder");
         }
     }

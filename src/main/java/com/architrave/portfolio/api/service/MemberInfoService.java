@@ -31,7 +31,6 @@ public class MemberInfoService {
     public MemberInfo updateMI(
             Long memberInfoId,
             String originUrl,
-            String thumbnailUrl,
             String name,
             CountryType country,
             Integer year,
@@ -40,15 +39,13 @@ public class MemberInfoService {
             String description
     ) {
         MemberInfo memberInfo = findMIById(memberInfoId);
-        if (
-                !memberInfo.getUploadFile().getOriginUrl().equals(originUrl) ||
-                !memberInfo.getUploadFile().getThumbnailUrl().equals(thumbnailUrl)
+        if (!memberInfo.getUploadFile().getOriginUrl().equals(originUrl)
         ) {
             // S3에 있는 기존 S3 이미지 제거
             // 제거하지 않으면 DB 상에서 해당 이미지 url은 사라지고
             // orphan 객체가 되어버린다.
             uploadFileService.deleteUploadFile(memberInfo.getUploadFile());
-            memberInfo.setUploadFileUrl(originUrl, thumbnailUrl);
+            memberInfo.setUploadFileUrl(originUrl);
         }
         if(!memberInfo.getName().equals(name)) memberInfo.setName(name);
         if(!memberInfo.getCountry().equals(country)) memberInfo.setCountry(country);
@@ -102,7 +99,6 @@ public class MemberInfoService {
         MemberInfo defaultMI = new MemberInfoBuilder()
                 .member(member)
                 .originUrl("")
-                .thumbnailUrl("")
                 .name("")
                 .email("")
                 .country(CountryType.NONE)

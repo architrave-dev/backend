@@ -46,7 +46,6 @@ public class MemberInfoUnitTest {
         testMemberInfo = new MemberInfoBuilder()
                 .member(testMember)
                 .originUrl("test originUrl")
-                .thumbnailUrl("test thumbnailUrl")
                 .name("test name")
                 .build();
     }
@@ -106,8 +105,7 @@ public class MemberInfoUnitTest {
         // Act
         MemberInfo updated = memberInfoService.updateMI(id,
                 "updated originUrl",
-                "updated thumbnailUrl",
-                "updated name",
+                "updated title",
                 null,
                 null,
                 null,

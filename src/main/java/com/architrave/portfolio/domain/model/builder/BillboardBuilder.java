@@ -9,7 +9,6 @@ public class BillboardBuilder {
 
     private Member member;
     private String originUrl;
-    private String thumbnailUrl;
     private String title;
     private String description;
 
@@ -30,14 +29,10 @@ public class BillboardBuilder {
         this.originUrl = originUrl;
         return this;
     }
-    public BillboardBuilder thumbnailUrl(String thumbnailUrl){
-        this.thumbnailUrl = thumbnailUrl;
-        return this;
-    }
 
     /**
-     * originUrl과 thumbnailUrl는 필수값 입니다. <br/>
-     * originUrl과 thumbnailUrl로 UploadFile을 생성합니다.
+     * originUrl는 필수값 입니다. <br/>
+     * originUrl로 UploadFile을 생성합니다.
      * @return Billboard
      */
     public Billboard build(){
@@ -45,7 +40,6 @@ public class BillboardBuilder {
         //일단 무지성 UploadFile 생성
         UploadFile uploadFile = UploadFile.builder()
                 .originUrl(originUrl)
-                .thumbnailUrl(thumbnailUrl)
                 .build();
 
         return Billboard.createBillboard(
@@ -56,7 +50,7 @@ public class BillboardBuilder {
         );
     }
     private void validateBillboard(){
-        if(member == null || originUrl == null || thumbnailUrl == null){
+        if(member == null || originUrl == null){
             throw new RequiredValueEmptyException("required value is empty in BillboardBuilder");
         }
     }
