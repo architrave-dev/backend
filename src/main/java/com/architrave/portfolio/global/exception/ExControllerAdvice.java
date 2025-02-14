@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import software.amazon.awssdk.services.ses.model.SesException;
 
 import java.util.NoSuchElementException;
 
@@ -114,5 +115,35 @@ public class ExControllerAdvice {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorDto(ErrorCode.DBE, "데이터베이스 처리 중 오류가 발생했습니다."));
         }
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    private ResponseEntity<ErrorDto> emailSendExceptionHandler(
+            SesException e
+    ){
+        log.info("handle in ExControllerAdvice: ", e);
+
+        String awsErrorCode    = e.awsErrorDetails().errorCode();    // 예: "MessageRejected"
+        String awsErrorMessage = e.awsErrorDetails().errorMessage(); // 예: "Email address is not verified."
+
+        HttpStatus status;
+        switch (awsErrorCode) {
+            case "MessageRejected":
+                // 예: 검증되지 않은 이메일, 포맷 문제 등
+                status = HttpStatus.BAD_REQUEST;
+                break;
+            case "Throttling":
+                // 발송량 초과(SES 할당량)
+                status = HttpStatus.TOO_MANY_REQUESTS;
+                break;
+            default:
+                // 그 외 SES 오류
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+                break;
+        }
+
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorDto(ErrorCode.EME, awsErrorMessage));
     }
 }
