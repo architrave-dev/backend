@@ -1,8 +1,10 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
+import com.architrave.portfolio.api.dto.email.request.EmailReq;
 import com.architrave.portfolio.api.dto.uploadFile.request.PreSignedUrlReq;
 import com.architrave.portfolio.api.dto.uploadFile.response.PreSignedUrlResponse;
+import com.architrave.portfolio.api.service.EmailService;
 import com.architrave.portfolio.api.service.UploadFileService;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class awsController {
 
     private final UploadFileService uploadFileService;
+    private final EmailService emailService;
+
     @Operation(
             summary = "ALB의 health-check 처리",
             description = "ALB에서 target group에 health-check를 보낸다." +
@@ -30,6 +34,22 @@ public class awsController {
     @GetMapping("/health-check")
     public ResponseEntity<Void> healthCheck(){
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "작가에게 이메일 보내기")
+    @PostMapping("/send-email")
+    public ResponseEntity<ResultDto<String>> sendEmail(
+            @RequestParam("aui") String aui,
+            @RequestBody EmailReq emailReq
+    ){
+
+        // 메일 주소 검증 로직 필요
+
+        emailService.sendEmail(emailReq);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("이메일 전송 성공"));
     }
 
     @Operation(
