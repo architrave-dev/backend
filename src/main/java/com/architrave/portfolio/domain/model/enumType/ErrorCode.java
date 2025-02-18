@@ -12,6 +12,8 @@ public enum ErrorCode {
     DUK("Duplicated Unique Key"),
 
     DBE("Database Error"),
+
+    EME("EMail send Error"),
     UME("UnManaged Error");;
 
 

@@ -30,7 +30,8 @@ public class ProjectElementService {
 
     @Transactional(readOnly = true)
     public List<ProjectElement> findProjectElementByProject(Project project) {
-        return projectElementRepository.findByProject(project);
+//        return projectElementRepository.findByProject(project);
+        return projectElementRepository.findByProjectWithAssociations(project);
     }
 
     @Transactional(readOnly = true)
