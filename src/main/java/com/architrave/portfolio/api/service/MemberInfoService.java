@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Trace
 @Service
@@ -69,7 +70,7 @@ public class MemberInfoService {
         if(!memberInfo.getAddress().equals(address)) memberInfo.setAddress(address);
         if(!memberInfo.getEmail().equals(email)) memberInfo.setEmail(email);
         if(!memberInfo.getContact().equals(contact)) memberInfo.setContact(contact);
-        if(!memberInfo.getSns().equals(socialMedia)) memberInfo.setSns(socialMedia);
+        if(socialMedia != null && !Objects.equals(memberInfo.getSns(), socialMedia)) memberInfo.setSns(socialMedia);
         return memberInfo;
     }
 
