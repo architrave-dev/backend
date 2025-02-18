@@ -6,6 +6,13 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(
+        name = "project_element",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"project_id", "work_id"}),
+                @UniqueConstraint(columnNames = {"project_id", "work_detail_id"}),
+        }
+)
 public class ProjectElement {
 
     @Id
@@ -20,11 +27,11 @@ public class ProjectElement {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "work_id")
     private Work work;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "work_detail_id")
     private WorkDetail workDetail;
 
