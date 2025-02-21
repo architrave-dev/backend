@@ -14,6 +14,7 @@ public enum ErrorCode {
     DBE("Database Error"),
 
     EME("EMail send Error"),
+    EVF("Email verification Failed"),
     UME("UnManaged Error");;
 
 
