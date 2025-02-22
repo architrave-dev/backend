@@ -59,4 +59,11 @@ public class AuthService implements UserDetailsService {
         String accessToken = jwtService.createJwt(member);
         return "Bearer " + accessToken;
     }
+
+    public String checkTokenExpired(String token) {
+        if(jwtService.isExpired(token)){
+            throw new ExpiredTokenException("Email verification token expired");
+        }
+        return jwtService.extractEmailFromToken(token);
+    }
 }
