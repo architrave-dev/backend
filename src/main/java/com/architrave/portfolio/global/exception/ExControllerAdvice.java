@@ -37,14 +37,14 @@ public class ExControllerAdvice {
 
         if (message.contains("Member account is inactive")) {
             status = HttpStatus.FORBIDDEN; // 403: Forbidden seems appropriate for inactive accounts
-            errorCode = ErrorCode.MIA; // Assuming MIA = "Member Inactive" (adjust based on your ErrorCode enum)
+            errorCode = ErrorCode.MIA; // "Member Inactive"
             return ResponseEntity
                     .status(status)
                     .body(new ErrorDto(errorCode, "회원 계정이 비활성화 상태입니다."));
         }
         else if (message.contains("Member account is pending approval")) {
-            status = HttpStatus.ACCEPTED; // 202: Accepted could indicate pending state
-            errorCode = ErrorCode.MPA; // Assuming MPA = "Member Pending Approval" (adjust as needed)
+            status = HttpStatus.FORBIDDEN; // 202: Accepted could indicate pending state
+            errorCode = ErrorCode.MPA;
             return ResponseEntity
                     .status(status)
                     .body(new ErrorDto(errorCode, "회원 계정이 승인 대기 중입니다."));

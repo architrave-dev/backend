@@ -102,13 +102,11 @@ public class Member extends BaseEntity implements UserDetails {
         return status != MemberStatus.INACTIVE && status != MemberStatus.PENDING;
     }
     public void validateActiveStatus() {
-        if (!isEnabled()) {
-            if (this.status == MemberStatus.INACTIVE) {
-                throw new IllegalStateException("Member account is inactive: " + this.email);
-            }
-            if (this.status == MemberStatus.PENDING) {
-                throw new IllegalStateException("Member account is pending approval: " + this.email);
-            }
+        if (this.status == MemberStatus.INACTIVE) {
+            throw new IllegalStateException("Member account is inactive: " + this.email);
+        }
+        if (this.status == MemberStatus.PENDING) {
+            throw new IllegalStateException("Member account is pending approval: " + this.email);
         }
     }
 }

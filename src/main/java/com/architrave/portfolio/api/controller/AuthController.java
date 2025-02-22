@@ -94,6 +94,7 @@ public class AuthController {
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();
         Member member = authService.loadUserByUsername(email);
+        member.validateActiveStatus();
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -101,7 +102,6 @@ public class AuthController {
                         password
                 )
         );
-
 
         String authHeader = authService.getAccessToken(member);
         String refreshToken = authService.getRefreshToken(member);
