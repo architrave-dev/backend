@@ -64,15 +64,7 @@ public class AuthController {
                 .build();
 
         memberService.createMember(member);
-//
-//        String verificationLink = "https://api.architrive.com/api/v1/auth/activate?token=" + authService.getAccessToken(member);
-//        EmailReq emailReq = new EmailReq(
-//                "no-reply@architrive.com", // Replace with your verified SES sender
-//                member.getEmail(),
-//                "Verify Your Email",
-//                "Please click this link to verify your email: " + verificationLink
-//        );
-//        emailService.sendEmail(emailReq);
+        emailService.sendVerificationEmail(member.getEmail());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -101,13 +93,15 @@ public class AuthController {
     public ResponseEntity<ResultDto<MemberSimpleDto>> login(@Valid @RequestBody LoginReq loginReq){
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();
+        Member member = authService.loadUserByUsername(email);
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         email,
                         password
                 )
         );
-        Member member = authService.loadUserByUsername(email);
+
 
         String authHeader = authService.getAccessToken(member);
         String refreshToken = authService.getRefreshToken(member);

@@ -40,6 +40,8 @@ public class Member extends BaseEntity implements UserDetails {
     @NotNull
     private RoleType role;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private MemberStatus status;
 
     private String generateAui(String username){

@@ -44,7 +44,6 @@ public class awsController {
     ){
 
         // 메일 주소 검증 로직 필요
-
         emailService.sendEmail(emailReq);
 
         return ResponseEntity
