@@ -1,5 +1,6 @@
 package com.architrave.portfolio.domain.model;
 
+import com.architrave.portfolio.domain.model.enumType.MemberStatus;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -39,6 +40,8 @@ public class Member extends BaseEntity implements UserDetails {
     @NotNull
     private RoleType role;
 
+    private MemberStatus status;
+
     private String generateAui(String username){
         String uuid_8 = UUID.randomUUID().toString().substring(0,8);
         return username + "-" + uuid_8;
@@ -47,6 +50,10 @@ public class Member extends BaseEntity implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
         this.aui = generateAui(username);
+    }
+
+    public void setStatus(MemberStatus status) {
+        this.status = status;
     }
 
     public void setRole(RoleType role) {
@@ -65,6 +72,7 @@ public class Member extends BaseEntity implements UserDetails {
         member.username = username;
         member.aui = member.generateAui(username);
         member.role = role;
+        member.status = MemberStatus.PENDING;
         return member;
     }
 
@@ -87,9 +95,18 @@ public class Member extends BaseEntity implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     @Override
     public boolean isEnabled() {
-        return true;
+        return status != MemberStatus.INACTIVE && status != MemberStatus.PENDING;
+    }
+    public void validateActiveStatus() {
+        if (!isEnabled()) {
+            if (this.status == MemberStatus.INACTIVE) {
+                throw new IllegalStateException("Member account is inactive: " + this.email);
+            }
+            if (this.status == MemberStatus.PENDING) {
+                throw new IllegalStateException("Member account is pending approval: " + this.email);
+            }
+        }
     }
 }
