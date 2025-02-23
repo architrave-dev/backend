@@ -1,6 +1,7 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
+import com.architrave.portfolio.api.dto.auth.request.ActivateReq;
 import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
@@ -75,10 +76,11 @@ public class AuthController {
             description = "이메일 인증 토큰으로 Member을 활성화합니다."
     )
     @PostMapping("/activate")
-    public ResponseEntity<ResultDto<String>> activateUser(@RequestParam String token){
+    public ResponseEntity<ResultDto<String>> activateUser(@Valid @RequestBody ActivateReq activateReq){
 
-        String email = authService.checkTokenExpired(token);
-        memberService.changeStatus(email, MemberStatus.ACTIVE);
+        authService.verify(activateReq.getEmail(), activateReq.getVerificationCode());
+
+        memberService.changeStatus(activateReq.getEmail(), MemberStatus.ACTIVE);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

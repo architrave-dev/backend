@@ -1,10 +1,13 @@
 package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.Verification;
 import com.architrave.portfolio.domain.repository.MemberRepository;
+import com.architrave.portfolio.domain.repository.VerificationRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
 import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
+import com.architrave.portfolio.global.exception.custom.VerificationCodeMismatchException;
 import com.architrave.portfolio.infra.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Trace
 @Service
@@ -22,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final VerificationRepository verificationRepository;
     private final JwtService jwtService;
 
     public Member getMemberFromContext(){
@@ -60,10 +66,15 @@ public class AuthService implements UserDetailsService {
         return "Bearer " + accessToken;
     }
 
-    public String checkTokenExpired(String token) {
-        if(jwtService.isExpired(token)){
-            throw new ExpiredTokenException("Email verification token expired");
+    @Transactional
+    public void verify(String key, String verificationCode) {
+        Verification verification = verificationRepository.findByKey(key)
+                .orElseThrow(() -> new NoSuchElementException("Verification record not found for key: " + key));
+
+        if(verification.getCode().equals(verificationCode)){
+            verificationRepository.delete(verification);
+        }else{
+            throw new VerificationCodeMismatchException("Invalid verification code for key: " + key);
         }
-        return jwtService.extractEmailFromToken(token);
     }
 }

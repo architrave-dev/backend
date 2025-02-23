@@ -17,7 +17,8 @@ public enum ErrorCode {
     EVF("Email verification Failed"),
     UME("UnManaged Error"),
     MIA("Member Inactive"),
-    MPA("Member Pending Approval");
+    MPA("Member Pending Approval"),
+    MVE("Member verification Error");
 
 
     private final String message;

@@ -2,10 +2,7 @@ package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
 import com.architrave.portfolio.domain.model.enumType.ErrorCode;
-import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
-import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
-import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
+import com.architrave.portfolio.global.exception.custom.*;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
@@ -88,6 +85,7 @@ public class ExControllerAdvice {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto( ErrorCode.NFR, e.getMessage()));
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             IllegalArgumentException.class,
@@ -97,6 +95,15 @@ public class ExControllerAdvice {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto( ErrorCode.AEV, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(VerificationCodeMismatchException.class)
+    private ResponseEntity<ErrorDto> handleVerificationCodeMismatchException(VerificationCodeMismatchException e){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto( ErrorCode.MVE, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
