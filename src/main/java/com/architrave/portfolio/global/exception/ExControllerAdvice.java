@@ -37,14 +37,14 @@ public class ExControllerAdvice {
             errorCode = ErrorCode.MIA; // "Member Inactive"
             return ResponseEntity
                     .status(status)
-                    .body(new ErrorDto(errorCode, "회원 계정이 비활성화 상태입니다."));
+                    .body(new ErrorDto(errorCode, e.getMessage()));
         }
         else if (message.contains("Member account is pending approval")) {
             status = HttpStatus.FORBIDDEN; // 202: Accepted could indicate pending state
             errorCode = ErrorCode.MPA;
             return ResponseEntity
                     .status(status)
-                    .body(new ErrorDto(errorCode, "회원 계정이 승인 대기 중입니다."));
+                    .body(new ErrorDto(errorCode, e.getMessage()));
         }
         else {
             // Fallback for other IllegalStateExceptions

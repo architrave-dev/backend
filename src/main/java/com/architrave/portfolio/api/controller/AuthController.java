@@ -78,9 +78,9 @@ public class AuthController {
     @PostMapping("/activate")
     public ResponseEntity<ResultDto<String>> activateUser(@Valid @RequestBody ActivateReq activateReq){
 
-        authService.verify(activateReq.getEmail(), activateReq.getVerificationCode());
+        authService.verify(activateReq.getKey(), activateReq.getVerificationCode());
 
-        memberService.changeStatus(activateReq.getEmail(), MemberStatus.ACTIVE);
+        memberService.changeStatus(activateReq.getKey(), MemberStatus.ACTIVE);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

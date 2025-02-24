@@ -8,17 +8,15 @@ public enum ErrorCode {
     AEV("Already Exist Value"),
     ATX("Access Token Expired"),
     RTX("Refresh Token Expired"),
-
     DUK("Duplicated Unique Key"),
-
     DBE("Database Error"),
-
     EME("EMail send Error"),
     EVF("Email verification Failed"),
-    UME("UnManaged Error"),
     MIA("Member Inactive"),
     MPA("Member Pending Approval"),
-    MVE("Member verification Error");
+    MVE("Member verification Error"),
+
+    UME("UnManaged Error");
 
 
     private final String message;
