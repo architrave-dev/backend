@@ -66,7 +66,8 @@ public class Member extends BaseEntity implements UserDetails {
             String email,
             String password,
             String username,
-            RoleType role
+            RoleType role,
+            MemberStatus status
     ){
         Member member = new Member();
         member.email = email;
@@ -74,7 +75,7 @@ public class Member extends BaseEntity implements UserDetails {
         member.username = username;
         member.aui = member.generateAui(username);
         member.role = role;
-        member.status = MemberStatus.PENDING;
+        member.status = status;
         return member;
     }
 

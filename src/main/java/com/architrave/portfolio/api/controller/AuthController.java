@@ -60,6 +60,7 @@ public class AuthController {
                 .password(passwordEncoder.encode(createMemberReq.getPassword()))
                 .username(createMemberReq.getUsername())
                 .role(RoleType.USER)
+                .status(MemberStatus.PENDING)
                 .build();
 
         memberService.createMember(member);
