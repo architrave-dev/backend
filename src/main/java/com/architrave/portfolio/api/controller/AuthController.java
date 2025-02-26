@@ -6,6 +6,7 @@ import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
+import com.architrave.portfolio.api.dto.auth.response.SimpleStringDto;
 import com.architrave.portfolio.api.dto.email.request.EmailReq;
 import com.architrave.portfolio.api.service.AuthService;
 import com.architrave.portfolio.api.service.EmailService;
@@ -53,10 +54,7 @@ public class AuthController {
                     "회원가입 후 이메일 인증 링크를 발송합니다."
     )
     @PostMapping("/signin")
-    public ResponseEntity<ResultDto<String>> signin(@Valid @RequestBody CreateMemberReq createMemberReq){
-        // 중복 가입 방지
-        memberService.checkEmailDuplicate(createMemberReq.getEmail());
-
+    public ResponseEntity<ResultDto<SimpleStringDto>> signin(@Valid @RequestBody CreateMemberReq createMemberReq){
         Member member = new MemberBuilder()
                 .email(createMemberReq.getEmail())
                 .password(passwordEncoder.encode(createMemberReq.getPassword()))
@@ -65,11 +63,14 @@ public class AuthController {
                 .build();
 
         memberService.createMember(member);
-        emailService.sendVerificationEmail(member.getEmail());
+//        String verificationCode = String.format("%06d", (int)(Math.random() * 1000000));
+        String verificationCode = "123456";
+        authService.createVerification(member.getEmail(), verificationCode);
+        emailService.sendVerificationEmail(member.getEmail(), verificationCode);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>("회원가입이 완료되었습니다. 이메일 인증을 해주세요."));
+                .body(new ResultDto<>(new SimpleStringDto("Registration completes upon email verification.", createMemberReq.getEmail())));
     }
     @Operation(
             summary = "이메일 인증 완료",
@@ -84,7 +85,7 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>("이메일 인증이 완료되었습니다. 로그인해주세요."));
+                .body(new ResultDto<>("Email verification is complete. Please log in."));
     }
     @Operation(
             summary = "로그인",
@@ -96,7 +97,6 @@ public class AuthController {
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();
         Member member = authService.loadUserByUsername(email);
-        member.validateActiveStatus();
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -104,6 +104,8 @@ public class AuthController {
                         password
                 )
         );
+
+        member.validateActiveStatus();
 
         String authHeader = authService.getAccessToken(member);
         String refreshToken = authService.getRefreshToken(member);

@@ -99,7 +99,7 @@ public class Member extends BaseEntity implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return status != MemberStatus.INACTIVE && status != MemberStatus.PENDING;
+        return true;
     }
     public void validateActiveStatus() {
         if (this.status == MemberStatus.INACTIVE) {

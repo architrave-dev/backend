@@ -66,11 +66,4 @@ public class MemberService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         member.setStatus(status);
     }
-
-    @Transactional(readOnly = true)
-    public void checkEmailDuplicate(String email) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("해당 이메일은 이미 사용 중입니다: " + email);
-        }
-    }
 }

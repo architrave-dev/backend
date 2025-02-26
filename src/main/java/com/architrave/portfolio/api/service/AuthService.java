@@ -67,6 +67,12 @@ public class AuthService implements UserDetailsService {
     }
 
     @Transactional
+    public void createVerification(String key, String code) {
+        Verification verification = Verification.createVerification(key, code);
+        verificationRepository.save(verification);
+    }
+
+    @Transactional
     public void verify(String key, String verificationCode) {
         Verification verification = verificationRepository.findByKey(key)
                 .orElseThrow(() -> new NoSuchElementException("Verification record not found for key: " + key));

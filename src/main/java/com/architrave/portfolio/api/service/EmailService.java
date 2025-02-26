@@ -18,9 +18,7 @@ public class EmailService {
 
     private final SesClient sesClient;
 
-    public void sendVerificationEmail(String email){
-//        String verificationCode = String.format("%06d", (int)(Math.random() * 1000000));
-        String verificationCode = "123456";
+    public void sendVerificationEmail(String email, String verificationCode){
         String plainTextBody = "Thank you for signing up. Your verification code is: " +
                 verificationCode +
                 "\nIf you did not request this, please ignore this email.\n\n" +
