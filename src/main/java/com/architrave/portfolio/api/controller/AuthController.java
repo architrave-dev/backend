@@ -140,4 +140,22 @@ public class AuthController {
     @Deprecated
     @GetMapping("/logout")
     public void login(){}
+
+    @Deprecated
+    @PostMapping("/admin/register")
+    public ResponseEntity<ResultDto<String>> adminRegister(@Valid @RequestBody CreateMemberReq createMemberReq){
+        Member member = new MemberBuilder()
+                .email(createMemberReq.getEmail())
+                .password(passwordEncoder.encode(createMemberReq.getPassword()))
+                .username(createMemberReq.getUsername())
+                .role(RoleType.USER)
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        memberService.createMember(member);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("admin register complete"));
+    }
 }
