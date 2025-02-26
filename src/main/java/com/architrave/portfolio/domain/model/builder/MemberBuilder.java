@@ -1,6 +1,7 @@
 package com.architrave.portfolio.domain.model.builder;
 
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.enumType.MemberStatus;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ public class MemberBuilder {
     private String password;
     private String username;
     private RoleType role;
+    private MemberStatus status;
 
     public MemberBuilder email(String email) {
         this.email = email;
@@ -29,6 +31,10 @@ public class MemberBuilder {
         this.role = role;
         return this;
     }
+    public MemberBuilder status(MemberStatus status) {
+        this.status = status;
+        return this;
+    }
 
     public Member build() {
         validateMember();
@@ -36,11 +42,13 @@ public class MemberBuilder {
                 this.email,
                 this.password,
                 this.username,
-                this.role
+                this.role,
+                this.status
+
         );
     }
     private void validateMember(){
-        if(email == null || password == null || username == null || role == null){
+        if(email == null || password == null || username == null || role == null || status == null){
             throw new RequiredValueEmptyException("required value is empty in MemberBuilder");
         }
     }

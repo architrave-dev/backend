@@ -2,11 +2,7 @@ package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
 import com.architrave.portfolio.domain.model.enumType.ErrorCode;
-import com.architrave.portfolio.global.exception.custom.ExpiredTokenException;
-import com.architrave.portfolio.global.exception.custom.InvalidTokenException;
-import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyException;
-import com.architrave.portfolio.global.exception.custom.UnauthorizedException;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.architrave.portfolio.global.exception.custom.*;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import software.amazon.awssdk.services.ses.model.MessageRejectedException;
 import software.amazon.awssdk.services.ses.model.SesException;
 
 import java.util.NoSuchElementException;
@@ -26,6 +23,38 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RestControllerAdvice
 public class ExControllerAdvice {
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorDto> handleIllegalStateException(IllegalStateException e) {
+        log.info("handle in ExControllerAdvice: ", e);
+
+        String message = e.getMessage();
+        HttpStatus status;
+        ErrorCode errorCode;
+
+        if (message.contains("Member account is inactive")) {
+            status = HttpStatus.FORBIDDEN; // 403: Forbidden seems appropriate for inactive accounts
+            errorCode = ErrorCode.MIA; // "Member Inactive"
+            return ResponseEntity
+                    .status(status)
+                    .body(new ErrorDto(errorCode, e.getMessage()));
+        }
+        else if (message.contains("Member account is pending approval")) {
+            status = HttpStatus.FORBIDDEN; // 202: Accepted could indicate pending state
+            errorCode = ErrorCode.MPA;
+            return ResponseEntity
+                    .status(status)
+                    .body(new ErrorDto(errorCode, e.getMessage()));
+        }
+        else {
+            // Fallback for other IllegalStateExceptions
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            errorCode = ErrorCode.UME;
+            return ResponseEntity
+                    .status(status)
+                    .body(new ErrorDto(errorCode, "예상치 못한 상태 오류가 발생했습니다."));
+        }
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<ErrorDto> dtoExceptionHandler(MethodArgumentNotValidException e){
@@ -56,6 +85,7 @@ public class ExControllerAdvice {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto( ErrorCode.NFR, e.getMessage()));
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             IllegalArgumentException.class,
@@ -65,6 +95,15 @@ public class ExControllerAdvice {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto( ErrorCode.AEV, e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(VerificationCodeMismatchException.class)
+    private ResponseEntity<ErrorDto> handleVerificationCodeMismatchException(VerificationCodeMismatchException e){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto( ErrorCode.MVE, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -118,6 +157,7 @@ public class ExControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({SesException.class, MessageRejectedException.class})
     private ResponseEntity<ErrorDto> emailSendExceptionHandler(
             SesException e
     ){
@@ -127,23 +167,27 @@ public class ExControllerAdvice {
         String awsErrorMessage = e.awsErrorDetails().errorMessage(); // 예: "Email address is not verified."
 
         HttpStatus status;
+        ErrorCode errorCode;
         switch (awsErrorCode) {
             case "MessageRejected":
                 // 예: 검증되지 않은 이메일, 포맷 문제 등
                 status = HttpStatus.BAD_REQUEST;
+                errorCode = ErrorCode.EVF;
                 break;
             case "Throttling":
                 // 발송량 초과(SES 할당량)
                 status = HttpStatus.TOO_MANY_REQUESTS;
+                errorCode = ErrorCode.EME;
                 break;
             default:
                 // 그 외 SES 오류
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
+                errorCode = ErrorCode.EME;
                 break;
         }
 
         return ResponseEntity
                 .status(status)
-                .body(new ErrorDto(ErrorCode.EME, awsErrorMessage));
+                .body(new ErrorDto(errorCode, awsErrorMessage));
     }
 }

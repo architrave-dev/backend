@@ -1,10 +1,12 @@
 package com.architrave.portfolio.api.service;
 
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.enumType.MemberStatus;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.repository.MemberRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +58,12 @@ public class MemberService {
         Member member = findMemberById(memberId);
         member.setRole(role);
         return member;
+    }
+
+    @Transactional
+    public void changeStatus(String email, MemberStatus status) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        member.setStatus(status);
     }
 }
