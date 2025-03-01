@@ -112,4 +112,8 @@ public class WorkService {
         Work target = findWorkById(workId);
         workRepository.delete(target);
     }
+    @Transactional
+    public void removeByMember(Member member) {
+        workRepository.deleteByMember(member);
+    }
 }

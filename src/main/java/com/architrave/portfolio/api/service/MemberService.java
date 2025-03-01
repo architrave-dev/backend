@@ -61,9 +61,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void changeStatus(String email, MemberStatus status) {
+    public Member changeStatus(String email, MemberStatus status) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         member.setStatus(status);
+        return member;
     }
 }

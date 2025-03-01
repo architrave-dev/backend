@@ -7,16 +7,12 @@ import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.dto.auth.response.SimpleStringDto;
-import com.architrave.portfolio.api.dto.email.request.EmailReq;
-import com.architrave.portfolio.api.service.AuthService;
-import com.architrave.portfolio.api.service.EmailService;
-import com.architrave.portfolio.api.service.MemberService;
+import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.MemberStatus;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
-import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,6 +41,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final OwnerContextHolder ownerContextHolder;
+    private final SettingService settingService;
 
 
     @Operation(
@@ -82,7 +79,9 @@ public class AuthController {
 
         authService.verify(activateReq.getKey(), activateReq.getVerificationCode());
 
-        memberService.changeStatus(activateReq.getKey(), MemberStatus.ACTIVE);
+        Member member = memberService.changeStatus(activateReq.getKey(), MemberStatus.ACTIVE);
+
+        settingService.findSettingByMember(member);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -140,22 +139,4 @@ public class AuthController {
     @Deprecated
     @GetMapping("/logout")
     public void login(){}
-
-    @Deprecated
-    @PostMapping("/admin/register")
-    public ResponseEntity<ResultDto<String>> adminRegister(@Valid @RequestBody CreateMemberReq createMemberReq){
-        Member member = new MemberBuilder()
-                .email(createMemberReq.getEmail())
-                .password(passwordEncoder.encode(createMemberReq.getPassword()))
-                .username(createMemberReq.getUsername())
-                .role(RoleType.USER)
-                .status(MemberStatus.ACTIVE)
-                .build();
-
-        memberService.createMember(member);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResultDto<>("admin register complete"));
-    }
 }

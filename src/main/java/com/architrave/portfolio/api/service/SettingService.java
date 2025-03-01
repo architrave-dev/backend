@@ -8,6 +8,8 @@ import com.architrave.portfolio.domain.model.builder.SettingBuilder;
 import com.architrave.portfolio.domain.repository.SettingRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class SettingService {
 
     private final SettingRepository settingRepository;
 
+    private final int SEARCH_LIMIT = 5;
     /**
      * 내부용
      * @param  settingId
@@ -87,10 +90,16 @@ public class SettingService {
 
     @Transactional(readOnly = true)
     public List<MemberSearchDto> searchMembersByUsernamePrefix(String query) {
-        List<Setting> settings = settingRepository.findByUsernamePrefixAndPageVisibleTrue(query);
+        Pageable pageable = PageRequest.of(0, SEARCH_LIMIT);
+        List<Setting> settings = settingRepository.findByUsernamePrefixAndPageVisibleTrue(query, pageable);
 
         return settings.stream()
                 .map(s -> new MemberSearchDto(s.getMember()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void removeByMember(Member member) {
+        settingRepository.deleteByMember(member);
     }
 }

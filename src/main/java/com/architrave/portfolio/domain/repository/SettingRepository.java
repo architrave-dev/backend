@@ -2,7 +2,9 @@ package com.architrave.portfolio.domain.repository;
 
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Setting;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,5 +20,12 @@ public interface SettingRepository extends JpaRepository<Setting, Long> {
             "WHERE m.username LIKE CONCAT(:username, '%') " +
             "  AND s.pageVisible = true " +
             "ORDER BY m.username ASC")
-    List<Setting> findByUsernamePrefixAndPageVisibleTrue(@Param("username") String username);
+    List<Setting> findByUsernamePrefixAndPageVisibleTrue(@Param("username") String username, Pageable pageable);
+
+    @Modifying
+    @Query("""
+            DELETE FROM Setting s
+            WHERE s.member = :member
+            """)
+    void deleteByMember(@Param("member")Member member);
 }
