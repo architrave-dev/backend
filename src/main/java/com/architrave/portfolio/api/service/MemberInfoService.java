@@ -114,4 +114,9 @@ public class MemberInfoService {
 
         return defaultMI;
     }
+
+    @Transactional
+    public void removeByMember(Member member) {
+        memberInfoRepository.deleteByMember(member);
+    }
 }

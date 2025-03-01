@@ -33,7 +33,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers(SWAGGER_WHITELIST).permitAll()                                //swagger
                 .requestMatchers(HttpMethod.GET, AWS_WHITELIST).permitAll()
-                .requestMatchers("/api/v1/auth/**", "/error").permitAll()
+                .requestMatchers("/api/v1/auth/**", "/error", "/api/v1/admin/**").permitAll()
                 .requestMatchers(HttpMethod.GET, CLIENT_WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.POST, USER_WHITELIST).hasRole("USER")
                 .requestMatchers(HttpMethod.PUT, USER_WHITELIST).hasRole("USER")
@@ -75,7 +75,7 @@ public class SecurityConfig {
     };
 
     private static final String[] CLIENT_WHITELIST = {
-            "/api/v1/member",
+            "/api/v1/member/**",
             "/api/v1/billboard/**",
             "/api/v1/project",
             "/api/v1/project/**",

@@ -63,4 +63,9 @@ public class CareerService {
         Career career = findCareerById(careerId);
         careerRepository.delete(career);
     }
+
+    @Transactional
+    public void removeByMember(Member member) {
+        careerRepository.deleteByMember(member);
+    }
 }

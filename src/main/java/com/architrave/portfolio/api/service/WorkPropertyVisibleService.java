@@ -53,4 +53,8 @@ public class WorkPropertyVisibleService {
         if(collection != null) wpv.setCollection(collection);
         return wpv;
     }
+    @Transactional
+    public void removeByMember(Member member) {
+        workPropertyVisibleRepository.deleteByMember(member);
+    }
 }

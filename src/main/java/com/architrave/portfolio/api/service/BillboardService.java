@@ -83,4 +83,9 @@ public class BillboardService {
 
         return billboardRepository.save(defaultLb);
     }
+
+    @Transactional
+    public void removeByMember(Member member) {
+        billboardRepository.deleteByMember(member);
+    }
 }

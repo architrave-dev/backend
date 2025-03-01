@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.auth.response.MemberSearchDto;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MenuVisible;
 import com.architrave.portfolio.domain.model.Setting;
@@ -7,11 +8,15 @@ import com.architrave.portfolio.domain.model.builder.SettingBuilder;
 import com.architrave.portfolio.domain.repository.SettingRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Trace
 @Service
@@ -20,6 +25,7 @@ public class SettingService {
 
     private final SettingRepository settingRepository;
 
+    private final int SEARCH_LIMIT = 5;
     /**
      * 내부용
      * @param  settingId
@@ -80,5 +86,20 @@ public class SettingService {
             menuVisible.setContact(contact);
         }
         return setting;
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberSearchDto> searchMembersByUsernamePrefix(String query) {
+        Pageable pageable = PageRequest.of(0, SEARCH_LIMIT);
+        List<Setting> settings = settingRepository.findByUsernamePrefixAndPageVisibleTrue(query, pageable);
+
+        return settings.stream()
+                .map(s -> new MemberSearchDto(s.getMember()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void removeByMember(Member member) {
+        settingRepository.deleteByMember(member);
     }
 }

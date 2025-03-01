@@ -4,6 +4,7 @@ import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -33,4 +34,11 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByMemberAndTitleWithElement(
             @Param("member") Member member,
             @Param("title") String title);
+
+    @Modifying
+    @Query("""
+            DELETE FROM Project p
+            WHERE p.member = :member
+            """)
+    void deleteByMember(@Param("member") Member member);
 }

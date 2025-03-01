@@ -89,7 +89,10 @@ public class ProjectService {
         Project projectById = findById(projectId);
         projectRepository.delete(projectById);
     }
-
+    @Transactional
+    public void removeByMember(Member member) {
+        projectRepository.deleteByMember(member);
+    }
     @Transactional
     public Project updatePiIndex(Long projectId, String piIndex) {
         Project project = findById(projectId);
