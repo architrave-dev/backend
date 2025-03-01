@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.auth.response.MemberSearchDto;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.MenuVisible;
 import com.architrave.portfolio.domain.model.Setting;
@@ -10,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Trace
 @Service
@@ -80,5 +83,14 @@ public class SettingService {
             menuVisible.setContact(contact);
         }
         return setting;
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberSearchDto> searchMembersByUsernamePrefix(String query) {
+        List<Setting> settings = settingRepository.findByUsernamePrefixAndPageVisibleTrue(query);
+
+        return settings.stream()
+                .map(s -> new MemberSearchDto(s.getMember()))
+                .collect(Collectors.toList());
     }
 }
