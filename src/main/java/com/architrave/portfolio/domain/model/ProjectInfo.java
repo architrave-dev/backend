@@ -23,6 +23,8 @@ public class ProjectInfo {
     private String customName;
     private String customValue;
 
+    private Integer index;
+
     public static ProjectInfo createProjectInfo(Project project, String name, String value){
         ProjectInfo projectInfo = new ProjectInfo();
         projectInfo.project = project;

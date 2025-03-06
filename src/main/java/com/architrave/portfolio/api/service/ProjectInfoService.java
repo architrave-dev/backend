@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.domain.repository.ProjectInfoRepository;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Trace
 @Slf4j
@@ -22,7 +25,7 @@ public class ProjectInfoService {
 
     @Transactional(readOnly = true)
     public List<ProjectInfo> findProjectInfoByProject(Project project){
-        return projectInfoRepository.findByProject(project);
+        return projectInfoRepository.findByProjectOrderByIndexAsc(project);
     }
 
     @Transactional(readOnly = true)
@@ -56,5 +59,24 @@ public class ProjectInfoService {
     @Transactional
     public void removeProjectInfoByProject(Project project){
         projectInfoRepository.deleteByProject(project);
+    }
+
+    @Transactional
+    public List<ProjectInfo> reorder(Project project, List<ReorderReq> reorderReqList) {
+        Map<Long, Integer> reorderMap = reorderReqList.stream()
+                .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
+
+        List<ProjectInfo> projectInfoList = projectInfoRepository.findByProject(project);
+
+        for (ProjectInfo projectInfo : projectInfoList) {
+            Integer newIndex = reorderMap.get(projectInfo.getId());
+            if(newIndex != null){
+                if (projectInfo.getIndex() == null || !newIndex.equals(projectInfo.getIndex())) {
+                    projectInfo.setIndex(newIndex);
+                }
+            }
+        }
+
+        return projectInfoRepository.saveAll(projectInfoList);
     }
 }

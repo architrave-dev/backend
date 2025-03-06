@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ProjectInfoRepository extends JpaRepository<ProjectInfo, Long> {
     List<ProjectInfo> findByProject(Project project);
+    List<ProjectInfo> findByProjectOrderByIndexAsc(Project project);
     void deleteByProject(Project project);
 }

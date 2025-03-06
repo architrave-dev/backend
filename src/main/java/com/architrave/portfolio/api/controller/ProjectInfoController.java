@@ -3,8 +3,12 @@ package com.architrave.portfolio.api.controller;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.project.request.*;
 import com.architrave.portfolio.api.dto.project.response.ProjectInfoDto;
+import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
+import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.service.ProjectInfoService;
 import com.architrave.portfolio.api.service.ProjectService;
+import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectInfo;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
@@ -82,6 +86,29 @@ public class ProjectInfoController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new ProjectInfoDto(projectInfo)));
+    }
+
+    @Operation(summary = "ProjectInfo 순서 수정하기")
+    @PutMapping("/reorder")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<List<ProjectInfoDto>>> reorderProjectInfoList(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateReorderListReq updateReorderListReq
+    ){
+        Long projectId = Long.parseLong(updateReorderListReq.getId());
+        Project project = projectService.findById(projectId);
+
+        List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
+
+        List<ProjectInfo> reorderedProjectInfoList = projectInfoService.reorder(project, reorderReqList);
+
+        List<ProjectInfoDto> result = reorderedProjectInfoList.stream()
+                .map((pi) -> new ProjectInfoDto(pi))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(result));
     }
 
 
