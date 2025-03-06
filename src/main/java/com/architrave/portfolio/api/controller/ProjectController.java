@@ -44,7 +44,7 @@ public class ProjectController {
             @RequestParam("aui") String aui
     ){
         Member member = memberService.findMemberByAui(aui);
-        List<Project> projectList = projectService.findByMember(member);
+        List<Project> projectList = projectService.findByMemberOrderByIndex(member);
         List<ProjectSimpleDto> result = projectList.stream()
                 .map((p) -> new ProjectSimpleDto(p))
                 .collect(Collectors.toList());

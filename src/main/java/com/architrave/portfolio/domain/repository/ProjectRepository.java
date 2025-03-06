@@ -17,6 +17,8 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByMember(Member member);
 
+    List<Project> findByMemberOrderByIndexAsc(Member member);
+
     @Query("select p from Project p" +
             " where p.member = :member" +
             " and p.id = :projectId")

@@ -53,6 +53,11 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
+    public List<Project> findByMemberOrderByIndex(Member member) {
+        return projectRepository.findByMemberOrderByIndexAsc(member);
+    }
+
+    @Transactional(readOnly = true)
     public Project findByMemberAndProjectId(Member member, Long projectId) {
         return projectRepository.findByMemberAndTitle(member, projectId)
                 .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
@@ -96,7 +101,7 @@ public class ProjectService {
         Map<Long, Integer> reorderMap = reorderReqList.stream()
                 .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
 
-        List<Project> projectList = projectRepository.findByMember(member);
+        List<Project> projectList = projectRepository.findByMemberOrderByIndexAsc(member);
 
         for (Project project : projectList) {
             Integer newIndex = reorderMap.get(project.getId());
