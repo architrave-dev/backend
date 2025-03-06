@@ -1,6 +1,5 @@
 package com.architrave.portfolio.api.dto.project.request;
 
-import com.architrave.portfolio.api.dto.projectElement.request.IndexDto;
 import com.architrave.portfolio.api.dto.uploadFile.request.UpdateUploadFileReq;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,6 @@ public class UpdateProjectReq {
     private UpdateUploadFileReq updateUploadFileReq;
     private String title;
     private String description;
-    private List<IndexDto> piIndexList;
     private List<CreateProjectInfoReq> createdProjectInfoList = new ArrayList<>();
     private List<UpdateProjectInfoReq> updatedProjectInfoList = new ArrayList<>();
     private List<RemoveProjectInfoReq> removedProjectInfoList = new ArrayList<>();

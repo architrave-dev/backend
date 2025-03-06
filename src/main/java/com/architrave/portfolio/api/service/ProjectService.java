@@ -93,16 +93,4 @@ public class ProjectService {
     public void removeByMember(Member member) {
         projectRepository.deleteByMember(member);
     }
-    @Transactional
-    public Project updatePiIndex(Long projectId, String piIndex) {
-        Project project = findById(projectId);
-        project.setPiIndex(piIndex);
-        return project;
-    }
-    @Transactional
-    public Project updatePeIndex(Long projectId, String peIndex) {
-        Project project = findById(projectId);
-        project.setPeIndex(peIndex);
-        return project;
-    }
 }

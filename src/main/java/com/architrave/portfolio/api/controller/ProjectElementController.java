@@ -27,7 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "05. ProjectElement")  // => swagger 이름
@@ -55,7 +54,7 @@ public class ProjectElementController {
         Member member = memberService.findMemberByAui(aui);
         Project project = projectService.findByMemberAndProjectId(member, projectId);
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
-        //peIndex 처리할 필요 없음, 프론트에서 없으면 그냥 무시해
+
         List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
                 .map((pe) -> new ProjectElementDto(pe))
                 .collect(Collectors.toList());
@@ -64,69 +63,10 @@ public class ProjectElementController {
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(
                         new ProjectElementListDto(
-                                project.getPeIndex(),
                                 projectElementDtoList
                         )
                 ));
     }
-
-//    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
-//            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
-//                    "1. 새롭게 추가되는 ProjectElement 리스트 <br />" +
-//                    "2. 기존 ProjectElement 변경 리스트 <br />" +
-//                    "3. 삭제되는 ProjectElement 리스트를 받습니다. "
-//    )
-//    @PutMapping
-//    @OwnerCheck
-//    public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
-//            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
-//            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
-//    ) {
-//        Member owner = ownerContextHolder.getOwner();
-//
-//        //projectElementList 업데이트
-//        List<IndexDto> indexDtoList = updateProjectElementList(owner,
-//                updateProjectElementListReq.getUpdatedProjectElements(),
-//                updateProjectElementListReq.getRemovedProjectElements(),
-//                updateProjectElementListReq.getPeIndexList()
-//        );
-//
-//        String peIndex = convertToStringUsingMap(indexDtoList);
-//        Project targetProject = projectService.updatePeIndex(updateProjectElementListReq.getProjectId(), peIndex);
-//
-//        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
-//
-//        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
-//                .map((pe) -> new ProjectElementDto(pe))
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(new ResultDto<>(
-//                        new ProjectElementListDto(
-//                                peIndex,
-//                                projectElementDtoList
-//                )));
-//    }
-
-    private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
-        return indexDtoList.stream()
-                .map(dto -> Optional.ofNullable(dto.getId())
-                        .orElseThrow(() -> new IllegalStateException("ProjectId is null for IndexDto")))
-                .map(Object::toString)
-                .collect(Collectors.joining("_"));
-    }
-
-//    private List<IndexDto> updateProjectElementList(Member loginUser,
-//                                   List<UpdateProjectElementReq> updatedList,
-//                                   List<DeleteProjectElementReq> removedList,
-//                                          List<IndexDto> indexDtoList
-//    ){
-//        updatedList.forEach(this::handleUpdateProjectElement);
-//        removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
-//
-//        return indexDtoList;
-//    }
 
     /**
      * Import ProjectElement with Work

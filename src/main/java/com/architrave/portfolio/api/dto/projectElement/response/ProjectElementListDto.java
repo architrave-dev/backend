@@ -10,6 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectElementListDto {
-    private String peIndex;
     private List<ProjectElementDto> projectElementList;
 }
