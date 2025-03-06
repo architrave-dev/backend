@@ -6,6 +6,8 @@ import com.architrave.portfolio.api.dto.document.request.UpdateDocumentReq;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
+import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
@@ -174,18 +176,28 @@ public class ProjectElementController {
                 .body(new ResultDto<>("delete project-element success"));
     }
 
-//    /**
-//     * 전체 순서변경을 지금 만들어야하나...?
-//     * 프론트에게 미안하더라도 일단 하나씩 하자.
-//     */
-//    @Operation(
-//            summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
-//            description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
-//    )
-//    @Deprecated
-//    @GetMapping("/order")
-//    private void changeOrderAtOnce(){}
-//
+    @Operation(summary = "ProjectElement 순서 수정하기")
+    @PutMapping("/reorder")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> reorderProjectElementList(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateReorderListReq updateReorderListReq
+    ){
+        Long projectId = Long.parseLong(updateReorderListReq.getId());
+        Project project = projectService.findById(projectId);
+
+        List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
+
+        List<ProjectElement> reorderedProjectElementList = projectElementService.reorder(project, reorderReqList);
+
+        List<ProjectElementDto> result = reorderedProjectElementList.stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(result));
+    }
 
     private ProjectElement handleCreateProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());

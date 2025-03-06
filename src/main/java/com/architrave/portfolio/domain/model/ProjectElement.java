@@ -43,6 +43,7 @@ public class ProjectElement {
     @JoinColumn(name = "document_id")
     private Document document;
 
+    private Integer index;
 
     @Enumerated(EnumType.STRING)
     private DisplayAlignment displayAlignment;
