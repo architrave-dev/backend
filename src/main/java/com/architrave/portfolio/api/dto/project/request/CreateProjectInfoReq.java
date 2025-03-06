@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 public class CreateProjectInfoReq {
 
     @NotNull
-    private Long tempId;
-    @NotNull
     private Long projectId;
     private String customName;
     private String customValue;
