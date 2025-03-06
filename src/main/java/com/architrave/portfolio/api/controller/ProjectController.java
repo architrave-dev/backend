@@ -4,6 +4,8 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.project.request.*;
 import com.architrave.portfolio.api.dto.project.response.ProjectDto;
 import com.architrave.portfolio.api.dto.project.response.ProjectSimpleDto;
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
+import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -116,6 +119,26 @@ public class ProjectController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new ProjectDto(updatedProject)));
+    }
+
+    @Operation(summary = "Project 순서 수정하기")
+    @PutMapping("/reorder")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<List<ProjectSimpleDto>>> reorderProjectList(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateReorderListReq updateReorderListReq
+    ){
+        Member owner = ownerContextHolder.getOwner();
+        List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
+
+        List<Project> reorderedProjectList = projectService.reorder(owner, reorderReqList);
+        List<ProjectSimpleDto> result = reorderedProjectList.stream()
+                .map((p) -> new ProjectSimpleDto(p))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(result));
     }
 
     @Operation(

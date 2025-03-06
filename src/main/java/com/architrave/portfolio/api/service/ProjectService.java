@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Trace
 @Service
@@ -54,12 +57,6 @@ public class ProjectService {
         return projectRepository.findByMemberAndTitle(member, projectId)
                 .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
     }
-  
-    @Transactional(readOnly = true)
-    public Project findByMemberAndTitleWithElement(Member member, String title) {
-        return projectRepository.findByMemberAndTitleWithElement(member, title)
-                .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
-    }
 
     @Transactional
     public Project updateProject(
@@ -92,5 +89,23 @@ public class ProjectService {
     @Transactional
     public void removeByMember(Member member) {
         projectRepository.deleteByMember(member);
+    }
+
+    @Transactional
+    public List<Project> reorder(Member member, List<ReorderReq> reorderReqList) {
+        Map<Long, Integer> reorderMap = reorderReqList.stream()
+                .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
+
+        List<Project> projectList = projectRepository.findByMember(member);
+
+        for (Project project : projectList) {
+            Integer newIndex = reorderMap.get(project.getId());
+            if(newIndex != null){
+                if (project.getIndex() == null || !newIndex.equals(project.getIndex())) {
+                    project.setIndex(newIndex);
+                }
+            }
+        }
+        return projectRepository.saveAll(projectList);
     }
 }
