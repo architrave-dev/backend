@@ -86,7 +86,8 @@ public class ProjectController {
                 owner,
                 createProjectReq.getOriginUrl(),
                 createProjectReq.getTitle(),
-                createProjectReq.getDescription()
+                createProjectReq.getDescription(),
+                createProjectReq.getIndex()
         );
 
         return ResponseEntity

@@ -52,6 +52,7 @@ public class ProjectUnitTest {
                 .title("Test Title")
                 .originUrl("test origin")
                 .description("Test Description")
+                .index(0)
                 .build();
     }
     @Test
@@ -66,7 +67,8 @@ public class ProjectUnitTest {
                 testMember,
                 "test origin",
                 "Test Title",
-                "Test Description"
+                "Test Description",
+                0
         );
 
         // Assert

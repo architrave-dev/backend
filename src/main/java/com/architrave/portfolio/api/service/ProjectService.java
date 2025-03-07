@@ -30,13 +30,15 @@ public class ProjectService {
             Member loginUser,
             String originUrl,
             String title,
-            String description
+            String description,
+            Integer index
     ) {
         Project project = new ProjectBuilder()
                 .member(loginUser)
                 .originUrl(originUrl)
                 .title(title)
                 .description(description)
+                .index(index)
                 .build();
 
         return projectRepository.save(project);

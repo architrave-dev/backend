@@ -40,13 +40,15 @@ public class Project extends BaseEntity{
             Member member,
             UploadFile uploadFile,
             String title,
-            String description
+            String description,
+            Integer index
     ){
         Project project = new Project();
         project.member = member;
         project.uploadFile = uploadFile;
         project.title = title;
         project.description = description;
+        project.index = index;
         return project;
     }
 
