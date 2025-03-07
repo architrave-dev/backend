@@ -185,7 +185,6 @@ public class ProjectElementController {
     ){
         Long projectId = Long.parseLong(updateReorderListReq.getId());
         Project project = projectService.findById(projectId);
-
         List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
 
         List<ProjectElement> reorderedProjectElementList = projectElementService.reorder(project, reorderReqList);

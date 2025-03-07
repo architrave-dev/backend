@@ -13,13 +13,11 @@ public class CareerDto {
     private CareerType careerType;
     private Integer yearFrom;
     private String content;
-    private Integer index;
 
     public CareerDto(Career career) {
         this.id = career.getId();
         this.careerType = career.getCareerType();
         this.yearFrom = career.getYearFrom();
         this.content = career.getContent();
-//        this.index = index;
     }
 }

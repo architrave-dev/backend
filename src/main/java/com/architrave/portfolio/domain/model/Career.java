@@ -24,6 +24,8 @@ public class Career extends BaseEntity{
     private Integer yearFrom;
     private String content;
 
+    private Integer index;
+
 
     public static Career createCareer(Member member, CareerType careerType, Integer yearFrom, String content) {
         Career career = new Career();

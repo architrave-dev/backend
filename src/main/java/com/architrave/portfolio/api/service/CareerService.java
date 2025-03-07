@@ -1,7 +1,9 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.builder.CareerBuilder;
 import com.architrave.portfolio.domain.model.enumType.CareerType;
 import com.architrave.portfolio.domain.repository.CareerRepository;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Trace
@@ -29,7 +33,7 @@ public class CareerService {
 
     @Transactional(readOnly = true)
     public List<Career> findCareerByMember(Member member) {
-        return careerRepository.findByMember(member);
+        return careerRepository.findByMemberOrderByIndexAsc(member);
     }
 
     @Transactional
@@ -67,5 +71,24 @@ public class CareerService {
     @Transactional
     public void removeByMember(Member member) {
         careerRepository.deleteByMember(member);
+    }
+
+    @Transactional
+    public List<Career> reorder(Member owner, CareerType careerType, List<ReorderReq> reorderReqList) {
+        Map<Long, Integer> reorderMap = reorderReqList.stream()
+                .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
+
+        List<Career> careerList = careerRepository.findByMemberAndCareerType(owner, careerType);
+
+        for (Career career : careerList) {
+            Integer newIndex = reorderMap.get(career.getId());
+            if(newIndex != null){
+                if (career.getIndex() == null || !newIndex.equals(career.getIndex())) {
+                    career.setIndex(newIndex);
+                }
+            }
+        }
+
+        return careerRepository.saveAll(careerList);
     }
 }
