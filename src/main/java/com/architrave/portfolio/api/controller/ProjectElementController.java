@@ -5,7 +5,6 @@ import com.architrave.portfolio.api.dto.document.request.CreateDocumentReq;
 import com.architrave.portfolio.api.dto.document.request.UpdateDocumentReq;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
-import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
 import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
@@ -49,7 +48,7 @@ public class ProjectElementController {
 
     @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")
     @GetMapping
-    public ResponseEntity<ResultDto<ProjectElementListDto>> getProjectElementList(
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> getProjectElementList(
             @RequestParam("aui") String aui,
             @RequestParam("projectId") Long projectId
     ){
@@ -63,11 +62,7 @@ public class ProjectElementController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(
-                        new ProjectElementListDto(
-                                projectElementDtoList
-                        )
-                ));
+                .body(new ResultDto<>(projectElementDtoList));
     }
 
     /**

@@ -91,8 +91,6 @@ public class CareerService {
             }
         }
 
-        return careerList.stream()
-                .sorted(Comparator.comparing(Career::getIndex))
-                .collect(Collectors.toList());
+        return careerRepository.findByMemberOrderByIndexAsc(owner);
     }
 }
