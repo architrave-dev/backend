@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -111,6 +112,9 @@ public class ProjectService {
                 }
             }
         }
-        return projectRepository.saveAll(projectList);
+
+        return projectList.stream()
+                .sorted(Comparator.comparing(Project::getIndex))
+                .collect(Collectors.toList());
     }
 }

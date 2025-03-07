@@ -143,8 +143,7 @@ public class ProjectController {
     @Operation(
             summary = "Project 삭제하기",
             description = "Project가 삭제되면 " +
-                    "관련된 ProjectInfo와 " +
-                    "ProjectElement가 모두 삭제됩니다."
+                    "관련된 ProjectInfo와 ProjectElement가 모두 삭제됩니다."
     )
     @DeleteMapping
     @OwnerCheck

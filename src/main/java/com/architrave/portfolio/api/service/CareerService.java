@@ -3,6 +3,7 @@ package com.architrave.portfolio.api.service;
 import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.builder.CareerBuilder;
 import com.architrave.portfolio.domain.model.enumType.CareerType;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -89,6 +91,8 @@ public class CareerService {
             }
         }
 
-        return careerRepository.saveAll(careerList);
+        return careerList.stream()
+                .sorted(Comparator.comparing(Career::getIndex))
+                .collect(Collectors.toList());
     }
 }
