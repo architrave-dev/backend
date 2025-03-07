@@ -163,7 +163,7 @@ public class ProjectElementService {
         Map<Long, Integer> reorderMap = reorderReqList.stream()
                 .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
 
-        List<ProjectElement> projectElementList = projectElementRepository.findByProject(project);
+        List<ProjectElement> projectElementList = projectElementRepository.findByProjectWithAssociations(project);
 
         for (ProjectElement projectElement : projectElementList) {
             Integer newIndex = reorderMap.get(projectElement.getId());
