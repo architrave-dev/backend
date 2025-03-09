@@ -3,6 +3,7 @@ package com.architrave.portfolio.domain.model.enumType;
 public enum ErrorCode {
     IDF("Invalid Dto Field"),
     RVN("Required Value Null"),
+    ENF("Enum Not Found"),
     NFR("Not Found Result"),
     NAU("Not Authorized User"),
     AEV("Already Exist Value"),

@@ -117,6 +117,17 @@ public class ExControllerAdvice {
                 .body(new ErrorDto( ErrorCode.RVN, e.getMessage()));
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({
+            NoMatchEnumException.class,
+    })
+    private ResponseEntity<ErrorDto> noMatchEnumExceptionHandler(NoMatchEnumException e){
+        log.info("handle in ExControllerAdvice: ", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto( ErrorCode.ENF, e.getMessage()));
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler({BadCredentialsException.class, UnauthorizedException.class})
     private ResponseEntity<ErrorDto> authenticationExceptionExceptionHandler(

@@ -43,6 +43,7 @@ public class ProjectElement {
     @JoinColumn(name = "document_id")
     private Document document;
 
+    private Integer index;
 
     @Enumerated(EnumType.STRING)
     private DisplayAlignment displayAlignment;
@@ -59,7 +60,8 @@ public class ProjectElement {
             Project project,
             Work work,
             DisplayAlignment displayAlignment,
-            DisplaySize displaySize
+            DisplaySize displaySize,
+            Integer index
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.WORK;
@@ -67,13 +69,15 @@ public class ProjectElement {
         projectElement.work = work;
         projectElement.displayAlignment = displayAlignment;
         projectElement.displaySize = displaySize;
+        projectElement.index = index;
         return projectElement;
     }
     public static ProjectElement createWorkDetailElement(
             Project project,
             WorkDetail workDetail,
             DisplayAlignment displayAlignment,
-            DisplaySize displaySize
+            DisplaySize displaySize,
+            Integer index
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.DETAIL;
@@ -81,42 +85,49 @@ public class ProjectElement {
         projectElement.workDetail = workDetail;
         projectElement.displayAlignment = displayAlignment;
         projectElement.displaySize = displaySize;
+        projectElement.index = index;
         return projectElement;
     }
     public static ProjectElement createTextBoxElement(
             Project project,
             TextBox textBox,
-            TextAlignment textAlignment
+            TextAlignment textAlignment,
+            Integer index
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.TEXTBOX;
         projectElement.project = project;
         projectElement.textBox = textBox;
         projectElement.textAlignment = textAlignment;
+        projectElement.index = index;
         return projectElement;
     }
 
     public static ProjectElement createDocumentElement(
             Project project,
             Document document,
-            DisplayAlignment displayAlignment
+            DisplayAlignment displayAlignment,
+            Integer index
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.DOCUMENT;
         projectElement.project = project;
         projectElement.document = document;
         projectElement.displayAlignment = displayAlignment;
+        projectElement.index = index;
         return projectElement;
     }
 
     public static ProjectElement createDividerElement(
             Project project,
-            DividerType dividerType
+            DividerType dividerType,
+            Integer index
     ){
         ProjectElement projectElement = new ProjectElement();
         projectElement.projectElementType = ProjectElementType.DIVIDER;
         projectElement.project = project;
         projectElement.dividerType = dividerType;
+        projectElement.index = index;
         return projectElement;
     }
 }

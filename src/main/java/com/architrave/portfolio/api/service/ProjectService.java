@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Project;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
@@ -9,8 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Trace
 @Service
@@ -26,13 +30,15 @@ public class ProjectService {
             Member loginUser,
             String originUrl,
             String title,
-            String description
+            String description,
+            Integer index
     ) {
         Project project = new ProjectBuilder()
                 .member(loginUser)
                 .originUrl(originUrl)
                 .title(title)
                 .description(description)
+                .index(index)
                 .build();
 
         return projectRepository.save(project);
@@ -50,14 +56,13 @@ public class ProjectService {
     }
 
     @Transactional(readOnly = true)
+    public List<Project> findByMemberOrderByIndex(Member member) {
+        return projectRepository.findByMemberOrderByIndexAsc(member);
+    }
+
+    @Transactional(readOnly = true)
     public Project findByMemberAndProjectId(Member member, Long projectId) {
         return projectRepository.findByMemberAndTitle(member, projectId)
-                .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
-    }
-  
-    @Transactional(readOnly = true)
-    public Project findByMemberAndTitleWithElement(Member member, String title) {
-        return projectRepository.findByMemberAndTitleWithElement(member, title)
                 .orElseThrow(() -> new NoSuchElementException("there is no project that title"));
     }
 
@@ -93,16 +98,25 @@ public class ProjectService {
     public void removeByMember(Member member) {
         projectRepository.deleteByMember(member);
     }
+
     @Transactional
-    public Project updatePiIndex(Long projectId, String piIndex) {
-        Project project = findById(projectId);
-        project.setPiIndex(piIndex);
-        return project;
-    }
-    @Transactional
-    public Project updatePeIndex(Long projectId, String peIndex) {
-        Project project = findById(projectId);
-        project.setPeIndex(peIndex);
-        return project;
+    public List<Project> reorder(Member member, List<ReorderReq> reorderReqList) {
+        Map<Long, Integer> reorderMap = reorderReqList.stream()
+                .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
+
+        List<Project> projectList = projectRepository.findByMemberOrderByIndexAsc(member);
+
+        for (Project project : projectList) {
+            Integer newIndex = reorderMap.get(project.getId());
+            if(newIndex != null){
+                if (project.getIndex() == null || !newIndex.equals(project.getIndex())) {
+                    project.setIndex(newIndex);
+                }
+            }
+        }
+
+        return projectList.stream()
+                .sorted(Comparator.comparing(Project::getIndex))
+                .collect(Collectors.toList());
     }
 }

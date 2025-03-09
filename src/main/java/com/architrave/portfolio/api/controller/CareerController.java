@@ -4,10 +4,13 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.career.request.CreateCareerReq;
 import com.architrave.portfolio.api.dto.career.request.UpdateCareerReq;
 import com.architrave.portfolio.api.dto.career.response.CareerDto;
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
+import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
+import com.architrave.portfolio.domain.model.enumType.CareerType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
@@ -62,7 +65,8 @@ public class CareerController {
                 owner,
                 createCareerReq.getCareerType(),
                 createCareerReq.getContent(),
-                createCareerReq.getYearFrom()
+                createCareerReq.getYearFrom(),
+                createCareerReq.getIndex()
         );
 
         return ResponseEntity
@@ -86,6 +90,30 @@ public class CareerController {
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new CareerDto(updated)));
     }
+
+    @Operation(summary = "Career 순서 수정하기")
+    @PutMapping("/reorder")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<List<CareerDto>>> reorderCareerList(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateReorderListReq updateReorderListReq
+    ){
+        Member owner = ownerContextHolder.getOwner();
+        CareerType careerType = CareerType.fromString(updateReorderListReq.getId());
+
+        List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
+
+        List<Career> reorderedCareerList = careerService.reorder(owner, careerType, reorderReqList);
+
+        List<CareerDto> result = reorderedCareerList.stream()
+                .map((c) -> new CareerDto(c))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(result));
+    }
+
     @Operation(summary = "작가의 Career 삭제하기")
     @DeleteMapping
     @OwnerCheck

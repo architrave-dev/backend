@@ -7,30 +7,36 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class DividerInProjectBuilder {
+public class DividerInPEBuilder {
     private Project project;
     private DividerType dividerType;
+    private Integer index;
 
-    public DividerInProjectBuilder project(Project project){
+    public DividerInPEBuilder project(Project project){
         this.project = project;
         return this;
     }
 
-    public DividerInProjectBuilder dividerType(DividerType dividerType){
+    public DividerInPEBuilder dividerType(DividerType dividerType){
         this.dividerType = dividerType;
+        return this;
+    }
+    public DividerInPEBuilder index(Integer index){
+        this.index = index;
         return this;
     }
 
     public ProjectElement build(){
-        validateProject();
+        validatePE();
         return ProjectElement.createDividerElement(
                 project,
-                dividerType
+                dividerType,
+                index
         );
     }
-    private void validateProject(){
-        if(project == null || dividerType == null ){
-            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
+    private void validatePE(){
+        if(project == null || dividerType == null || index == null){
+            throw new RequiredValueEmptyException("required value is empty in DividerInPEBuilder");
         }
     }
 }

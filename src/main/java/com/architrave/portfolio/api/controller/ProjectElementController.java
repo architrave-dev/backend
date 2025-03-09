@@ -5,7 +5,8 @@ import com.architrave.portfolio.api.dto.document.request.CreateDocumentReq;
 import com.architrave.portfolio.api.dto.document.request.UpdateDocumentReq;
 import com.architrave.portfolio.api.dto.projectElement.request.*;
 import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
-import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementListDto;
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
+import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.dto.textBox.request.UpdateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
@@ -27,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Tag(name = "05. ProjectElement")  // => swagger 이름
@@ -48,85 +48,22 @@ public class ProjectElementController {
 
     @Operation(summary = "작가의 특정 Project의 ProjectElement List 조회하기")
     @GetMapping
-    public ResponseEntity<ResultDto<ProjectElementListDto>> getProjectElementList(
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> getProjectElementList(
             @RequestParam("aui") String aui,
             @RequestParam("projectId") Long projectId
     ){
         Member member = memberService.findMemberByAui(aui);
         Project project = projectService.findByMemberAndProjectId(member, projectId);
         List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(project);
-        //peIndex 처리할 필요 없음, 프론트에서 없으면 그냥 무시해
+
         List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
                 .map((pe) -> new ProjectElementDto(pe))
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(
-                        new ProjectElementListDto(
-                                project.getPeIndex(),
-                                projectElementDtoList
-                        )
-                ));
+                .body(new ResultDto<>(projectElementDtoList));
     }
-
-//    @Operation(summary = "특정 Project 내의 ProjectElement List 수정하기",
-//            description = "한번의 요청으로 다음의 것들을 처리합니다. <br />" +
-//                    "1. 새롭게 추가되는 ProjectElement 리스트 <br />" +
-//                    "2. 기존 ProjectElement 변경 리스트 <br />" +
-//                    "3. 삭제되는 ProjectElement 리스트를 받습니다. "
-//    )
-//    @PutMapping
-//    @OwnerCheck
-//    public ResponseEntity<ResultDto<ProjectElementListDto>> updateProjectElementList(
-//            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
-//            @Valid @RequestBody UpdateProjectElementListReq updateProjectElementListReq
-//    ) {
-//        Member owner = ownerContextHolder.getOwner();
-//
-//        //projectElementList 업데이트
-//        List<IndexDto> indexDtoList = updateProjectElementList(owner,
-//                updateProjectElementListReq.getUpdatedProjectElements(),
-//                updateProjectElementListReq.getRemovedProjectElements(),
-//                updateProjectElementListReq.getPeIndexList()
-//        );
-//
-//        String peIndex = convertToStringUsingMap(indexDtoList);
-//        Project targetProject = projectService.updatePeIndex(updateProjectElementListReq.getProjectId(), peIndex);
-//
-//        List<ProjectElement> projectElementList = projectElementService.findProjectElementByProject(targetProject);
-//
-//        List<ProjectElementDto> projectElementDtoList = projectElementList.stream()
-//                .map((pe) -> new ProjectElementDto(pe))
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(new ResultDto<>(
-//                        new ProjectElementListDto(
-//                                peIndex,
-//                                projectElementDtoList
-//                )));
-//    }
-
-    private String convertToStringUsingMap(List<IndexDto> indexDtoList) {
-        return indexDtoList.stream()
-                .map(dto -> Optional.ofNullable(dto.getId())
-                        .orElseThrow(() -> new IllegalStateException("ProjectId is null for IndexDto")))
-                .map(Object::toString)
-                .collect(Collectors.joining("_"));
-    }
-
-//    private List<IndexDto> updateProjectElementList(Member loginUser,
-//                                   List<UpdateProjectElementReq> updatedList,
-//                                   List<DeleteProjectElementReq> removedList,
-//                                          List<IndexDto> indexDtoList
-//    ){
-//        updatedList.forEach(this::handleUpdateProjectElement);
-//        removedList.forEach(p -> projectElementService.removeById(p.getProjectElementId()));
-//
-//        return indexDtoList;
-//    }
 
     /**
      * Import ProjectElement with Work
@@ -145,11 +82,12 @@ public class ProjectElementController {
         Work work = workService.findWorkById(createProjectElementWithWorkReq.getWorkId());
         Project project = projectService.findById(createProjectElementWithWorkReq.getProjectId());
 
-        ProjectElement projectElement = new WorkInProjectBuilder()
+        ProjectElement projectElement = new WorkInPEBuilder()
                 .project(project)
                 .work(work)
                 .workAlignment(createProjectElementWithWorkReq.getDisplayAlignment())
                 .workDisplaySize(createProjectElementWithWorkReq.getDisplaySize())
+                .index(createProjectElementWithWorkReq.getIndex())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -175,11 +113,12 @@ public class ProjectElementController {
         WorkDetail workDetail = workDetailService.findWorkDetailById(createProjectElementWithWorkDetailReq.getWorkDetailId());
         Project project = projectService.findById(createProjectElementWithWorkDetailReq.getProjectId());
 
-        ProjectElement projectElement = new WorkDetailInProjectBuilder()
+        ProjectElement projectElement = new WorkDetailInPEBuilder()
                 .project(project)
                 .workDetail(workDetail)
                 .workDetailAlignment(createProjectElementWithWorkDetailReq.getDisplayAlignment())
                 .workDetailDisplaySize(createProjectElementWithWorkDetailReq.getDisplaySize())
+                .index(createProjectElementWithWorkDetailReq.getIndex())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -234,18 +173,27 @@ public class ProjectElementController {
                 .body(new ResultDto<>("delete project-element success"));
     }
 
-//    /**
-//     * 전체 순서변경을 지금 만들어야하나...?
-//     * 프론트에게 미안하더라도 일단 하나씩 하자.
-//     */
-//    @Operation(
-//            summary = "[미지원] 특정 Project 내의 ProjectElement 간 순서 일괄 변경",
-//            description = "현재까지는 프론트에서 순서 계산 후 개별로 update 요청"
-//    )
-//    @Deprecated
-//    @GetMapping("/order")
-//    private void changeOrderAtOnce(){}
-//
+    @Operation(summary = "ProjectElement 순서 수정하기")
+    @PutMapping("/reorder")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<List<ProjectElementDto>>> reorderProjectElementList(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateReorderListReq updateReorderListReq
+    ){
+        Long projectId = Long.parseLong(updateReorderListReq.getId());
+        Project project = projectService.findById(projectId);
+        List<ReorderReq> reorderReqList = updateReorderListReq.getReorderReqList();
+
+        List<ProjectElement> reorderedProjectElementList = projectElementService.reorder(project, reorderReqList);
+
+        List<ProjectElementDto> result = reorderedProjectElementList.stream()
+                .map((pe) -> new ProjectElementDto(pe))
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(result));
+    }
 
     private ProjectElement handleCreateProjectElement(Member loginUser, CreateProjectElementReq createProjectElementReq) {
         Project project = projectService.findById(createProjectElementReq.getProjectId());
@@ -266,11 +214,12 @@ public class ProjectElementController {
                     createWorkReq.getPrice(),
                     createWorkReq.getCollection()
             );
-            projectElement = new WorkInProjectBuilder()
+            projectElement = new WorkInPEBuilder()
                     .project(project)
                     .work(work)
                     .workAlignment(createProjectElementReq.getDisplayAlignment())
                     .workDisplaySize(createProjectElementReq.getDisplaySize())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DETAIL)){
             CreateWorkDetailReq createWorkDetailReq = createProjectElementReq.getCreateWorkDetailReq();
@@ -280,11 +229,12 @@ public class ProjectElementController {
                     createWorkDetailReq.getOriginUrl(),
                     createWorkDetailReq.getDescription()
             );
-            projectElement = new WorkDetailInProjectBuilder()
+            projectElement = new WorkDetailInPEBuilder()
                     .project(project)
                     .workDetail(workDetail)
                     .workDetailAlignment(createProjectElementReq.getDisplayAlignment())
                     .workDetailDisplaySize(createProjectElementReq.getDisplaySize())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -292,10 +242,11 @@ public class ProjectElementController {
                             .getCreateTextBoxReq()
                             .getContent()
             );
-            projectElement = new TextBoxInProjectBuilder()
+            projectElement = new TextBoxInPEBuilder()
                     .project(project)
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextAlignment())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DOCUMENT)){
             CreateDocumentReq createDocumentReq = createProjectElementReq.getCreateDocumentReq();
@@ -303,15 +254,17 @@ public class ProjectElementController {
                     createDocumentReq.getOriginUrl(),
                     createDocumentReq.getDescription()
             );
-            projectElement = new DocumentInProjectBuilder()
+            projectElement = new DocumentInPEBuilder()
                     .project(project)
                     .document(document)
                     .documentAlignment(createProjectElementReq.getDisplayAlignment())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
-            projectElement = new DividerInProjectBuilder()
+            projectElement = new DividerInPEBuilder()
                     .project(project)
                     .dividerType(createProjectElementReq.getDividerType())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }
         return projectElement;

@@ -2,6 +2,7 @@ package com.architrave.portfolio.domain.repository;
 
 import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,6 @@ public interface ProjectElementRepository extends JpaRepository<ProjectElement, 
 
     List<ProjectElement> findByProject(Project project);
 
-    @Modifying
     @Query("""
         SELECT DISTINCT pe
         FROM ProjectElement pe
@@ -27,7 +27,17 @@ public interface ProjectElementRepository extends JpaRepository<ProjectElement, 
         LEFT JOIN FETCH pe.textBox tb
         LEFT JOIN FETCH pe.document doc
         WHERE pe.project = :project
+        order by pe.index ASC
         """)
+//    @EntityGraph(attributePaths = {
+//            "work",
+//            "work.uploadFile",
+//            "workDetail",
+//            "workDetail.uploadFile",
+//            "textBox",
+//            "document"
+//    })
+//    @Query("SELECT pe FROM ProjectElement pe WHERE pe.project = :project order by pe.index ASC")
     List<ProjectElement> findByProjectWithAssociations(@Param("project") Project project);
 
     void deleteByProject(Project project);

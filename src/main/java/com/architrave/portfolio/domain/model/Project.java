@@ -34,23 +34,21 @@ public class Project extends BaseEntity{
             orphanRemoval = true)
     private List<ProjectElement> projectElementList = new ArrayList<>();
 
-    //ProjectElement의 순서를 _ 구분자로 관리
-    private String peIndex;
-
-    //ProjectInfo의 순서를 _ 구분자로 관리
-    private String piIndex;
+    private Integer index;
 
     public static Project createProject(
             Member member,
             UploadFile uploadFile,
             String title,
-            String description
+            String description,
+            Integer index
     ){
         Project project = new Project();
         project.member = member;
         project.uploadFile = uploadFile;
         project.title = title;
         project.description = description;
+        project.index = index;
         return project;
     }
 

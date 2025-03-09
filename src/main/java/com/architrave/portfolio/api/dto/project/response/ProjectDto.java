@@ -14,16 +14,11 @@ public class ProjectDto {
     private String title;
     private String description;
     private UploadFile uploadFile;
-    private String piIndex;
-    private List<ProjectInfoDto> projectInfoList;
 
-    public ProjectDto(Project project,
-                      List<ProjectInfoDto> projectInfoList){
+    public ProjectDto(Project project){
         this.id = project.getId();
         this.title = project.getTitle();
         this.description = project.getDescription();
         this.uploadFile = project.getUploadFile();
-        this.piIndex = project.getPiIndex();
-        this.projectInfoList = projectInfoList;
     }
 }

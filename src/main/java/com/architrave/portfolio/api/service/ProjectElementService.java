@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.service;
 
+import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.enumType.*;
 import com.architrave.portfolio.domain.repository.ProjectElementRepository;
@@ -8,8 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Trace
 @Service
@@ -153,5 +157,26 @@ public class ProjectElementService {
     @Transactional
     public void deleteByMemberAndWorkDetailId(Member loginUser, WorkDetail workDetail) {
         projectElementRepository.deleteByProjectMemberAndWorkDetail(loginUser, workDetail);
+    }
+
+    @Transactional
+    public List<ProjectElement> reorder(Project project, List<ReorderReq> reorderReqList) {
+        Map<Long, Integer> reorderMap = reorderReqList.stream()
+                .collect(Collectors.toMap(ReorderReq::getId, ReorderReq::getIndex));
+
+        List<ProjectElement> projectElementList = projectElementRepository.findByProjectWithAssociations(project);
+
+        for (ProjectElement projectElement : projectElementList) {
+            Integer newIndex = reorderMap.get(projectElement.getId());
+            if(newIndex != null){
+                if (projectElement.getIndex() == null || !newIndex.equals(projectElement.getIndex())) {
+                    projectElement.setIndex(newIndex);
+                }
+            }
+        }
+
+        return projectElementList.stream()
+                .sorted(Comparator.comparing(ProjectElement::getIndex))
+                .collect(Collectors.toList());
     }
 }

@@ -8,36 +8,43 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class DocumentInProjectBuilder {
+public class DocumentInPEBuilder {
     private Project project;
     private Document document;
     private DisplayAlignment documentAlignment;
+    private Integer index;
 
-    public DocumentInProjectBuilder project(Project project){
+    public DocumentInPEBuilder project(Project project){
         this.project = project;
         return this;
     }
 
-    public DocumentInProjectBuilder document(Document document){
+    public DocumentInPEBuilder document(Document document){
         this.document = document;
         return this;
     }
-    public DocumentInProjectBuilder documentAlignment(DisplayAlignment documentAlignment){
+    public DocumentInPEBuilder documentAlignment(DisplayAlignment documentAlignment){
         this.documentAlignment = documentAlignment;
         return this;
     }
 
+    public DocumentInPEBuilder index(Integer index){
+        this.index = index;
+        return this;
+    }
+
     public ProjectElement build(){
-        validateProject();
+        validatePE();
         return ProjectElement.createDocumentElement(
                 project,
                 document,
-                documentAlignment
+                documentAlignment,
+                index
         );
     }
-    private void validateProject(){
-        if(project == null || document == null || documentAlignment == null ){
-            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
+    private void validatePE(){
+        if(project == null || document == null || documentAlignment == null || index == null ){
+            throw new RequiredValueEmptyException("required value is empty in DocumentInPEBuilder");
         }
     }
 }

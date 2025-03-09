@@ -13,6 +13,7 @@ public class ProjectBuilder {
     private String title;
     private String description;
     private String originUrl;
+    private Integer index;
 
     public ProjectBuilder member(Member member) {
         this.member = member;
@@ -28,6 +29,10 @@ public class ProjectBuilder {
     }
     public ProjectBuilder originUrl(String originUrl){
         this.originUrl = originUrl;
+        return this;
+    }
+    public ProjectBuilder index(Integer index){
+        this.index = index;
         return this;
     }
     /**
@@ -46,11 +51,12 @@ public class ProjectBuilder {
                 member,
                 uploadFile,
                 title,
-                description
+                description,
+                index
         );
     }
     private void validateProject(){
-        if(member == null || title == null || originUrl == null ){
+        if(member == null || title == null || originUrl == null || index == null ){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

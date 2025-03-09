@@ -17,6 +17,8 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByMember(Member member);
 
+    List<Project> findByMemberOrderByIndexAsc(Member member);
+
     @Query("select p from Project p" +
             " where p.member = :member" +
             " and p.id = :projectId")
@@ -24,16 +26,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             @Param("member") Member member,
             @Param("projectId") Long projectId);
 
-    @Query("""
-            select p 
-            from Project p 
-            left join fetch p.projectElementList 
-            where p.member = :member 
-            and p.title = :title
-            """)
-    Optional<Project> findByMemberAndTitleWithElement(
-            @Param("member") Member member,
-            @Param("title") String title);
 
     @Modifying
     @Query("""

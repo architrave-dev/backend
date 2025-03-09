@@ -54,7 +54,8 @@ public class ProjectIntegrationTest {
                 testMember,
                 "test origin",
                 "test title",
-                "test description"
+                "test description",
+                0
         );
 
         // Verify creation
@@ -91,13 +92,15 @@ public class ProjectIntegrationTest {
                 testMember,
                 "test origin 1",
                 "test title 1",
-                "test description 1"
+                "test description 1",
+                0
         );
         projectService.createProject(
                 testMember,
                 "test origin 2",
                 "test title 2",
-                "test description 2"
+                "test description 2",
+                1
         );
 
         // Verify multiple creations
