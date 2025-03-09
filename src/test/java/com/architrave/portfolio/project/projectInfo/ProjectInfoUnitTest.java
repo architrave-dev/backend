@@ -56,7 +56,8 @@ public class ProjectInfoUnitTest {
         testProjectInfo = ProjectInfo.createProjectInfo(
                 testProject,
                 "test name",
-                "test value"
+                "test value",
+                0
         );
     }
 
@@ -101,7 +102,9 @@ public class ProjectInfoUnitTest {
         ProjectInfo result = projectInfoService.createProjectInfo(
                 testProjectInfo.getProject(),
                 testProjectInfo.getCustomName(),
-                testProjectInfo.getCustomValue());
+                testProjectInfo.getCustomValue(),
+                testProjectInfo.getIndex()
+        );
 
         // Assert & 호출여부 확인
         assertThat(result).isNotNull();

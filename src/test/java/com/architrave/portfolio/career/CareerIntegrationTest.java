@@ -52,7 +52,8 @@ public class CareerIntegrationTest {
                 testMember,
                 CareerType.G_EXH,
                 "test career",
-                2020
+                2020,
+                0
         );
         // verify
         Career found = careerService.findCareerById(created.getId());
@@ -82,13 +83,15 @@ public class CareerIntegrationTest {
                 testMember,
                 CareerType.G_EXH,
                 "test career",
-                2020
+                2020,
+                0
         );
         Career created_2 = careerService.createCareer(
                 testMember,
                 CareerType.EDU,
                 "test career2",
-                2021
+                2021,
+                1
         );
 
         List<Career> careerList = careerService.findCareerByMember(testMember);

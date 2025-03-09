@@ -63,7 +63,8 @@ public class ProjectInfoIntegrationTest {
         ProjectInfo created = projectInfoService.createProjectInfo(
                 testProject,
                 "test name",
-                "test value"
+                "test value",
+                0
         );
         // verify
         assertThat(created).isNotNull();
@@ -97,12 +98,14 @@ public class ProjectInfoIntegrationTest {
         projectInfoService.createProjectInfo(
                 testProject,
                 "test name 1",
-                "test value 1"
+                "test value 1",
+                0
         );
         projectInfoService.createProjectInfo(
                 testProject,
                 "test name 2",
-                "test value 2"
+                "test value 2",
+                1
         );
 
         //verify
