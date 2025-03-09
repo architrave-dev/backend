@@ -9,37 +9,37 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class WorkDetailInProjectBuilder {
+public class WorkDetailInPEBuilder {
     private Project project;
     private WorkDetail workDetail;
     private DisplayAlignment workDetailAlignment;
     private DisplaySize workDetailDisplaySize;
     private Integer index;
 
-    public WorkDetailInProjectBuilder project(Project project){
+    public WorkDetailInPEBuilder project(Project project){
         this.project = project;
         return this;
     }
 
-    public WorkDetailInProjectBuilder workDetail(WorkDetail workDetail){
+    public WorkDetailInPEBuilder workDetail(WorkDetail workDetail){
         this.workDetail = workDetail;
         return this;
     }
-    public WorkDetailInProjectBuilder workDetailAlignment(DisplayAlignment workDetailAlignment){
+    public WorkDetailInPEBuilder workDetailAlignment(DisplayAlignment workDetailAlignment){
         this.workDetailAlignment = workDetailAlignment;
         return this;
     }
-    public WorkDetailInProjectBuilder workDetailDisplaySize(DisplaySize workDetailDisplaySize){
+    public WorkDetailInPEBuilder workDetailDisplaySize(DisplaySize workDetailDisplaySize){
         this.workDetailDisplaySize = workDetailDisplaySize;
         return this;
     }
-    public WorkDetailInProjectBuilder index(Integer index){
+    public WorkDetailInPEBuilder index(Integer index){
         this.index = index;
         return this;
     }
 
     public ProjectElement build(){
-        validateProject();
+        validatePE();
         return ProjectElement.createWorkDetailElement(
                 project,
                 workDetail,
@@ -48,9 +48,9 @@ public class WorkDetailInProjectBuilder {
                 index
         );
     }
-    private void validateProject(){
+    private void validatePE(){
         if(project == null || workDetail == null || workDetailAlignment == null || workDetailDisplaySize == null || index == null){
-            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in WorkDetailInPEBuilder");
         }
     }
 }

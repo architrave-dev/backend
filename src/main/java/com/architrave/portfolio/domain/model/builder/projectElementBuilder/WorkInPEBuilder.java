@@ -9,37 +9,37 @@ import com.architrave.portfolio.global.exception.custom.RequiredValueEmptyExcept
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class WorkInProjectBuilder {
+public class WorkInPEBuilder {
     private Project project;
     private Work work;
     private DisplayAlignment displayAlignment;
     private DisplaySize displaySize;
     private Integer index;
 
-    public WorkInProjectBuilder project(Project project){
+    public WorkInPEBuilder project(Project project){
         this.project = project;
         return this;
     }
 
-    public WorkInProjectBuilder work(Work work){
+    public WorkInPEBuilder work(Work work){
         this.work = work;
         return this;
     }
-    public WorkInProjectBuilder workAlignment(DisplayAlignment displayAlignment){
+    public WorkInPEBuilder workAlignment(DisplayAlignment displayAlignment){
         this.displayAlignment = displayAlignment;
         return this;
     }
-    public WorkInProjectBuilder workDisplaySize(DisplaySize displaySize){
+    public WorkInPEBuilder workDisplaySize(DisplaySize displaySize){
         this.displaySize = displaySize;
         return this;
     }
-    public WorkInProjectBuilder index(Integer index){
+    public WorkInPEBuilder index(Integer index){
         this.index = index;
         return this;
     }
 
     public ProjectElement build(){
-        validateProject();
+        validatePE();
         return ProjectElement.createWorkElement(
                 project,
                 work,
@@ -48,9 +48,9 @@ public class WorkInProjectBuilder {
                 index
         );
     }
-    private void validateProject(){
+    private void validatePE(){
         if(project == null || work == null || displayAlignment == null || displaySize == null || index == null){
-            throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
+            throw new RequiredValueEmptyException("required value is empty in WorkInPEBuilder");
         }
     }
 }

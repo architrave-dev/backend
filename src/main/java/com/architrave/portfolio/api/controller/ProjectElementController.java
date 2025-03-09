@@ -82,11 +82,12 @@ public class ProjectElementController {
         Work work = workService.findWorkById(createProjectElementWithWorkReq.getWorkId());
         Project project = projectService.findById(createProjectElementWithWorkReq.getProjectId());
 
-        ProjectElement projectElement = new WorkInProjectBuilder()
+        ProjectElement projectElement = new WorkInPEBuilder()
                 .project(project)
                 .work(work)
                 .workAlignment(createProjectElementWithWorkReq.getDisplayAlignment())
                 .workDisplaySize(createProjectElementWithWorkReq.getDisplaySize())
+                .index(createProjectElementWithWorkReq.getIndex())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -112,11 +113,12 @@ public class ProjectElementController {
         WorkDetail workDetail = workDetailService.findWorkDetailById(createProjectElementWithWorkDetailReq.getWorkDetailId());
         Project project = projectService.findById(createProjectElementWithWorkDetailReq.getProjectId());
 
-        ProjectElement projectElement = new WorkDetailInProjectBuilder()
+        ProjectElement projectElement = new WorkDetailInPEBuilder()
                 .project(project)
                 .workDetail(workDetail)
                 .workDetailAlignment(createProjectElementWithWorkDetailReq.getDisplayAlignment())
                 .workDetailDisplaySize(createProjectElementWithWorkDetailReq.getDisplaySize())
+                .index(createProjectElementWithWorkDetailReq.getIndex())
                 .build();
 
         ProjectElement createdProjectElement = projectElementService.createProjectElement(projectElement);
@@ -212,7 +214,7 @@ public class ProjectElementController {
                     createWorkReq.getPrice(),
                     createWorkReq.getCollection()
             );
-            projectElement = new WorkInProjectBuilder()
+            projectElement = new WorkInPEBuilder()
                     .project(project)
                     .work(work)
                     .workAlignment(createProjectElementReq.getDisplayAlignment())
@@ -227,7 +229,7 @@ public class ProjectElementController {
                     createWorkDetailReq.getOriginUrl(),
                     createWorkDetailReq.getDescription()
             );
-            projectElement = new WorkDetailInProjectBuilder()
+            projectElement = new WorkDetailInPEBuilder()
                     .project(project)
                     .workDetail(workDetail)
                     .workDetailAlignment(createProjectElementReq.getDisplayAlignment())
@@ -240,7 +242,7 @@ public class ProjectElementController {
                             .getCreateTextBoxReq()
                             .getContent()
             );
-            projectElement = new TextBoxInProjectBuilder()
+            projectElement = new TextBoxInPEBuilder()
                     .project(project)
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextAlignment())
@@ -252,14 +254,14 @@ public class ProjectElementController {
                     createDocumentReq.getOriginUrl(),
                     createDocumentReq.getDescription()
             );
-            projectElement = new DocumentInProjectBuilder()
+            projectElement = new DocumentInPEBuilder()
                     .project(project)
                     .document(document)
                     .documentAlignment(createProjectElementReq.getDisplayAlignment())
                     .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
-            projectElement = new DividerInProjectBuilder()
+            projectElement = new DividerInPEBuilder()
                     .project(project)
                     .dividerType(createProjectElementReq.getDividerType())
                     .index(createProjectElementReq.getIndex())

@@ -5,9 +5,9 @@ import com.architrave.portfolio.domain.model.*;
 import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.builder.ProjectBuilder;
 import com.architrave.portfolio.domain.model.builder.WorkBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DocumentInProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInProjectBuilder;
-import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInProjectBuilder;
+import com.architrave.portfolio.domain.model.builder.projectElementBuilder.DocumentInPEBuilder;
+import com.architrave.portfolio.domain.model.builder.projectElementBuilder.TextBoxInPEBuilder;
+import com.architrave.portfolio.domain.model.builder.projectElementBuilder.WorkInPEBuilder;
 import com.architrave.portfolio.domain.model.enumType.*;
 import com.architrave.portfolio.domain.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,7 +88,7 @@ public class ProjectElementIntegrationTest {
     @DisplayName("create, update, delete ProjectElement(Work)")
     void workPeLifecycle() {
         //Create
-        ProjectElement workPe = new WorkInProjectBuilder()
+        ProjectElement workPe = new WorkInPEBuilder()
                 .project(testProject)
                 .work(testWork)
                 .workAlignment(DisplayAlignment.CENTER)
@@ -126,7 +126,7 @@ public class ProjectElementIntegrationTest {
     @DisplayName("create, update, delete ProjectElement(TextBox)")
     void textboxPeLifecycle() {
         //Create
-        ProjectElement textBoxPe = new TextBoxInProjectBuilder()
+        ProjectElement textBoxPe = new TextBoxInPEBuilder()
                 .project(testProject)
                 .textBox(testTextBox)
                 .textBoxAlignment(TextAlignment.CENTER)
@@ -163,7 +163,7 @@ public class ProjectElementIntegrationTest {
     @DisplayName("create, update, delete ProjectElement(Document)")
     void ducumentPeLifecycle() {
         //Create
-        ProjectElement documentPe = new DocumentInProjectBuilder()
+        ProjectElement documentPe = new DocumentInPEBuilder()
                 .project(testProject)
                 .document(testDocument)
                 .documentAlignment(DisplayAlignment.CENTER)
@@ -202,14 +202,14 @@ public class ProjectElementIntegrationTest {
     @Test
     @DisplayName("multiple Work, Textbox, Document ProjectElement")
     void multipleWorkTextboxDocumentPe() {
-        ProjectElement textBoxPe = new TextBoxInProjectBuilder()
+        ProjectElement textBoxPe = new TextBoxInPEBuilder()
                 .project(testProject)
                 .textBox(testTextBox)
                 .textBoxAlignment(TextAlignment.CENTER)
                 .build();
         projectElementService.createProjectElement(textBoxPe);
 
-        ProjectElement workPe = new WorkInProjectBuilder()
+        ProjectElement workPe = new WorkInPEBuilder()
                 .project(testProject)
                 .work(testWork)
                 .workAlignment(DisplayAlignment.CENTER)
@@ -217,7 +217,7 @@ public class ProjectElementIntegrationTest {
                 .build();
         projectElementService.createProjectElement(workPe);
 
-        ProjectElement documentPe = new DocumentInProjectBuilder()
+        ProjectElement documentPe = new DocumentInPEBuilder()
                 .project(testProject)
                 .document(testDocument)
                 .documentAlignment(DisplayAlignment.CENTER)
