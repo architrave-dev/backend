@@ -59,7 +59,8 @@ public class ProjectInfoController {
 
         ProjectInfo projectInfo = projectInfoService.createProjectInfo(project,
                 createProjectInfoReq.getCustomName(),
-                createProjectInfoReq.getCustomValue()
+                createProjectInfoReq.getCustomValue(),
+                createProjectInfoReq.getIndex()
         );
 
         return ResponseEntity

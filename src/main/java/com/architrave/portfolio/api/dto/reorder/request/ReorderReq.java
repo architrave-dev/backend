@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReorderReq {
-    private Integer index;
+public class ReorderReq extends IndexDto {
     private Long id;
 }

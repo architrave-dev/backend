@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.dto.projectElement.request;
 
+import com.architrave.portfolio.api.dto.reorder.request.IndexDto;
 import com.architrave.portfolio.api.dto.document.request.CreateDocumentReq;
 import com.architrave.portfolio.api.dto.textBox.request.CreateTextBoxReq;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkDetailReq;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProjectElementReq {
+public class CreateProjectElementReq extends IndexDto {
 
     @NotNull
     private Long projectId;

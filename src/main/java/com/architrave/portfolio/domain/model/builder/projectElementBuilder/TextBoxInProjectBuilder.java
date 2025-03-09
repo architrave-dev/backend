@@ -12,6 +12,7 @@ public class TextBoxInProjectBuilder {
     private Project project;
     private TextBox textBox;
     private TextAlignment textAlignment;
+    private Integer index;
 
     public TextBoxInProjectBuilder project(Project project){
         this.project = project;
@@ -27,16 +28,22 @@ public class TextBoxInProjectBuilder {
         return this;
     }
 
+    public TextBoxInProjectBuilder index(Integer index){
+        this.index = index;
+        return this;
+    }
+
     public ProjectElement build(){
         validateProject();
         return ProjectElement.createTextBoxElement(
                 project,
                 textBox,
-                textAlignment
+                textAlignment,
+                index
         );
     }
     private void validateProject(){
-        if(project == null || textBox == null || textAlignment == null ){
+        if(project == null || textBox == null || textAlignment == null || index == null){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

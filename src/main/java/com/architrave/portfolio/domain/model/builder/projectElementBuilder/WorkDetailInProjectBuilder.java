@@ -14,6 +14,7 @@ public class WorkDetailInProjectBuilder {
     private WorkDetail workDetail;
     private DisplayAlignment workDetailAlignment;
     private DisplaySize workDetailDisplaySize;
+    private Integer index;
 
     public WorkDetailInProjectBuilder project(Project project){
         this.project = project;
@@ -32,6 +33,10 @@ public class WorkDetailInProjectBuilder {
         this.workDetailDisplaySize = workDetailDisplaySize;
         return this;
     }
+    public WorkDetailInProjectBuilder index(Integer index){
+        this.index = index;
+        return this;
+    }
 
     public ProjectElement build(){
         validateProject();
@@ -39,11 +44,12 @@ public class WorkDetailInProjectBuilder {
                 project,
                 workDetail,
                 workDetailAlignment,
-                workDetailDisplaySize
+                workDetailDisplaySize,
+                index
         );
     }
     private void validateProject(){
-        if(project == null || workDetail == null || workDetailAlignment == null || workDetailDisplaySize == null){
+        if(project == null || workDetail == null || workDetailAlignment == null || workDetailDisplaySize == null || index == null){
             throw new RequiredValueEmptyException("required value is empty in ProjectBuilder");
         }
     }

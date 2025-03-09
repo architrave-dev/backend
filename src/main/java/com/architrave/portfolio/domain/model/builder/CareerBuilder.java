@@ -12,6 +12,8 @@ public class CareerBuilder {
     private Integer yearFrom;
     private String content;
 
+    private Integer index;
+
     public CareerBuilder member(Member member) {
         this.member = member;
         return this;
@@ -28,6 +30,10 @@ public class CareerBuilder {
         this.yearFrom = yearFrom;
         return this;
     }
+    public CareerBuilder index(Integer index) {
+        this.index = index;
+        return this;
+    }
 
     public Career build(){
         validateCareer();
@@ -35,11 +41,12 @@ public class CareerBuilder {
                 this.member,
                 this.careerType,
                 this.yearFrom,
-                this.content
+                this.content,
+                this.index
         );
     }
     private void validateCareer(){
-        if(member == null || careerType == null || content == null || yearFrom == null){
+        if(member == null || careerType == null || content == null || yearFrom == null || index == null){
             throw new RequiredValueEmptyException("required value is empty in CareerBuilder");
         }
     }

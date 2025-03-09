@@ -39,12 +39,13 @@ public class CareerService {
     }
 
     @Transactional
-    public Career createCareer(Member loginUser, CareerType careerType, String content, Integer yearFrom) {
+    public Career createCareer(Member loginUser, CareerType careerType, String content, Integer yearFrom, Integer index) {
         Career career = new CareerBuilder()
                 .member(loginUser)
                 .careerType(careerType)
                 .content(content)
                 .yearFrom(yearFrom)
+                .index(index)
                 .build();
         return careerRepository.save(career);
     }

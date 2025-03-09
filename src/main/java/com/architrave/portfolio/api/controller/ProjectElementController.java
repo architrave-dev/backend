@@ -217,6 +217,7 @@ public class ProjectElementController {
                     .work(work)
                     .workAlignment(createProjectElementReq.getDisplayAlignment())
                     .workDisplaySize(createProjectElementReq.getDisplaySize())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DETAIL)){
             CreateWorkDetailReq createWorkDetailReq = createProjectElementReq.getCreateWorkDetailReq();
@@ -231,6 +232,7 @@ public class ProjectElementController {
                     .workDetail(workDetail)
                     .workDetailAlignment(createProjectElementReq.getDisplayAlignment())
                     .workDetailDisplaySize(createProjectElementReq.getDisplaySize())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.TEXTBOX)){
             TextBox textBox = textBoxService.createTextBox(
@@ -242,6 +244,7 @@ public class ProjectElementController {
                     .project(project)
                     .textBox(textBox)
                     .textBoxAlignment(createProjectElementReq.getTextAlignment())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DOCUMENT)){
             CreateDocumentReq createDocumentReq = createProjectElementReq.getCreateDocumentReq();
@@ -253,11 +256,13 @@ public class ProjectElementController {
                     .project(project)
                     .document(document)
                     .documentAlignment(createProjectElementReq.getDisplayAlignment())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }else if(elementType.equals(ProjectElementType.DIVIDER)){
             projectElement = new DividerInProjectBuilder()
                     .project(project)
                     .dividerType(createProjectElementReq.getDividerType())
+                    .index(createProjectElementReq.getIndex())
                     .build();
         }
         return projectElement;

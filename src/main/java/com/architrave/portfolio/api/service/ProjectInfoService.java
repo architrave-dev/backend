@@ -36,8 +36,8 @@ public class ProjectInfoService {
     }
 
     @Transactional
-    public ProjectInfo createProjectInfo(Project project, String name, String value) {
-        ProjectInfo projectInfo = ProjectInfo.createProjectInfo(project, name, value);
+    public ProjectInfo createProjectInfo(Project project, String name, String value, Integer index) {
+        ProjectInfo projectInfo = ProjectInfo.createProjectInfo(project, name, value, index);
         return projectInfoRepository.save(projectInfo);
     }
 

@@ -4,15 +4,12 @@ import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.career.request.CreateCareerReq;
 import com.architrave.portfolio.api.dto.career.request.UpdateCareerReq;
 import com.architrave.portfolio.api.dto.career.response.CareerDto;
-import com.architrave.portfolio.api.dto.projectElement.response.ProjectElementDto;
 import com.architrave.portfolio.api.dto.reorder.request.ReorderReq;
 import com.architrave.portfolio.api.dto.reorder.request.UpdateReorderListReq;
 import com.architrave.portfolio.api.service.CareerService;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.domain.model.Career;
 import com.architrave.portfolio.domain.model.Member;
-import com.architrave.portfolio.domain.model.Project;
-import com.architrave.portfolio.domain.model.ProjectElement;
 import com.architrave.portfolio.domain.model.enumType.CareerType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
@@ -68,7 +65,8 @@ public class CareerController {
                 owner,
                 createCareerReq.getCareerType(),
                 createCareerReq.getContent(),
-                createCareerReq.getYearFrom()
+                createCareerReq.getYearFrom(),
+                createCareerReq.getIndex()
         );
 
         return ResponseEntity
