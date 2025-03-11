@@ -5,7 +5,7 @@ import com.architrave.portfolio.api.dto.auth.request.ActivateReq;
 import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
-import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
+import com.architrave.portfolio.api.dto.auth.response.MemberWithTokenDto;
 import com.architrave.portfolio.api.dto.auth.response.SimpleStringDto;
 import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
@@ -13,7 +13,6 @@ import com.architrave.portfolio.domain.model.builder.MemberBuilder;
 import com.architrave.portfolio.domain.model.enumType.MemberStatus;
 import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
-import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -40,7 +39,6 @@ public class AuthController {
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final OwnerContextHolder ownerContextHolder;
     private final SettingService settingService;
 
 
@@ -93,7 +91,7 @@ public class AuthController {
                     "Authorization 헤더에 jwt 토큰을 반환합니다."
     )
     @PostMapping("/login")
-    public ResponseEntity<ResultDto<MemberSimpleDto>> login(@Valid @RequestBody LoginReq loginReq){
+    public ResponseEntity<ResultDto<MemberWithTokenDto>> login(@Valid @RequestBody LoginReq loginReq){
         String email = loginReq.getEmail();
         String password = loginReq.getPassword();
         Member member = authService.loadUserByUsername(email);
@@ -113,7 +111,7 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, authHeader)
-                .body(new ResultDto<>(new MemberSimpleDto(member, refreshToken)));
+                .body(new ResultDto<>(new MemberWithTokenDto(member, refreshToken)));
     }
 
     @Operation(
