@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Trace
 @Service
@@ -65,6 +66,13 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         member.setStatus(status);
+        return member;
+    }
+
+    @Transactional
+    public Member updateMember(Long id, String username) {
+        Member member = findMemberById(id);
+        if(!member.getUsername().equals(username)) member.setUsername(username);
         return member;
     }
 }

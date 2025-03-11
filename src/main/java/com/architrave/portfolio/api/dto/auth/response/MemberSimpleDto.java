@@ -16,23 +16,11 @@ public class MemberSimpleDto {
     private String email;
     private String username;
     private String aui;
-    private RoleType role;
 
-    private String refreshToken;
-    public MemberSimpleDto(Member member, String token) {
+    public MemberSimpleDto(Member member) {
         id = member.getId();
         email = member.getEmail();
         username = member.getUsername();
         aui = member.getAui();
-        role = member.getRole();
-        refreshToken = token;
-
-        log.info("created member  id: {}", member.getId());
-        log.info("created member  email: {}", member.getEmail());
-        log.info("created member  username: {}", member.getUsername());
-        log.info("created member  aui: {}", member.getAui());
-        log.info("created member  role: {}", member.getRole());
-        log.info("created member  token: {}", token);
-
     }
 }
