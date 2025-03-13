@@ -6,7 +6,9 @@ import com.architrave.portfolio.domain.model.enumType.RoleType;
 import com.architrave.portfolio.domain.repository.MemberRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -74,5 +77,15 @@ public class MemberService {
         Member member = findMemberById(id);
         if(!member.getUsername().equals(username)) member.setUsername(username);
         return member;
+    }
+    @Transactional
+    public void updatePassword(Long id, String rawPassword, String newPassword) {
+        Member member = findMemberById(id);
+        //비밀번호 확인
+        if (!passwordEncoder.matches(rawPassword, member.getPassword())) {
+            throw new BadCredentialsException("password does not match");
+        }
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        member.changePassword(encodedPassword);
     }
 }

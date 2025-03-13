@@ -108,4 +108,7 @@ public class Member extends BaseEntity implements UserDetails {
             throw new IllegalStateException("Member account is pending approval: " + this.email);
         }
     }
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

@@ -2,6 +2,7 @@ package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.auth.request.UpdateMemberReq;
+import com.architrave.portfolio.api.dto.auth.request.UpdatePasswordReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSearchDto;
 import com.architrave.portfolio.api.dto.auth.response.MemberSearchListDto;
 import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
@@ -71,5 +72,20 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new MemberSimpleDto(updatedMember)));
+    }
+    @Operation(summary = "Password 수정하기")
+    @PutMapping("/password")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<String>> updatePassword(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdatePasswordReq updatePasswordReq
+    ){
+        memberService.updatePassword(updatePasswordReq.getId(),
+                updatePasswordReq.getPassword(),
+                updatePasswordReq.getNewPassword());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("change successfully"));
     }
 }
