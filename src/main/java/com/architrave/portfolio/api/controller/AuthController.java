@@ -5,7 +5,6 @@ import com.architrave.portfolio.api.dto.auth.request.ActivateReq;
 import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
-import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.dto.auth.response.MemberWithTokenDto;
 import com.architrave.portfolio.api.dto.auth.response.SimpleStringDto;
 import com.architrave.portfolio.api.service.*;
@@ -43,8 +42,8 @@ public class AuthController {
     private final SettingService settingService;
 
     @Operation(summary = "AUI 조회하기")
-    @GetMapping("/aui")
-    public ResponseEntity<ResultDto<String>> getMemberAui(
+    @PostMapping("/aui")
+    public ResponseEntity<ResultDto<SimpleStringDto>> getMemberAui(
             @Valid @RequestBody LoginReq loginReq
     ){
         String email = loginReq.getEmail();
@@ -60,7 +59,10 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(member.getAui()));
+                .body(new ResultDto<>(new SimpleStringDto(
+                        "Here is your AUI(Artist Unique ID)",
+                        member.getAui()
+                )));
     }
     @Operation(
             summary = "회원가입",
