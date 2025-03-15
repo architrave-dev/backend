@@ -44,14 +44,12 @@ public class Member extends BaseEntity implements UserDetails {
     @NotNull
     private MemberStatus status;
 
-    private String generateAui(String username){
-        String uuid_8 = UUID.randomUUID().toString().substring(0,8);
-        return username + "-" + uuid_8;
+    private String generateAui(){
+        return UUID.randomUUID().toString().substring(0,8);
     }
 
     public void setUsername(String username) {
         this.username = username;
-        this.aui = generateAui(username);
     }
 
     public void setStatus(MemberStatus status) {
@@ -73,7 +71,7 @@ public class Member extends BaseEntity implements UserDetails {
         member.email = email;
         member.password = password;
         member.username = username;
-        member.aui = member.generateAui(username);
+        member.aui = member.generateAui();
         member.role = role;
         member.status = status;
         return member;
@@ -109,5 +107,8 @@ public class Member extends BaseEntity implements UserDetails {
         if (this.status == MemberStatus.PENDING) {
             throw new IllegalStateException("Member account is pending approval: " + this.email);
         }
+    }
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

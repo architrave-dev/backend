@@ -1,20 +1,23 @@
 package com.architrave.portfolio.api.controller;
 
 import com.architrave.portfolio.api.dto.ResultDto;
+import com.architrave.portfolio.api.dto.auth.request.UpdateMemberReq;
+import com.architrave.portfolio.api.dto.auth.request.UpdatePasswordReq;
 import com.architrave.portfolio.api.dto.auth.response.MemberSearchDto;
 import com.architrave.portfolio.api.dto.auth.response.MemberSearchListDto;
+import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.service.MemberService;
 import com.architrave.portfolio.api.service.SettingService;
+import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
+import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,5 +55,37 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new MemberSearchListDto(memberList)));
+    }
+
+    @Operation(summary = "Member 수정하기")
+    @PutMapping
+    @OwnerCheck
+    public ResponseEntity<ResultDto<MemberSimpleDto>> updateMember(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdateMemberReq updateMemberReq
+    ){
+        Member updatedMember = memberService.updateMember(
+                updateMemberReq.getId(),
+                updateMemberReq.getUsername()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(new MemberSimpleDto(updatedMember)));
+    }
+    @Operation(summary = "Password 수정하기")
+    @PutMapping("/password")
+    @OwnerCheck
+    public ResponseEntity<ResultDto<String>> updatePassword(
+            @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
+            @Valid @RequestBody UpdatePasswordReq updatePasswordReq
+    ){
+        memberService.updatePassword(updatePasswordReq.getId(),
+                updatePasswordReq.getPassword(),
+                updatePasswordReq.getNewPassword());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>("change successfully"));
     }
 }
