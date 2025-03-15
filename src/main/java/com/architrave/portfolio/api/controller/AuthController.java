@@ -5,6 +5,7 @@ import com.architrave.portfolio.api.dto.auth.request.ActivateReq;
 import com.architrave.portfolio.api.dto.auth.request.CreateMemberReq;
 import com.architrave.portfolio.api.dto.auth.request.LoginReq;
 import com.architrave.portfolio.api.dto.auth.request.RefreshReq;
+import com.architrave.portfolio.api.dto.auth.response.MemberSimpleDto;
 import com.architrave.portfolio.api.dto.auth.response.MemberWithTokenDto;
 import com.architrave.portfolio.api.dto.auth.response.SimpleStringDto;
 import com.architrave.portfolio.api.service.*;
@@ -41,7 +42,26 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final SettingService settingService;
 
+    @Operation(summary = "AUI 조회하기")
+    @GetMapping("/aui")
+    public ResponseEntity<ResultDto<String>> getMemberAui(
+            @Valid @RequestBody LoginReq loginReq
+    ){
+        String email = loginReq.getEmail();
+        String password = loginReq.getPassword();
+        Member member = authService.loadUserByUsername(email);
 
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        password
+                )
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResultDto<>(member.getAui()));
+    }
     @Operation(
             summary = "회원가입",
             description = "회원가입을 위한 API 입니다. <br />" +
