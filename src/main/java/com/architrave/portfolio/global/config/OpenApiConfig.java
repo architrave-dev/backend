@@ -66,7 +66,8 @@ public class OpenApiConfig {
                 .addTagsItem(new Tag().name("10. Billboard"))
                 .addTagsItem(new Tag().name("11. MemberInfo"))
                 .addTagsItem(new Tag().name("12. Contact"))
-                .addTagsItem(new Tag().name("13. Setting"));
+                .addTagsItem(new Tag().name("13. ContactPropertyVisible"))
+                .addTagsItem(new Tag().name("14. Setting"));
     }
 
     @Bean
