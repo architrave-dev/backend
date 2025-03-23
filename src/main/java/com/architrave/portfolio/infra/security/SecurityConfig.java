@@ -87,6 +87,7 @@ public class SecurityConfig {
             "/api/v1/career",
             "/api/v1/member-info",
             "/api/v1/contact",
+            "/api/v1/contact-property",
             "/api/v1/setting",
     };
 
@@ -102,6 +103,7 @@ public class SecurityConfig {
             "/api/v1/career",
             "/api/v1/member-info",
             "/api/v1/contact",
+            "/api/v1/contact-property",
             "/api/v1/setting",
             "/pre-signed-url",
             "/send-email"
