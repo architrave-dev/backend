@@ -9,9 +9,6 @@ public class SocialMedia {
     private String twitter;
     private String instagram;
     private String facebook;
-    private String threads;
-    private String behance;
     private String youtube;
-    private String vimeo;
     private String url1;
 }

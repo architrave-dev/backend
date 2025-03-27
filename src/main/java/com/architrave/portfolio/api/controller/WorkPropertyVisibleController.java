@@ -27,7 +27,7 @@ public class WorkPropertyVisibleController {
     private final MemberService memberService;
     private final WorkPropertyVisibleService workPropertyVisibleService;
 
-    @Operation(summary = "workDetailId로  WorkDetail 조회하기")
+    @Operation(summary = "WorkPropertyVisible 조회하기")
     @GetMapping
     public ResponseEntity<ResultDto<WorkPropertyVisibleDto>> getWorkPropertyVisible(
             @RequestParam("aui") String aui
@@ -41,10 +41,10 @@ public class WorkPropertyVisibleController {
     }
 
 
-    @Operation(summary = "WorkDetail 수정하기")
+    @Operation(summary = "WorkPropertyVisible 수정하기")
     @PutMapping
     @OwnerCheck
-    public ResponseEntity<ResultDto<WorkPropertyVisibleDto>> updateWorkDetail(
+    public ResponseEntity<ResultDto<WorkPropertyVisibleDto>> updateWorkPropertyVisible(
             @RequestParam("aui") String aui,    // aop OwnerCheck 에서 사용.
             @Valid @RequestBody UpdateWorkPropertyVisibleReq updateWorkPropertyVisibleReq
     ) {

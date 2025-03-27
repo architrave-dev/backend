@@ -3,9 +3,7 @@ package com.architrave.portfolio.domain.model.enumType;
 public enum WorkType {
 
     // 2D
-    PAINTING_WATER,     // 수채화
-    PAINTING_OIL,       // 유화
-    PAINTING_DRY,       // 건식재료
+    PAINTING,     // 페인팅
 
     PRINTS,             // 판화
     PHOTO,              // 사진
