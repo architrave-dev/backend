@@ -1,5 +1,6 @@
 package com.architrave.portfolio.api.controller;
 
+import com.architrave.portfolio.api.dto.PagedResponse;
 import com.architrave.portfolio.api.dto.ResultDto;
 import com.architrave.portfolio.api.dto.work.request.CreateWorkReq;
 import com.architrave.portfolio.api.dto.work.request.UpdateWorkReq;
@@ -19,6 +20,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,22 +59,23 @@ public class WorkController {
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new WorkWithDetailDto(work, workDetailDtoList)));
     }
-    @Operation(summary = "작가의 Work List 조회하기")
+    @Operation(summary = "Work List 조회하기: pagination")
     @GetMapping("/list")
-    public ResponseEntity<ResultDto<List<WorkDto>>> getWorkListByMember(
-            @RequestParam("aui") String aui
+    public ResponseEntity<ResultDto<PagedResponse<WorkDto>>> getWorkListByMember(
+            @RequestParam("aui") String aui,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
     ){
         Member member = memberService.findMemberByAui(aui);
+        // spring.data.web.pageable.one-indexed-parameters=true 세팅
+        Pageable pageable = PageRequest.of(page-1, size);
 
-        List<Work> workList = workService.findWorkByMember(member);
-        log.info("workList.size(): ", workList.size());
-        List<WorkDto> workDtoList = workList.stream()
-                .map((w) -> new WorkDto(w))
-                .collect(Collectors.toList());
+        Page<Work> workPage = workService.findWorkByMember(member, pageable);
+        Page<WorkDto> workDtoPage = workPage.map(WorkDto::new);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResultDto<>(workDtoList));
+                .body(new ResultDto<>(new PagedResponse<>(workDtoPage)));
     }
     @Operation(summary = "작가의 Work List 간단하게 조회하기",
     description = "getWorkListByMember보다 (2배 이상 빠르다) <br />" +
