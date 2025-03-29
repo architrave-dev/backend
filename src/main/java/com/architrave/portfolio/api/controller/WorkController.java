@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,16 +60,23 @@ public class WorkController {
                 .status(HttpStatus.OK)
                 .body(new ResultDto<>(new WorkWithDetailDto(work, workDetailDtoList)));
     }
-    @Operation(summary = "Work List 조회하기: pagination")
+    @Operation(summary = "Work List 조회하기: pagination, sorting")
     @GetMapping("/list")
     public ResponseEntity<ResultDto<PagedResponse<WorkDto>>> getWorkListByMember(
             @RequestParam("aui") String aui,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "title") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction
     ){
         Member member = memberService.findMemberByAui(aui);
+//        Sort sort = Sort.by(
+//                Sort.Order.asc("title"),
+//                Sort.Order.desc("prodYear")
+//        );
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         // spring.data.web.pageable.one-indexed-parameters=true 세팅
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         Page<Work> workPage = workService.findWorkByMember(member, pageable);
         Page<WorkDto> workDtoPage = workPage.map(WorkDto::new);
