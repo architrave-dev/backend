@@ -50,7 +50,7 @@ public class MemberInfoService {
         }
         if(!memberInfo.getName().equals(name)) memberInfo.setName(name);
         if(!memberInfo.getCountry().equals(country)) memberInfo.setCountry(country);
-        if(!memberInfo.getYear().equals(year)) memberInfo.setYear(year);
+        if(!(memberInfo.getYear() == year)) memberInfo.setYear(year);
         if(!memberInfo.getEmail().equals(email)) memberInfo.setEmail(email);
         if(!memberInfo.getContact().equals(contact)) memberInfo.setContact(contact);
         if(!memberInfo.getDescription().equals(description)) memberInfo.setDescription(description);
