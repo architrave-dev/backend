@@ -12,6 +12,7 @@ import com.architrave.portfolio.api.service.*;
 import com.architrave.portfolio.domain.model.Member;
 import com.architrave.portfolio.domain.model.Work;
 import com.architrave.portfolio.domain.model.WorkDetail;
+import com.architrave.portfolio.domain.model.enumType.WorkSortType;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerCheck;
 import com.architrave.portfolio.global.aop.ownerCheck.OwnerContextHolder;
@@ -66,7 +67,7 @@ public class WorkController {
             @RequestParam("aui") String aui,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sortBy", defaultValue = "title") String sortBy,
+            @RequestParam(value = "sortBy", defaultValue = "title") WorkSortType sortBy,
             @RequestParam(value = "direction", defaultValue = "ASC") String direction
     ){
         Member member = memberService.findMemberByAui(aui);
@@ -74,7 +75,8 @@ public class WorkController {
 //                Sort.Order.asc("title"),
 //                Sort.Order.desc("prodYear")
 //        );
-        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy.toString());
         // spring.data.web.pageable.one-indexed-parameters=true 세팅
         Pageable pageable = PageRequest.of(page-1, size, sort);
 
