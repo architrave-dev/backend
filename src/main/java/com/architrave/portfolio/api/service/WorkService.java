@@ -9,6 +9,8 @@ import com.architrave.portfolio.domain.model.enumType.WorkType;
 import com.architrave.portfolio.domain.repository.WorkRepository;
 import com.architrave.portfolio.global.aop.logTrace.Trace;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,11 @@ public class WorkService {
     @Transactional(readOnly = true)
     public List<Work> findWorkByMember(Member member) {
         return workRepository.findByMember(member);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Work> findWorkByMember(Member member, Pageable pageable) {
+        return workRepository.findByMember(member, pageable);
     }
 
     @Transactional(readOnly = true)

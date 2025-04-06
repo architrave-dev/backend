@@ -2,6 +2,7 @@ package com.architrave.portfolio.global.exception;
 
 import com.architrave.portfolio.api.dto.ErrorDto;
 import com.architrave.portfolio.domain.model.enumType.ErrorCode;
+import com.architrave.portfolio.domain.model.enumType.WorkSortType;
 import com.architrave.portfolio.global.exception.custom.*;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import software.amazon.awssdk.services.ses.model.MessageRejectedException;
 import software.amazon.awssdk.services.ses.model.SesException;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -200,5 +203,17 @@ public class ExControllerAdvice {
         return ResponseEntity
                 .status(status)
                 .body(new ErrorDto(errorCode, awsErrorMessage));
+    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorDto> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        if (ex.getRequiredType() == WorkSortType.class) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorDto(ErrorCode.IDF, "Invalid sortBy value. Allowed values are: " + Arrays.toString(WorkSortType.values())));
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto(ErrorCode.IDF, "Please check the value again"));
     }
 }
