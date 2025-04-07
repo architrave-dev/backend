@@ -6,17 +6,18 @@ Architrave is a portfolio web service that empowers contemporary artists\
 to directly manage their projects and works.
 
 ## Now Status
-MVP-3 released.
+MVP-4 released.
 
 Contact us for a test Artist ID
 
 ## Key Features
-### MVP-3
-- Separate logic for verifying website owner with AOP.  
-- Implement CI/CD pipelines through GitHub Actions.  
-- Domain settings with AWS Route53.  
-- Use HTTPS with CloudFront(FE) and ALB(BE).  
-- Establish a system of prefix for image files in S3.  
+### MVP-4
+- Changed page-level bulk updates to individual updates
+- Created Contact Page 
+- Created Settings Page
+- Created image processing logic using AWS Lambda functions
+  - Creates 5 responsive image sizes based on device width
+  - Removes related images when an object is deleted
 
 ### APIs
 - [Swagger API](https://api.architrive.com/swagger-ui/index.html)
@@ -29,22 +30,20 @@ Contact us for a test Artist ID
 
 ## Settings
 ### ERD
-![arch_mvp-3 ERD](https://github.com/user-attachments/assets/6f400435-4201-466f-b759-8cdaf7dcba67)
-
-
+![arch_mvp-4_ERD](https://github.com/user-attachments/assets/10bac757-80c3-41c3-ac58-787472bdde91)
 
 ### Architecture
-![arch_mvp-3_Architecture](https://github.com/user-attachments/assets/0a7fa600-405e-46ee-bdd6-fbb610897052)
-
+![MVP-4 Architecture](https://github.com/user-attachments/assets/3d70efb8-4a1d-453c-a825-6a7a168b73c8)
 
 
 ## Considerations 
-### About AOP
-[Owner Verification as a Cross-Cutting Concern](https://github.com/architrave-dev/backend/wiki/Apply-AOP#ownercheck)
-### About Auth
-[AccessToken and RefreshToken Usage Flow](https://github.com/architrave-dev/backend/wiki/About-Auth#mvp-2)
-### About Deploy
-[Deployment Process Improvement Needed](https://github.com/architrave-dev/backend/wiki/About-Deploy#deployment-process-improvement-needed)
+### MVP-4
+- [Individual updates vs Bulk updates](https://github.com/architrave-dev/backend/wiki/Change-update-system)
+### MVP-3
+- [Owner Verification as a Cross-Cutting Concern](https://github.com/architrave-dev/backend/wiki/Apply-AOP#ownercheck)
+### MVP-2
+- [AccessToken and RefreshToken Usage Flow](https://github.com/architrave-dev/backend/wiki/About-Auth#mvp-2)
+- [Deployment Process Improvement Needed](https://github.com/architrave-dev/backend/wiki/About-Deploy#deployment-process-improvement-needed)
 
 
 ## Contact
